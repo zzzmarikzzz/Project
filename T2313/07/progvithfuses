@@ -1,0 +1,3 @@
+#!/bin/bash
+avreal +tiny2313 -p378 -ab -o0.8Mhz -ew output/hexfile.hex -f_high=DF,_low=CF
+exit 0

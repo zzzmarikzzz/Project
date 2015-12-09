@@ -1,0 +1,1659 @@
+gavrasm Gerd's AVR assembler version 3.4 (C)2014 by DG4FAC
+----------------------------------------------------------
+Source file: ish.asm
+Hex file:    ish.hex
+Eeprom file: ish.eep
+Compiled:    19.11.2015, 21:21:03
+Pass:        2
+     1: .include "/home/marik/Project/tn24Adef.inc"
+  Including file /home/marik/Project/tn24Adef.inc
+     1: ;***** THIS IS A MACHINE GENERATED FILE - DO NOT EDIT ********************
+     2: ;***** Created: 2011-02-09 12:04 ******* Source: ATtiny24A.xml ***********
+     3: ;*************************************************************************
+     4: ;* A P P L I C A T I O N   N O T E   F O R   T H E   A V R   F A M I L Y
+     5: ;* 
+     6: ;* Number            : AVR000
+     7: ;* File Name         : "tn24Adef.inc"
+     8: ;* Title             : Register/Bit Definitions for the ATtiny24A
+     9: ;* Date              : 2011-02-09
+    10: ;* Version           : 2.35
+    11: ;* Support E-mail    : avr@atmel.com
+    12: ;* Target MCU        : ATtiny24A
+    13: ;* 
+    14: ;* DESCRIPTION
+    15: ;* When including this file in the assembly program file, all I/O register 
+    16: ;* names and I/O register bit names appearing in the data book can be used.
+    17: ;* In addition, the six registers forming the three data pointers X, Y and 
+    18: ;* Z have been assigned names XL - ZH. Highest RAM address for Internal 
+    19: ;* SRAM is also defined 
+    20: ;* 
+    21: ;* The Register names are represented by their hexadecimal address.
+    22: ;* 
+    23: ;* The Register Bit names are represented by their bit number (0-7).
+    24: ;* 
+    25: ;* Please observe the difference in using the bit names with instructions
+    26: ;* such as "sbr"/"cbr" (set/clear bit in register) and "sbrs"/"sbrc"
+    27: ;* (skip if bit in register set/cleared). The following example illustrates
+    28: ;* this:
+    29: ;* 
+    30: ;* in    r16,PORTB             ;read PORTB latch
+    31: ;* sbr   r16,(1<<PB6)+(1<<PB5) ;set PB6 and PB5 (use masks, not bit#)
+    32: ;* out   PORTB,r16             ;output to PORTB
+    33: ;* 
+    34: ;* in    r16,TIFR              ;read the Timer Interrupt Flag Register
+    35: ;* sbrc  r16,TOV0              ;test the overflow flag (use bit#)
+    36: ;* rjmp  TOV0_is_set           ;jump if set
+    37: ;* ...                         ;otherwise do something else
+    38: ;*************************************************************************
+    39: 
+    40: #ifndef _TN24ADEF_INC_
+    41: #define _TN24ADEF_INC_
+    42: 
+    43: 
+    44: #pragma partinc 0
+    45: 
+    46: ; ***** SPECIFY DEVICE ***************************************************
+    47: .device ATtiny24A
+    48: #pragma AVRPART ADMIN PART_NAME ATtiny24A
+    49: .equ	SIGNATURE_000	= 0x1e
+    50: .equ	SIGNATURE_001	= 0x91
+    51: .equ	SIGNATURE_002	= 0x0b
+    52: 
+    53: #pragma AVRPART CORE CORE_VERSION V2
+    54: #pragma AVRPART CORE NEW_INSTRUCTIONS lpm rd,z+
+    55: 
+    56: 
+    57: ; ***** I/O REGISTER DEFINITIONS *****************************************
+    58: ; NOTE:
+    59: ; Definitions marked "MEMORY MAPPED"are extended I/O ports
+    60: ; and cannot be used with IN/OUT instructions
+    61: .equ	SREG	= 0x3f
+    62: .equ	SPL	= 0x3d
+    63: .equ	OCR0B	= 0x3c
+    64: .equ	GIMSK	= 0x3b
+    65: .equ	GIFR	= 0x3a
+    66: .equ	TIMSK0	= 0x39
+    67: .equ	TIFR0	= 0x38
+    68: .equ	SPMCSR	= 0x37
+    69: .equ	OCR0A	= 0x36
+    70: .equ	MCUCR	= 0x35
+    71: .equ	MCUSR	= 0x34
+    72: .equ	TCCR0B	= 0x33
+    73: .equ	TCNT0	= 0x32
+    74: .equ	OSCCAL	= 0x31
+    75: .equ	TCCR0A	= 0x30
+    76: .equ	TCCR1A	= 0x2f
+    77: .equ	TCCR1B	= 0x2e
+    78: .equ	TCNT1L	= 0x2c
+    79: .equ	TCNT1H	= 0x2d
+    80: .equ	OCR1AL	= 0x2a
+    81: .equ	OCR1AH	= 0x2b
+    82: .equ	OCR1BL	= 0x28
+    83: .equ	OCR1BH	= 0x29
+    84: .equ	DWDR	= 0x27
+    85: .equ	CLKPR	= 0x26
+    86: .equ	ICR1L	= 0x24
+    87: .equ	ICR1H	= 0x25
+    88: .equ	GTCCR	= 0x23
+    89: .equ	TCCR1C	= 0x22
+    90: .equ	WDTCSR	= 0x21
+    91: .equ	PCMSK1	= 0x20
+    92: .equ	EEARH	= 0x1f
+    93: .equ	EEARL	= 0x1e
+    94: .equ	EEDR	= 0x1d
+    95: .equ	EECR	= 0x1c
+    96: .equ	PORTA	= 0x1b
+    97: .equ	DDRA	= 0x1a
+    98: .equ	PINA	= 0x19
+    99: .equ	PORTB	= 0x18
+   100: .equ	DDRB	= 0x17
+   101: .equ	PINB	= 0x16
+   102: .equ	GPIOR2	= 0x15
+   103: .equ	GPIOR1	= 0x14
+   104: .equ	GPIOR0	= 0x13
+   105: .equ	PCMSK0	= 0x12
+   106: .equ	USIBR	= 0x10
+   107: .equ	USIDR	= 0x0f
+   108: .equ	USISR	= 0x0e
+   109: .equ	USICR	= 0x0d
+   110: .equ	TIMSK1	= 0x0c
+   111: .equ	TIFR1	= 0x0b
+   112: .equ	ACSR	= 0x08
+   113: .equ	ADMUX	= 0x07
+   114: .equ	ADCSRA	= 0x06
+   115: .equ	ADCH	= 0x05
+   116: .equ	ADCL	= 0x04
+   117: .equ	ADCSRB	= 0x03
+   118: .equ	DIDR0	= 0x01
+   119: .equ	PRR	= 0x00
+   120: 
+   121: 
+   122: ; ***** BIT DEFINITIONS **************************************************
+   123: 
+   124: ; ***** PORTA ************************
+   125: ; PORTA - Port A Data Register
+   126: .equ	PORTA0	= 0	; Port A Data Register bit 0
+   127: .equ	PA0	= 0	; For compatibility
+   128: .equ	PORTA1	= 1	; Port A Data Register bit 1
+   129: .equ	PA1	= 1	; For compatibility
+   130: .equ	PORTA2	= 2	; Port A Data Register bit 2
+   131: .equ	PA2	= 2	; For compatibility
+   132: .equ	PORTA3	= 3	; Port A Data Register bit 3
+   133: .equ	PA3	= 3	; For compatibility
+   134: .equ	PORTA4	= 4	; Port A Data Register bit 4
+   135: .equ	PA4	= 4	; For compatibility
+   136: .equ	PORTA5	= 5	; Port A Data Register bit 5
+   137: .equ	PA5	= 5	; For compatibility
+   138: .equ	PORTA6	= 6	; Port A Data Register bit 6
+   139: .equ	PA6	= 6	; For compatibility
+   140: .equ	PORTA7	= 7	; Port A Data Register bit 7
+   141: .equ	PA7	= 7	; For compatibility
+   142: 
+   143: ; DDRA - Port A Data Direction Register
+   144: .equ	DDA0	= 0	; Data Direction Register, Port A, bit 0
+   145: .equ	DDA1	= 1	; Data Direction Register, Port A, bit 1
+   146: .equ	DDA2	= 2	; Data Direction Register, Port A, bit 2
+   147: .equ	DDA3	= 3	; Data Direction Register, Port A, bit 3
+   148: .equ	DDA4	= 4	; Data Direction Register, Port A, bit 4
+   149: .equ	DDA5	= 5	; Data Direction Register, Port A, bit 5
+   150: .equ	DDA6	= 6	; Data Direction Register, Port A, bit 6
+   151: .equ	DDA7	= 7	; Data Direction Register, Port A, bit 7
+   152: 
+   153: ; PINA - Port A Input Pins
+   154: .equ	PINA0	= 0	; Input Pins, Port A bit 0
+   155: .equ	PINA1	= 1	; Input Pins, Port A bit 1
+   156: .equ	PINA2	= 2	; Input Pins, Port A bit 2
+   157: .equ	PINA3	= 3	; Input Pins, Port A bit 3
+   158: .equ	PINA4	= 4	; Input Pins, Port A bit 4
+   159: .equ	PINA5	= 5	; Input Pins, Port A bit 5
+   160: .equ	PINA6	= 6	; Input Pins, Port A bit 6
+   161: .equ	PINA7	= 7	; Input Pins, Port A bit 7
+   162: 
+   163: 
+   164: ; ***** PORTB ************************
+   165: ; PORTB - Data Register, Port B
+   166: .equ	PORTB0	= 0	; 
+   167: .equ	PB0	= 0	; For compatibility
+   168: .equ	PORTB1	= 1	; 
+   169: .equ	PB1	= 1	; For compatibility
+   170: .equ	PORTB2	= 2	; 
+   171: .equ	PB2	= 2	; For compatibility
+   172: .equ	PORTB3	= 3	; 
+   173: .equ	PB3	= 3	; For compatibility
+   174: 
+   175: ; DDRB - Data Direction Register, Port B
+   176: .equ	DDB0	= 0	; 
+   177: .equ	DDB1	= 1	; 
+   178: .equ	DDB2	= 2	; 
+   179: .equ	DDB3	= 3	; 
+   180: 
+   181: ; PINB - Input Pins, Port B
+   182: .equ	PINB0	= 0	; 
+   183: .equ	PINB1	= 1	; 
+   184: .equ	PINB2	= 2	; 
+   185: .equ	PINB3	= 3	; 
+   186: 
+   187: 
+   188: ; ***** ANALOG_COMPARATOR ************
+   189: ; ADCSRB - ADC Control and Status Register B
+   190: .equ	ACME	= 6	; Analog Comparator Multiplexer Enable
+   191: 
+   192: ; ACSR - Analog Comparator Control And Status Register
+   193: .equ	ACIS0	= 0	; Analog Comparator Interrupt Mode Select bit 0
+   194: .equ	ACIS1	= 1	; Analog Comparator Interrupt Mode Select bit 1
+   195: .equ	ACIC	= 2	; Analog Comparator Input Capture Enable
+   196: .equ	ACIE	= 3	; Analog Comparator Interrupt Enable
+   197: .equ	ACI	= 4	; Analog Comparator Interrupt Flag
+   198: .equ	ACO	= 5	; Analog Compare Output
+   199: .equ	ACBG	= 6	; Analog Comparator Bandgap Select
+   200: .equ	AINBG	= ACBG	; For compatibility
+   201: .equ	ACD	= 7	; Analog Comparator Disable
+   202: 
+   203: ; DIDR0 - 
+   204: .equ	ADC0D	= 0	; ADC 0 Digital input buffer disable
+   205: .equ	ADC1D	= 1	; ADC 1 Digital input buffer disable
+   206: 
+   207: 
+   208: ; ***** AD_CONVERTER *****************
+   209: ; ADMUX - ADC Multiplexer Selection Register
+   210: .equ	MUX0	= 0	; Analog Channel and Gain Selection Bit 0
+   211: .equ	MUX1	= 1	; Analog Channel and Gain Selection Bit 1
+   212: .equ	MUX2	= 2	; Analog Channel and Gain Selection Bit 2
+   213: .equ	MUX3	= 3	; Analog Channel and Gain Selection Bit 3
+   214: .equ	MUX4	= 4	; Analog Channel and Gain Selection Bit 4
+   215: .equ	MUX5	= 5	; Analog Channel and Gain Selection Bit 5
+   216: .equ	REFS0	= 6	; Reference Selection Bit 0
+   217: .equ	REFS1	= 7	; Reference Selection Bit 1
+   218: 
+   219: ; ADCSRA - ADC Control and Status Register A
+   220: .equ	ADPS0	= 0	; ADC  Prescaler Select Bit 0
+   221: .equ	ADPS1	= 1	; ADC  Prescaler Select Bit 1
+   222: .equ	ADPS2	= 2	; ADC  Prescaler Select Bit 2
+   223: .equ	ADIE	= 3	; ADC Interrupt Enable
+   224: .equ	ADIF	= 4	; ADC Interrupt Flag
+   225: .equ	ADATE	= 5	; ADC Auto Trigger Enable
+   226: .equ	ADSC	= 6	; ADC Start Conversion
+   227: .equ	ADEN	= 7	; ADC Enable
+   228: 
+   229: ; ADCH - ADC Data Register High Byte
+   230: .equ	ADCH0	= 0	; ADC Data Register High Byte Bit 0
+   231: .equ	ADCH1	= 1	; ADC Data Register High Byte Bit 1
+   232: .equ	ADCH2	= 2	; ADC Data Register High Byte Bit 2
+   233: .equ	ADCH3	= 3	; ADC Data Register High Byte Bit 3
+   234: .equ	ADCH4	= 4	; ADC Data Register High Byte Bit 4
+   235: .equ	ADCH5	= 5	; ADC Data Register High Byte Bit 5
+   236: .equ	ADCH6	= 6	; ADC Data Register High Byte Bit 6
+   237: .equ	ADCH7	= 7	; ADC Data Register High Byte Bit 7
+   238: 
+   239: ; ADCL - ADC Data Register Low Byte
+   240: .equ	ADCL0	= 0	; ADC Data Register Low Byte Bit 0
+   241: .equ	ADCL1	= 1	; ADC Data Register Low Byte Bit 1
+   242: .equ	ADCL2	= 2	; ADC Data Register Low Byte Bit 2
+   243: .equ	ADCL3	= 3	; ADC Data Register Low Byte Bit 3
+   244: .equ	ADCL4	= 4	; ADC Data Register Low Byte Bit 4
+   245: .equ	ADCL5	= 5	; ADC Data Register Low Byte Bit 5
+   246: .equ	ADCL6	= 6	; ADC Data Register Low Byte Bit 6
+   247: .equ	ADCL7	= 7	; ADC Data Register Low Byte Bit 7
+   248: 
+   249: ; ADCSRB - ADC Control and Status Register B
+   250: .equ	ADTS0	= 0	; ADC Auto Trigger Source bit 0
+   251: .equ	ADTS1	= 1	; ADC Auto Trigger Source bit 1
+   252: .equ	ADTS2	= 2	; ADC Auto Trigger Source bit 2
+   253: .equ	ADLAR	= 4	; ADC Left Adjust Result
+   254: .equ	BIN	= 7	; Bipolar Input Mode
+   255: 
+   256: ; DIDR0 - Digital Input Disable Register 0
+   257: ;.equ	ADC0D	= 0	; ADC0 Digital Input Disable
+   258: ;.equ	ADC1D	= 1	; ADC1 Digital Input Disable
+   259: .equ	ADC2D	= 2	; ADC2 Digital Input Disable
+   260: .equ	ADC3D	= 3	; ADC3 Digital Input Disable
+   261: .equ	ADC4D	= 4	; ADC4 Digital Input Disable
+   262: .equ	ADC5D	= 5	; ADC5 Digital Input Disable
+   263: .equ	ADC6D	= 6	; ADC6 Digital Input Disable
+   264: .equ	ADC7D	= 7	; ADC7 Digital Input Disable
+   265: 
+   266: 
+   267: ; ***** USI **************************
+   268: ; USIBR - USI Buffer Register
+   269: .equ	USIBR0	= 0	; USI Buffer Register bit 0
+   270: .equ	USIBR1	= 1	; USI Buffer Register bit 1
+   271: .equ	USIBR2	= 2	; USI Buffer Register bit 2
+   272: .equ	USIBR3	= 3	; USI Buffer Register bit 3
+   273: .equ	USIBR4	= 4	; USI Buffer Register bit 4
+   274: .equ	USIBR5	= 5	; USI Buffer Register bit 5
+   275: .equ	USIBR6	= 6	; USI Buffer Register bit 6
+   276: .equ	USIBR7	= 7	; USI Buffer Register bit 7
+   277: 
+   278: ; USIDR - USI Data Register
+   279: .equ	USIDR0	= 0	; USI Data Register bit 0
+   280: .equ	USIDR1	= 1	; USI Data Register bit 1
+   281: .equ	USIDR2	= 2	; USI Data Register bit 2
+   282: .equ	USIDR3	= 3	; USI Data Register bit 3
+   283: .equ	USIDR4	= 4	; USI Data Register bit 4
+   284: .equ	USIDR5	= 5	; USI Data Register bit 5
+   285: .equ	USIDR6	= 6	; USI Data Register bit 6
+   286: .equ	USIDR7	= 7	; USI Data Register bit 7
+   287: 
+   288: ; USISR - USI Status Register
+   289: .equ	USICNT0	= 0	; USI Counter Value Bit 0
+   290: .equ	USICNT1	= 1	; USI Counter Value Bit 1
+   291: .equ	USICNT2	= 2	; USI Counter Value Bit 2
+   292: .equ	USICNT3	= 3	; USI Counter Value Bit 3
+   293: .equ	USIDC	= 4	; Data Output Collision
+   294: .equ	USIPF	= 5	; Stop Condition Flag
+   295: .equ	USIOIF	= 6	; Counter Overflow Interrupt Flag
+   296: .equ	USISIF	= 7	; Start Condition Interrupt Flag
+   297: 
+   298: ; USICR - USI Control Register
+   299: .equ	USITC	= 0	; Toggle Clock Port Pin
+   300: .equ	USICLK	= 1	; Clock Strobe
+   301: .equ	USICS0	= 2	; USI Clock Source Select Bit 0
+   302: .equ	USICS1	= 3	; USI Clock Source Select Bit 1
+   303: .equ	USIWM0	= 4	; USI Wire Mode Bit 0
+   304: .equ	USIWM1	= 5	; USI Wire Mode Bit 1
+   305: .equ	USIOIE	= 6	; Counter Overflow Interrupt Enable
+   306: .equ	USISIE	= 7	; Start Condition Interrupt Enable
+   307: 
+   308: 
+   309: ; ***** EXTERNAL_INTERRUPT ***********
+   310: ; MCUCR - MCU Control Register
+   311: .equ	ISC00	= 0	; Interrupt Sense Control 0 Bit 0
+   312: .equ	ISC01	= 1	; Interrupt Sense Control 0 Bit 1
+   313: 
+   314: ; GIMSK - General Interrupt Mask Register
+   315: .equ	GICR	= GIMSK	; For compatibility
+   316: .equ	PCIE0	= 4	; Pin Change Interrupt Enable 0
+   317: .equ	PCIE1	= 5	; Pin Change Interrupt Enable 1
+   318: .equ	INT0	= 6	; External Interrupt Request 0 Enable
+   319: 
+   320: ; GIFR - General Interrupt Flag register
+   321: .equ	PCIF0	= 4	; Pin Change Interrupt Flag 0
+   322: .equ	PCIF1	= 5	; Pin Change Interrupt Flag 1
+   323: .equ	INTF0	= 6	; External Interrupt Flag 0
+   324: 
+   325: ; PCMSK1 - Pin Change Enable Mask 1
+   326: .equ	PCINT8	= 0	; Pin Change Enable Mask Bit 8
+   327: .equ	PCINT9	= 1	; Pin Change Enable Mask Bit 9
+   328: .equ	PCINT10	= 2	; Pin Change Enable Mask Bit 10
+   329: .equ	PCINT11	= 3	; Pin Change Enable Mask Bit 11
+   330: 
+   331: ; PCMSK0 - Pin Change Enable Mask 0
+   332: .equ	PCINT0	= 0	; Pin Change Enable Mask Bit 0
+   333: .equ	PCINT1	= 1	; Pin Change Enable Mask Bit 1
+   334: .equ	PCINT2	= 2	; Pin Change Enable Mask Bit 2
+   335: .equ	PCINT3	= 3	; Pin Change Enable Mask Bit 3
+   336: .equ	PCINT4	= 4	; Pin Change Enable Mask Bit 4
+   337: .equ	PCINT5	= 5	; Pin Change Enable Mask Bit 5
+   338: .equ	PCINT6	= 6	; Pin Change Enable Mask Bit 6
+   339: .equ	PCINT7	= 7	; Pin Change Enable Mask Bit 7
+   340: 
+   341: 
+   342: ; ***** EEPROM ***********************
+   343: ; EEARL - EEPROM Address Register Low Byte
+   344: .equ	EEAR0	= 0	; EEPROM Read/Write Access Bit 0
+   345: .equ	EEAR1	= 1	; EEPROM Read/Write Access Bit 1
+   346: .equ	EEAR2	= 2	; EEPROM Read/Write Access Bit 2
+   347: .equ	EEAR3	= 3	; EEPROM Read/Write Access Bit 3
+   348: .equ	EEAR4	= 4	; EEPROM Read/Write Access Bit 4
+   349: .equ	EEAR5	= 5	; EEPROM Read/Write Access Bit 5
+   350: .equ	EEAR6	= 6	; EEPROM Read/Write Access Bit 6
+   351: .equ	EEAR7	= 7	; EEPROM Read/Write Access Bit 7
+   352: 
+   353: ; EEARH - EEPROM Address Register High Byte
+   354: .equ	EEAR8	= 0	; EEPROM Read/Write Access Bit 0
+   355: 
+   356: ; EEDR - EEPROM Data Register
+   357: .equ	EEDR0	= 0	; EEPROM Data Register bit 0
+   358: .equ	EEDR1	= 1	; EEPROM Data Register bit 1
+   359: .equ	EEDR2	= 2	; EEPROM Data Register bit 2
+   360: .equ	EEDR3	= 3	; EEPROM Data Register bit 3
+   361: .equ	EEDR4	= 4	; EEPROM Data Register bit 4
+   362: .equ	EEDR5	= 5	; EEPROM Data Register bit 5
+   363: .equ	EEDR6	= 6	; EEPROM Data Register bit 6
+   364: .equ	EEDR7	= 7	; EEPROM Data Register bit 7
+   365: 
+   366: ; EECR - EEPROM Control Register
+   367: .equ	EERE	= 0	; EEPROM Read Enable
+   368: .equ	EEPE	= 1	; EEPROM Write Enable
+   369: .equ	EEMPE	= 2	; EEPROM Master Write Enable
+   370: .equ	EERIE	= 3	; EEPROM Ready Interrupt Enable
+   371: .equ	EEPM0	= 4	; EEPROM Programming Mode Bit 0
+   372: .equ	EEPM1	= 5	; EEPROM Programming Mode Bit 1
+   373: 
+   374: 
+   375: ; ***** WATCHDOG *********************
+   376: ; WDTCSR - Watchdog Timer Control Register
+   377: .equ	WDP0	= 0	; Watch Dog Timer Prescaler bit 0
+   378: .equ	WDP1	= 1	; Watch Dog Timer Prescaler bit 1
+   379: .equ	WDP2	= 2	; Watch Dog Timer Prescaler bit 2
+   380: .equ	WDE	= 3	; Watch Dog Enable
+   381: .equ	WDCE	= 4	; Watchdog Change Enable
+   382: .equ	WDP3	= 5	; Watchdog Timer Prescaler Bit 3
+   383: .equ	WDIE	= 6	; Watchdog Timeout Interrupt Enable
+   384: .equ	WDIF	= 7	; Watchdog Timeout Interrupt Flag
+   385: 
+   386: 
+   387: ; ***** TIMER_COUNTER_0 **************
+   388: ; TIMSK0 - Timer/Counter Interrupt Mask Register
+   389: .equ	TOIE0	= 0	; Timer/Counter0 Overflow Interrupt Enable
+   390: .equ	OCIE0A	= 1	; Timer/Counter0 Output Compare Match A Interrupt Enable
+   391: .equ	OCIE0B	= 2	; Timer/Counter0 Output Compare Match B Interrupt Enable
+   392: 
+   393: ; TIFR0 - Timer/Counter0 Interrupt Flag Register
+   394: .equ	TOV0	= 0	; Timer/Counter0 Overflow Flag
+   395: .equ	OCF0A	= 1	; Timer/Counter0 Output Compare Flag A
+   396: .equ	OCF0B	= 2	; Timer/Counter0 Output Compare Flag B
+   397: 
+   398: ; TCCR0A - Timer/Counter  Control Register A
+   399: .equ	WGM00	= 0	; Waveform Generation Mode bit 0
+   400: .equ	WGM01	= 1	; Waveform Generation Mode bit 1
+   401: .equ	COM0B0	= 4	; Compare Match Output B Mode bit 0
+   402: .equ	COM0B1	= 5	; Compare Match Output B Mode bit 1
+   403: .equ	COM0A0	= 6	; Compare Match Output A Mode bit 0
+   404: .equ	COM0A1	= 7	; Compare Match Output A Mode bit 1
+   405: 
+   406: ; TCCR0B - Timer/Counter Control Register B
+   407: .equ	CS00	= 0	; Clock Select bit 0
+   408: .equ	CS01	= 1	; Clock Select bit 1
+   409: .equ	CS02	= 2	; Clock Select bit 2
+   410: .equ	WGM02	= 3	; Waveform Generation Mode bit 2
+   411: .equ	FOC0B	= 6	; Force Output Compare B
+   412: .equ	FOC0A	= 7	; Force Output Compare A
+   413: 
+   414: ; TCNT0 - Timer/Counter0
+   415: .equ	TCNT0_0	= 0	; 
+   416: .equ	TCNT0_1	= 1	; 
+   417: .equ	TCNT0_2	= 2	; 
+   418: .equ	TCNT0_3	= 3	; 
+   419: .equ	TCNT0_4	= 4	; 
+   420: .equ	TCNT0_5	= 5	; 
+   421: .equ	TCNT0_6	= 6	; 
+   422: .equ	TCNT0_7	= 7	; 
+   423: 
+   424: ; OCR0A - Timer/Counter0 Output Compare Register A
+   425: .equ	OCR0A_0	= 0	; 
+   426: .equ	OCR0A_1	= 1	; 
+   427: .equ	OCR0A_2	= 2	; 
+   428: .equ	OCR0A_3	= 3	; 
+   429: .equ	OCR0A_4	= 4	; 
+   430: .equ	OCR0A_5	= 5	; 
+   431: .equ	OCR0A_6	= 6	; 
+   432: .equ	OCR0A_7	= 7	; 
+   433: 
+   434: ; OCR0B - Timer/Counter0 Output Compare Register B
+   435: .equ	OCR0_0	= 0	; 
+   436: .equ	OCR0_1	= 1	; 
+   437: .equ	OCR0_2	= 2	; 
+   438: .equ	OCR0_3	= 3	; 
+   439: .equ	OCR0_4	= 4	; 
+   440: .equ	OCR0_5	= 5	; 
+   441: .equ	OCR0_6	= 6	; 
+   442: .equ	OCR0_7	= 7	; 
+   443: 
+   444: ; GTCCR - General Timer/Counter Control Register
+   445: .equ	PSR10	= 0	; Prescaler Reset Timer/CounterN
+   446: .equ	TSM	= 7	; Timer/Counter Synchronization Mode
+   447: 
+   448: 
+   449: ; ***** TIMER_COUNTER_1 **************
+   450: ; TIMSK1 - Timer/Counter1 Interrupt Mask Register
+   451: .equ	TOIE1	= 0	; Timer/Counter1 Overflow Interrupt Enable
+   452: .equ	OCIE1A	= 1	; Timer/Counter1 Output Compare A Match Interrupt Enable
+   453: .equ	OCIE1B	= 2	; Timer/Counter1 Output Compare B Match Interrupt Enable
+   454: .equ	ICIE1	= 5	; Timer/Counter1 Input Capture Interrupt Enable
+   455: 
+   456: ; TIFR1 - Timer/Counter Interrupt Flag register
+   457: .equ	TOV1	= 0	; Timer/Counter1 Overflow Flag
+   458: .equ	OCF1A	= 1	; Timer/Counter1 Output Compare A Match Flag
+   459: .equ	OCF1B	= 2	; Timer/Counter1 Output Compare B Match Flag
+   460: .equ	ICF1	= 5	; Timer/Counter1 Input Capture Flag
+   461: 
+   462: ; TCCR1A - Timer/Counter1 Control Register A
+   463: .equ	WGM10	= 0	; Pulse Width Modulator Select Bit 0
+   464: .equ	PWM10	= WGM10	; For compatibility
+   465: .equ	WGM11	= 1	; Pulse Width Modulator Select Bit 1
+   466: .equ	PWM11	= WGM11	; For compatibility
+   467: .equ	COM1B0	= 4	; Comparet Ouput Mode 1B, bit 0
+   468: .equ	COM1B1	= 5	; Compare Output Mode 1B, bit 1
+   469: .equ	COM1A0	= 6	; Comparet Ouput Mode 1A, bit 0
+   470: .equ	COM1A1	= 7	; Compare Output Mode 1A, bit 1
+   471: 
+   472: ; TCCR1B - Timer/Counter1 Control Register B
+   473: .equ	CS10	= 0	; Clock Select bit 0
+   474: .equ	CS11	= 1	; Clock Select 1 bit 1
+   475: .equ	CS12	= 2	; Clock Select1 bit 2
+   476: .equ	WGM12	= 3	; Waveform Generation Mode Bit 2
+   477: .equ	CTC1	= WGM12	; For compatibility
+   478: .equ	WGM13	= 4	; Waveform Generation Mode Bit 3
+   479: .equ	ICES1	= 6	; Input Capture 1 Edge Select
+   480: .equ	ICNC1	= 7	; Input Capture 1 Noise Canceler
+   481: 
+   482: ; TCCR1C - Timer/Counter1 Control Register C
+   483: .equ	FOC1B	= 6	; Force Output Compare for Channel B
+   484: .equ	FOC1A	= 7	; Force Output Compare for Channel A
+   485: 
+   486: 
+   487: ; ***** CPU **************************
+   488: ; SREG - Status Register
+   489: .equ	SREG_C	= 0	; Carry Flag
+   490: .equ	SREG_Z	= 1	; Zero Flag
+   491: .equ	SREG_N	= 2	; Negative Flag
+   492: .equ	SREG_V	= 3	; Two's Complement Overflow Flag
+   493: .equ	SREG_S	= 4	; Sign Bit
+   494: .equ	SREG_H	= 5	; Half Carry Flag
+   495: .equ	SREG_T	= 6	; Bit Copy Storage
+   496: .equ	SREG_I	= 7	; Global Interrupt Enable
+   497: 
+   498: ; SPL - Stack Pointer Low
+   499: .equ	SP0	= 0	; Stack pointer bit 0
+   500: .equ	SP1	= 1	; Stack pointer bit 1
+   501: .equ	SP2	= 2	; Stack pointer bit 2
+   502: .equ	SP3	= 3	; Stack pointer bit 3
+   503: .equ	SP4	= 4	; Stack pointer bit 4
+   504: .equ	SP5	= 5	; Stack pointer bit 5
+   505: .equ	SP6	= 6	; Stack pointer bit 6
+   506: .equ	SP7	= 7	; Stack pointer bit 7
+   507: 
+   508: ; MCUCR - MCU Control Register
+   509: .equ	SM0	= 3	; Sleep Mode Select Bit 0
+   510: .equ	SM1	= 4	; Sleep Mode Select Bit 1
+   511: .equ	SE	= 5	; Sleep Enable
+   512: .equ	PUD	= 6	; 
+   513: 
+   514: ; MCUSR - MCU Status Register
+   515: .equ	PORF	= 0	; Power-on reset flag
+   516: .equ	EXTRF	= 1	; External Reset Flag
+   517: .equ	BORF	= 2	; Brown-out Reset Flag
+   518: .equ	WDRF	= 3	; Watchdog Reset Flag
+   519: 
+   520: ; OSCCAL - Oscillator Calibration Value
+   521: .equ	CAL0	= 0	; Oscillator Calibration Value Bit0
+   522: .equ	CAL1	= 1	; Oscillator Calibration Value Bit1
+   523: .equ	CAL2	= 2	; Oscillator Calibration Value Bit2
+   524: .equ	CAL3	= 3	; Oscillator Calibration Value Bit3
+   525: .equ	CAL4	= 4	; Oscillator Calibration Value Bit4
+   526: .equ	CAL5	= 5	; Oscillator Calibration Value Bit5
+   527: .equ	CAL6	= 6	; Oscillator Calibration Value Bit6
+   528: .equ	CAL7	= 7	; Oscillator Calibration Value Bit7
+   529: 
+   530: ; GPIOR2 - General Purpose I/O Register 2
+   531: .equ	GPIOR20	= 0	; 
+   532: .equ	GPIOR21	= 1	; 
+   533: .equ	GPIOR22	= 2	; 
+   534: .equ	GPIOR23	= 3	; 
+   535: .equ	GPIOR24	= 4	; 
+   536: .equ	GPIOR25	= 5	; 
+   537: .equ	GPIOR26	= 6	; 
+   538: .equ	GPIOR27	= 7	; 
+   539: 
+   540: ; GPIOR1 - General Purpose I/O Register 1
+   541: .equ	GPIOR10	= 0	; 
+   542: .equ	GPIOR11	= 1	; 
+   543: .equ	GPIOR12	= 2	; 
+   544: .equ	GPIOR13	= 3	; 
+   545: .equ	GPIOR14	= 4	; 
+   546: .equ	GPIOR15	= 5	; 
+   547: .equ	GPIOR16	= 6	; 
+   548: .equ	GPIOR17	= 7	; 
+   549: 
+   550: ; GPIOR0 - General Purpose I/O Register 0
+   551: .equ	GPIOR00	= 0	; 
+   552: .equ	GPIOR01	= 1	; 
+   553: .equ	GPIOR02	= 2	; 
+   554: .equ	GPIOR03	= 3	; 
+   555: .equ	GPIOR04	= 4	; 
+   556: .equ	GPIOR05	= 5	; 
+   557: .equ	GPIOR06	= 6	; 
+   558: .equ	GPIOR07	= 7	; 
+   559: 
+   560: ; PRR - Power Reduction Register
+   561: .equ	PRADC	= 0	; Power Reduction ADC
+   562: .equ	PRUSI	= 1	; Power Reduction USI
+   563: .equ	PRTIM0	= 2	; Power Reduction Timer/Counter0
+   564: .equ	PRTIM1	= 3	; Power Reduction Timer/Counter1
+   565: 
+   566: ; CLKPR - Clock Prescale Register
+   567: .equ	CLKPS0	= 0	; Clock Prescaler Select Bit 0
+   568: .equ	CLKPS1	= 1	; Clock Prescaler Select Bit 1
+   569: .equ	CLKPS2	= 2	; Clock Prescaler Select Bit 2
+   570: .equ	CLKPS3	= 3	; Clock Prescaler Select Bit 3
+   571: .equ	CLKPCE	= 7	; Clock Prescaler Change Enable
+   572: 
+   573: 
+   574: ; ***** BOOT_LOAD ********************
+   575: ; SPMCSR - Store Program Memory Control Register
+   576: .equ	SPMEN	= 0	; Store Program Memory Enable
+   577: .equ	PGERS	= 1	; Page Erase
+   578: .equ	PGWRT	= 2	; Page Write
+   579: .equ	RFLB	= 3	; Read fuse and lock bits
+   580: .equ	CTPB	= 4	; Clear temporary page buffer
+   581: 
+   582: 
+   583: 
+   584: ; ***** LOCKSBITS ********************************************************
+   585: .equ	LB1	= 0	; Lockbit
+   586: .equ	LB2	= 1	; Lockbit
+   587: 
+   588: 
+   589: ; ***** FUSES ************************************************************
+   590: ; LOW fuse bits
+   591: .equ	CKSEL0	= 0	; Select Clock source
+   592: .equ	CKSEL1	= 1	; Select Clock source
+   593: .equ	CKSEL2	= 2	; Select Clock source
+   594: .equ	CKSEL3	= 3	; Select Clock source
+   595: .equ	SUT0	= 4	; Select start-up time
+   596: .equ	SUT1	= 5	; Select start-up time
+   597: .equ	CKOUT	= 6	; Clock Output Enable
+   598: .equ	CKDIV8	= 7	; Divide clock by 8
+   599: 
+   600: ; HIGH fuse bits
+   601: .equ	BODLEVEL0	= 0	; Brown-out Detector trigger level
+   602: .equ	BODLEVEL1	= 1	; Brown-out Detector trigger level
+   603: .equ	BODLEVEL2	= 2	; Brown-out Detector trigger level
+   604: .equ	EESAVE	= 3	; EEPROM memory is preserved through the Chip Erase
+   605: .equ	WDTON	= 4	; Watchdog Timer always on
+   606: .equ	SPIEN	= 5	; Enable Serial Program and Data Downloading
+   607: .equ	DWEN	= 6	; DebugWIRE Enable
+   608: .equ	RSTDISBL	= 7	; External Reset disable
+   609: 
+   610: ; EXTENDED fuse bits
+   611: .equ	SELFPRGEN	= 0	; Self-Programming Enable
+   612: 
+   613: 
+   614: 
+   615: ; ***** CPU REGISTER DEFINITIONS *****************************************
+   616: .def	XH	= r27
+   617: .def	XL	= r26
+   618: .def	YH	= r29
+   619: .def	YL	= r28
+   620: .def	ZH	= r31
+   621: .def	ZL	= r30
+   622: 
+   623: 
+   624: 
+   625: ; ***** DATA MEMORY DECLARATIONS *****************************************
+   626: .equ	FLASHEND	= 0x03ff	; Note: Word address
+   627: .equ	IOEND	= 0x003f
+   628: .equ	SRAM_START	= 0x0060
+   629: .equ	SRAM_SIZE	= 128
+   630: .equ	RAMEND	= 0x00df
+   631: .equ	XRAMEND	= 0x0000
+   632: .equ	E2END	= 0x007f
+   633: .equ	EEPROMEND	= 0x007f
+   634: .equ	EEADRBITS	= 7
+   635: #pragma AVRPART MEMORY PROG_FLASH 2048
+   636: #pragma AVRPART MEMORY EEPROM 128
+   637: #pragma AVRPART MEMORY INT_SRAM SIZE 128
+   638: #pragma AVRPART MEMORY INT_SRAM START_ADDR 0x60
+   639: 
+   640: 
+   641: 
+   642: ; ***** BOOTLOADER DECLARATIONS ******************************************
+   643: .equ	NRWW_START_ADDR	= 0x0
+   644: .equ	NRWW_STOP_ADDR	= 0x3ff
+   645: .equ	RWW_START_ADDR	= 0x0
+   646: .equ	RWW_STOP_ADDR	= 0x0
+   647: .equ	PAGESIZE	= 16
+   648: 
+   649: 
+   650: 
+   651: ; ***** INTERRUPT VECTORS ************************************************
+   652: .equ	EXT_INT0addr	= 0x0001	; External Interrupt Request 0
+   653: .equ	PCI0addr	= 0x0002	; Pin Change Interrupt Request 0
+   654: .equ	PCI1addr	= 0x0003	; Pin Change Interrupt Request 1
+   655: .equ	WATCHDOGaddr	= 0x0004	; Watchdog Time-out
+   656: .equ	ICP1addr	= 0x0005	; Timer/Counter1 Capture Event
+   657: .equ	OC1Aaddr	= 0x0006	; Timer/Counter1 Compare Match A
+   658: .equ	OC1Baddr	= 0x0007	; Timer/Counter1 Compare Match B
+   659: .equ	OVF1addr	= 0x0008	; Timer/Counter1 Overflow
+   660: .equ	OC0Aaddr	= 0x0009	; Timer/Counter0 Compare Match A
+   661: .equ	OC0Baddr	= 0x000a	; Timer/Counter0 Compare Match B
+   662: .equ	OVF0addr	= 0x000b	; Timer/Counter0 Overflow
+   663: .equ	ACIaddr	= 0x000c	; Analog Comparator
+   664: .equ	ADCCaddr	= 0x000d	; ADC Conversion Complete
+   665: .equ	ERDYaddr	= 0x000e	; EEPROM Ready
+   666: .equ	USI_STRaddr	= 0x000f	; USI START
+   667: .equ	USI_OVFaddr	= 0x0010	; USI Overflow
+   668: 
+   669: .equ	INT_VECTORS_SIZE	= 17	; size in words
+   670: 
+   671: #endif  /* _TN24ADEF_INC_ */
+   672: 
+   673: ; ***** END OF FILE ******************************************************
+   674: 
+  Continuing file ish.asm
+     2: ; Internal Hardware Init  ======================================
+     3: 		.equ 	XTAL = 16000000 
+     4: 
+     5: .def     Flag=R5	;флаг
+     6: .def     Th0=R6		;Час выключения
+     7: .def     Tm0=R7		;Минута выключения
+     8: .def     Th1=R8		;Час включения
+     9: .def     Tm1=R9		;Минута включения
+    10: .def     ThC=R12	;Час Текущий (считанный)
+    11: .def     TmC=R11	;Минута Текущая (считанная)
+    12: .def     MenuCNT=R10;Счетчик меню
+    13: 
+    14: .def     Temp=R16
+    15: .def     Temp2=R17
+    16: .def     CNT=R18
+    17: .def     OutByte=R20
+    18: .def     OutByte2=R21
+    19: .def     IncBCD=R23
+    20: 
+    21: .equ	KeyPin=PINA
+    22: .equ	MenuKey=PA0
+    23: .equ	OkKey=PA1
+    24: .equ	Light=PA2	; Управление светом на порте PA7
+    25: .equ	SEG7_DDR=DDRA
+    26: .equ	SEG7_PORT=PortA
+    27: .equ	DS=PA3
+    28: .equ	SHcp=PA5
+    29: .equ	STcp=PA7
+    30: .equ	dot=2
+    31: 
+    32: 
+    33: .equ	EEPTh0=100
+    34: .equ	EEPTm0=101
+    35: .equ	EEPTh1=102
+    36: .equ	EEPTm1=103
+    37: 
+    38: .cseg
+    39: .org 0
+    40: 
+    41: 000000   C011  rjmp RESET
+    42: 000001   C00F  rjmp EXTINT0
+    43: 000002   C00E  rjmp EXTPCINT0
+    44: 000003   C00D  rjmp EXTPCINT1
+    45: 000004   C00C  rjmp WDT
+    46: 000005   C00B  rjmp TIM1_CAPT
+    47: 000006   C00A  rjmp TIM1_COMPA
+    48: 000007   C009  rjmp TIM1_COMPB
+    49: 000008   C008  rjmp TIM1_OVF
+    50: 000009   C007  rjmp TIM0_COMPA
+    51: 00000A   C006  rjmp TIM0_COMPB
+    52: 00000B   C005  rjmp TIM0_OVF
+    53: 00000C   C004  rjmp ANA_COMP
+    54: 00000D   C003  rjmp ADC
+    55: 00000E   C002  rjmp EE_RDY
+    56: 00000F   C001  rjmp USI_STR
+    57: 000010   C000  rjmp USI_OVF
+    58: 
+    59: 
+    60: ;RESET:
+    61: EXTINT0:
+    62: EXTPCINT0:
+    63: EXTPCINT1:
+    64: WDT:
+    65: TIM1_CAPT:
+    66: TIM1_COMPA:
+    67: TIM1_COMPB:
+    68: TIM1_OVF:
+    69: TIM0_COMPA:
+    70: TIM0_COMPB:
+    71: TIM0_OVF:
+    72: ANA_COMP:
+    73: ADC:
+    74: EE_RDY:
+    75: USI_STR:
+    76: USI_OVF:
+    77: 000011   9518  reti
+    78: 
+    79: 
+    80: RESET:	
+    81: 000012   ED0F  ldi R16,RamEnd       ;инициализация стека
+    82: 000013   BF0D  out SPL,R16
+    83: 
+    84: 000014   95A8  WDR
+    85: 	; Очищаем бит WDRF в регистре MCUSR
+    86: 000015   B704  in Temp, MCUSR
+    87: 000016   7F07  andi Temp, ~(1<<WDRF)
+    88: 000017   BF04  out MCUSR, Temp
+    89: 	; Пишем 1 в WDCE and WDE
+    90: 000018   B501  in Temp, WDTCSR
+    91: 000019   6108  ori Temp, (1<<WDCE) | (1<<WDE)
+    92: 00001A   BD01  out WDTCSR, Temp
+    93: 	;Записываем новое значение предделителя времени задержки
+    94: 00001B   E00F  ldi Temp, (0<<WDP3) |(1<<WDP2) | (1<<WDP1) | (1<<WDP0) | (1<<WDE) | (0<<WDIE)	; Предделитель на 2 секунды
+    95: 00001C   BD01  out WDTCSR, Temp
+    96: 00001D   95A8  WDR
+    97: 00001E   9478  SEI
+    98: 
+    99: 00001F   E004  ldi R16,1<<Light	;настройка порта A
+   100: 000020   BB0A  out DDRA,R16
+   101: 
+   102: 000021   EA08  ldi Temp, 1<<DS|1<<SHcp|1<<STcp  ;настройка порта SEG7
+   103: 000022   B31A  in Temp2, SEG7_DDR
+   104: 000023   7517  ANDI Temp2, ~(1<<STcp|1<<SHcp|1<<DS)
+   105: 000024   2B01  OR Temp, Temp2
+   106: 000025   BB0A  out SEG7_DDR,Temp
+   107: 
+   108: 000026   E000  ldi R16,0b00000000	;Гасим свет
+   109: 000027   BB0B  out PORTA,R16
+   110: 
+   111: 
+   112: 000028   2722  CLR R18
+   113: 000029   E614  LDI R17, EEPTh0
+   114: 00002A   D234  RCALL EEPROM_read
+   115: 00002B   2E60  MOV Th0,R16		;Час выключения
+   116: 00002C   E615  LDI R17, EEPTm0
+   117: 00002D   D231  RCALL EEPROM_read
+   118: 00002E   2E70  MOV Tm0,R16		;Минута выключения
+   119: 00002F   E616  LDI R17, EEPTh1
+   120: 000030   D22E  RCALL EEPROM_read
+   121: 000031   2E80  MOV Th1,R16		;Час включения
+   122: 000032   E617  LDI R17, EEPTm1
+   123: 000033   D22B  RCALL EEPROM_read
+   124: 000034   2E90  MOV Tm1,R16		;Минута включения
+   125: 
+   126: 000035   D001  RCALL CheckFlag
+   127: 000036   C029  RJMP Begin
+   128: 
+   129: ;|----------------------------------------------------------------------
+   130: CheckFlag:	;Выставить флаг =1 если T0 > T1, иначе =0
+   131: 000037   2700  CLR R16
+   132: 000038   D1ED  RCALL CpTime
+   133: 000039   F010  BRLO FlagZero
+   134: 00003A   E001  LDI R16, 1
+   135: 00003B   C001  RJMP FlagWrite
+   136: 00003C   E000  LDI R16, 0
+   137: 00003D   2E50  MOV Flag, R16
+   138: 00003E   9508  RET
+   139: ;|----------------------------------------------------------------------
+   140: 
+   141: 	.include 	"USI_macro.inc"
+  Including file USI_macro.inc
+     1: ;===============================================================================================
+     2: ; USI def
+     3: 
+     4: .ifndef XTAL
+     5: 	.error "XTAL must be defined!"
+     6: .endif
+     7: 
+     8: 	.equ	USIDelayC	= (XTAL/2000000)	; Задержка для примерно 200kHz
+     9: 
+    10: 	.equ	DS1307		= 0b11010000	;Адрес часов
+    11: 	.equ	USISR_8BIT	= 0xF0			; значение 4х битного счетчика для передачи 8 бит пакета  информации 
+    12: 	.equ	USISR_1BIT	= 0xFE			; значение 4х битного счетчика для передачи 9го бита пакета  информации 
+    13: 	
+    14: 	
+    15: 	.equ	SCLPort		= PORTA
+    16: 	.equ	SDAPort		= PORTA
+    17: 	.equ	SCLPin		= PINA
+    18: 	.equ	SDAPin		= PINA
+    19: 	.equ	SCLDDR		= DDRA
+    20: 	.equ	SDADDR		= DDRA
+    21: 	.equ	SCL			= 4
+    22: 	.equ	SDA			= 6
+    23: 
+    24: 
+    25: ;===============================================================================================
+    26: ; USI Init
+    27: 	.MACRO	USI_TWI_INIT
+    28: 	SBI SCLDDR, SCL
+    29: 	SBI SDADDR, SDA
+    30: 	LDI R16, 0<<USISIE|0<<USIOIE|1<<USIWM1|0<<USIWM0|1<<USICS1|0<<USICS0|1<<USICLK|0<<USITC	; Отключаем прерывания, двухпроводной режим без удержания SCL 
+    31: 	OUT USICR, R16
+    32: 	LDI R16, 1<<USISIF|1<<USIOIF|1<<USIPF|1<<USIDC|0<<USICNT3|0<<USICNT2|0<<USICNT1|0<<USICNT0
+    33: 	OUT USISR, R16
+    34: 	LDI R17, 0xFF				;ВАЖНО!!!
+    35: 	OUT USIDR, R17				;освобождаем линию sda
+    36: 	SBI SDAPORT, SDA
+    37: 	SBI SCLPORT, SCL
+    38: 	RCALL USIDelay
+    39: 	
+    40: 	.ENDM
+    41: 
+    42: ;===============================================================================================
+    43: ;Start
+    44: 	.MACRO	USI_TWI_START
+    45: 	SBI SCLPORT, SCL		;перевод SCL в 1
+    46: 	RCALL USIDelay
+    47: 	SBI SDAPORT, SDA		;на всякий случай выставляем в исходное состояние SDA
+    48: 	CBI SCLDDR, SCL			;ВАЖНО!!! отключаем SCL от выходного буфера интерфейса
+    49: 	LDI R16, 1<<USISIF|1<<USIOIF|1<<USIPF|1<<USIDC|0<<USICNT3|0<<USICNT2|0<<USICNT1|0<<USICNT0	;сбрасываем USISR
+    50: 	OUT USISR, R16
+    51: 	CBI SDAPORT, SDA		;переводим  SDA в 0 пока SCL в 1
+    52: 	RCALL USIDelay			;тупим нашу задержку
+    53: 	SBI SCLDDR, SCL			;ВАЖНО!!! подключаем SCL обратно к выходному буферу интерфейса
+    54: 	CBI SCLPORT, SCL		;переводим SCL в 0
+    55: 	SBI SDAPORT, SDA		;освобождаем линию SDA для последующей передачи/приема данных
+    56: 	RCALL USIDelay			;тупим нашу задержку
+    57: 	
+    58: 	.ENDM
+    59: 
+    60: ;===============================================================================================
+    61: ;Stop
+    62: 	.MACRO	USI_TWI_STOP
+    63: 	CBI SCLPORT, SCL		;необязательная подготовка
+    64: 	RCALL USIDelay
+    65: 	CBI SDAPORT, SDA
+    66: 	RCALL USIDelay
+    67: 	SBI SCLPORT, SCL		;перевод SCL в 1
+    68: 	RCALL USIDelay
+    69: 	SBI SDAPORT, SDA		;перевод  SDA в 1
+    70: 	RCALL USIDelay
+    71: 	IN R16, USISR			;сброс флага детекции состояния Стоп в USISR
+    72: 	ORI R16, 1<<USIPF
+    73: 	OUT USISR, R16
+    74: 
+    75: 	.ENDM
+    76: 	
+    77: ;===============================================================================================
+    78: ;Send Byte From R16
+    79: 	.MACRO	USI_SEND_B
+    80: 	SBIS SCLPIN, SCL			;проверка, если старт не прошел — ставим 0й бит R18 и выходим
+    81: 	RJMP NoErrSend
+    82: 	ORI R18, 1<<0
+    83: 	RJMP ErrSend
+    84: NoErrSend:	OUT USIDR, R16				;загружаем байт данных
+    85: 	RCALL USI_TWI_Transf_8bit	;посылаем 8 бит
+    86: 	CBI SDADDR, SDA				;переклюаемся на прием
+    87: 	RCALL USI_TWI_Transf_1bit	;читаем подтверждение
+    88: 	SBRC R16,0
+    89: 	ORI R18, 1<<0				;Если есть ACK - выходим, иначе ставим 1й бит R18
+    90: 	
+    91: ErrSend:
+    92: 	.ENDM
+    93: 	
+    94: ;===============================================================================================
+    95: ;Send Byte Immediate
+    96: 	.MACRO	USI_SEND_BI
+    97: 	LDI R16,@0
+    98: 	USI_SEND_B
+    99: 	.ENDM
+   100: 	
+   101: ;===============================================================================================
+   102: ;Receive Byte
+   103: 	.MACRO	USI_READ
+   104: 	SBIS SCLPIN, SCL			;проверка, если старт не прошел — ставим 0й бит R18 и выходим
+   105: 	RJMP NoErrRead
+   106: 	ORI R18, 1<<0
+   107: 	RJMP ErrRead
+   108: NoErrRead:	CBI SDADDR, SDA				;переклюаемся на прием
+   109: 	RCALL USI_TWI_Transf_8bit	;принимаем 8 бит
+   110: ErrRead:
+   111: 	.ENDM
+   112: 	
+   113: ;===============================================================================================
+   114: ;Receive Byte + ACK
+   115: 	.MACRO	USI_READ_B_ACK
+   116: 	USI_READ
+   117: 	PUSH R16
+   118: 	SBRC R18,0
+   119: 	RJMP ErrReadACK
+   120: 	LDI R16, 0x00	;передаем подтверждение ACK
+   121: 	OUT USIDR, R16
+   122: 	RCALL USI_TWI_Transf_1bit
+   123: 
+   124: 	POP R16
+   125: ErrReadACK:
+   126: 	.ENDM
+   127: 
+   128: ;===============================================================================================
+   129: ;Receive Byte + NACK
+   130: 	.MACRO	USI_READ_B_NACK
+   131: 	USI_READ
+   132: 	PUSH R16
+   133: 	SBRC R18,0
+   134: 	RJMP ErrReadNACK
+   135: 	LDI R16, 0xFF	;передаем NACK
+   136: 	OUT USIDR, R16
+   137: 	RCALL USI_TWI_Transf_1bit
+   138: 
+   139: 	POP R16
+   140: ErrReadNACK:
+   141: 	.ENDM
+   142: 
+   143: ;===============================================================================================
+   144: ;SLA_W
+   145: 	.MACRO	USI_SLA_W
+   146: 	LDI R16,DS1307	;АДРЕС УСТРОЙСТВА
+   147: 	USI_SEND_B
+   148: 	
+   149: 	.ENDM
+   150: 
+   151: ;===============================================================================================
+   152: ;SLA_R
+   153: 	.MACRO	USI_SLA_R
+   154: 	LDI R16,DS1307|1<<0	;АДРЕС УСТРОЙСТВА
+   155: 	USI_SEND_B
+   156: 	
+   157: 	.ENDM
+   158: 
+   159: 
+   160: 
+   161: ;===============================================================================================
+   162: 
+   163: 00003F   EF00  LDI R16, USISR_8BIT
+   164: 000040   C001  RJMP USI_TWI_Transf
+   165: 
+   166: 000041   EF0E  LDI R16, USISR_1BIT
+   167: 000042   B90E  OUT USISR, R16
+   168: 
+   169: 000043   E21B  LDI R17, 0<<USISIE|0<<USIOIE|1<<USIWM1|0<<USIWM0|1<<USICS1|0<<USICS0|1<<USICLK|1<<USITC	;задаем битовую маску для USICR. USITC самый важный бит					
+   170: 000044   D00E  RCALL USIDelay
+   171: 000045   B91D  OUT USICR, R17		;запинываем значение в USICR, интерфейс работает 
+   172: 000046   9BCC  SBIS SCLPIN, SCL	;проверяем, свободна-ли линия
+   173: 000047   CFFE  RJMP SCL_CHECK
+   174: 000048   D00A  RCALL USIDelay
+   175: 000049   B91D  OUT USICR, R17		;еще раз запинываем USICR
+   176: 00004A   B10E  IN R16, USISR
+   177: 00004B   7400  ANDI R16, 1<<USIOIF
+   178: 00004C   F3B9  BREQ USI_TRANSF		;повторяем предыдущие операции до переполнения счетчика
+   179: 
+   180: 00004D   D005  RCALL USIDelay
+   181: 00004E   B10F  IN R16, USIDR				;сохраняем принятые данные
+   182: 00004F   EF1F  LDI R17, 0xFF
+   183: 000050   B91F  OUT USIDR, R17				;освобождаем линию sda
+   184: 000051   9AD6  SBI SDADDR, SDA				;ВАЖНО!!! восстанавливаем  подключение SDA к выходному буферу интерфейса
+   185: 000052   9508  RET
+   186: 
+   187: ;===============================================================================================
+   188: 
+   189: 
+   190: 000053   E008  LDI R16, 	USIDelayC	;Тупим
+   191: 000054   0000  NOP
+   192: 000055   950A  DEC R16
+   193: 000056   F7E9  BRNE USILoop
+   194: 000057   9508  RET
+  Continuing file ish.asm
+   142: 
+   143: sym_table:
+   144: 	; Таблица символов 7SEG дисплея
+   145: 	; Q0 = G, Q1 = C, Q2 = dot, Q3 = D,
+   146: 	; Q4 = E, Q5 = A, Q6 = F,   Q7 = B
+   147: 
+   148: 	.DB 0b11111010, 0b10000010 ; 0, 1
+        000058 82FA
+   149: 	.DB 0b10111001, 0b10101011 ; 2, 3
+        000059 ABB9
+   150: 	.DB 0b11000011, 0b01101011 ; 4, 5
+        00005A 6BC3
+   151: 	.DB 0b01111011, 0b10100010 ; 6, 7
+        00005B A27B
+   152: 	.DB 0b11111011, 0b11101011 ; 8, 9
+        00005C EBFB
+   153: 	.DB 0b00011010, 0b01011001 ; u, t
+        00005D 591A
+   154: 	.DB 0b01111000, 0b00010011 ; C, n
+        00005E 1378
+   155: 	.DB 0b00010001, 0b01110001 ; r, F
+        00005F 7111
+   156: 
+   157: 000060   D159  RCALL ReadTime
+   158: 000061   FE50  SBRS Flag, 0
+   159: 000062   C007  RJMP FL0	;Если флаг  не выставлен, переходим к сравнению, когда T0<T1
+   160: 
+   161: 000063   E002  LDI R16, 1<<1		;Сравниваем текущее время с T1
+   162: 000064   D1C1  rcall CpTime
+   163: 000065   F078  BRLO Light_Off	; Если Т1 больше - выключаем
+   164: 000066   E001  LDI R16, 1<<0		;Сравниваем текущее время с T0
+   165: 000067   D1BE  rcall CpTime
+   166: 000068   F460  BRSH Light_Off	; Если Тc больше - выключаем
+   167: 000069   C007  rjmp Light_ON
+   168: 
+   169: FL0:	; Флаг =0
+   170: 00006A   E002  LDI R16, 1<<1		;Сравниваем текущее время с T1
+   171: 00006B   D1BA  rcall CpTime
+   172: 00006C   F420  BRSH Light_On	; Если Тc больше - включаем
+   173: 00006D   E001  LDI R16, 1<<0		;Сравниваем текущее время с T0
+   174: 00006E   D1B7  rcall CpTime
+   175: 00006F   F428  BRSH Light_Off	; Если Тc больше - выключаем
+   176: 000070   C000  rjmp Light_ON
+   177: 
+   178: 000071   B30B  in R16,PORTA ; Включаем свет
+   179: 000072   6004  ori R16, 1<<Light
+   180: 000073   BB0B  out PORTA, R16
+   181: 000074   C003  rjmp Bezdel
+   182: 
+   183: 000075   B30B  in R16,PORTA ; Выключаем свет
+   184: 000076   7F0B  andi R16, ~(1<<Light)
+   185: 000077   BB0B  out PORTA, R16
+   186: 
+   187: Bezdel:
+   188: 000078   D21A  rcall BCDTo7SEG
+   189: 000079   95A8  WDR
+   190: 00007A   D1CC  rcall Delay
+   191: 00007B   0000  nop
+   192: 00007C   CFE3  RJMP Begin
+   193: 
+   194: ;|----------------------------------------------------------------------
+   195: ;| Настройка
+   196: ;|----------------------------------------------------------------------
+   197: MenuWays: .dw	TCurrent, SetThC, SetTmC, TCurrentWR, TOff, SetTh0, SetTm0, TOffWR, TOn, SetTh1, SetTm1, TOnWR, SetExit	;Для переходов по меню
+        00007D 00C4 00D1 00E2 00EE 013D 0148 0159 0165
+        000085 0176 017F 0190 019C 01AC
+   198: 
+   199: 00008A   24AA  CLR MenuCNT
+   200: 00008B   94E8  CLT
+   201: 00008C   910F  POP R16
+   202: 00008D   910F  POP R16
+   203: 00008E   2D4A  MOV R20, MenuCNT
+   204: 00008F   0F44  LSL R20
+   205: 000090   EFEA  LDI	ZL, low(MenuWays*2)		; Загружаем адрес нашей таблицы.
+   206: 000091   E0F0  LDI	ZH, High(MenuWays*2)
+   207: 000092   2755  CLR	R21
+   208: 000093   0FE4  ADD	ZL, R20
+   209: 000094   1FF5  ADC	ZH, R21
+   210: 000095   9145  LPM	R20,Z+
+   211: 000096   9154  LPM	R21,Z
+   212: 000097   2FF5  MOV ZH, R21
+   213: 000098   2FE4  MOV ZL, R20
+   214: 000099   9409  IJMP
+   215: 
+   216: 00009A   94E8  CLT
+   217: 00009B   2D1A  MOV R17, MenuCNT
+   218: 00009C   7013  ANDI R17, 1<<0|1<<1
+   219: 00009D   F011  BREQ ADD4
+   220: 00009E   94A3  INC MenuCNT
+   221: 00009F   CFEE  RJMP MenuRoute
+   222: 0000A0   2D1A  MOV R17, MenuCNT
+   223: 0000A1   5F1C  SUBI R17, 0xFC		;R17 + 4
+   224: 0000A2   2EA1  MOV MenuCNT, R17
+   225: 0000A3   CFEA  RJMP MenuRoute
+   226: 
+   227: 
+   228: 0000A4   2D1A  MOV R17, MenuCNT
+   229: 0000A5   7013  ANDI R17, 1<<0|1<<1
+   230: 0000A6   F011  BREQ MenuInc
+   231: 0000A7   D1BE  Rcall BCDInc		; Инкремент числа в BCD
+   232: 0000A8   CFE5  RJMP MenuRoute
+   233: 0000A9   94A3  INC MenuCNT
+   234: 0000AA   CFE3  RJMP MenuRoute
+   235: 
+   236: 0000AB   E000  LDI R16,0x00      ;задержка (0:6 - 0,2 секунды)
+   237: 0000AC   2E30  MOV R3, R16
+   238: 0000AD   E006  LDI R16,0x06
+   239: 0000AE   2E40  MOV R4, R16
+   240: 0000AF   D206  rcall TimeToSeg
+   241: 0000B0   943A  dec R3
+   242: 0000B1   F7E9  brne Loop2
+   243: 0000B2   944A  dec R4
+   244: 0000B3   F7D9  brne Loop2
+   245: 0000B4   95A8  WDR
+   246: 0000B5   E000  LDI R16,0x00      ;задержка (0:6 - 0,2 секунды)
+   247: 0000B6   2E30  MOV R3, R16
+   248: 0000B7   E708  LDI R16,120
+   249: 0000B8   2E40  MOV R4, R16
+   250: 0000B9   D1FC  rcall TimeToSeg
+   251: 0000BA   943A  dec R3
+   252: 0000BB   F7E9  brne Loop3
+   253: 0000BC   99C8  SBIC KeyPin, MenuKey
+   254: 0000BD   CFDC  RJMP MenuPressed
+   255: 0000BE   99C9  SBIC KeyPin, OkKey
+   256: 0000BF   CFE4  RJMP OkPressed
+   257: 0000C0   95A8  WDR
+   258: 0000C1   944A  dec R4
+   259: 0000C2   F7B1  brne Loop3
+   260: 
+   261: 0000C3   CF9C  RJMP Begin
+   262: 
+   263: 
+   264: 0000C4   EB0C  LDI R16, 0xBC		; Отобразить tCur
+   265: 0000C5   2EC0  MOV R12, R16
+   266: 0000C6   EA0E  LDI R16, 0xAE
+   267: 0000C7   2EB0  MOV R11, R16
+   268: 0000C8   D1CA  rcall BCDTo7SEG
+   269: 0000C9   9100  LDS R16, TimeToOut+1
+        0000CA   0061
+   270: 0000CB   7F0B  ANDI R16, ~(1<<dot)
+   271: 0000CC   9300  STS TimeToOut+1, R16
+        0000CD   0061
+   272: 0000CE   D0E1  RCALL Delay05
+   273: 0000CF   95A8  WDR
+   274: 0000D0   CFDA  RJMP Indication
+   275: 
+   276: 0000D1   F01E  BRTS ThCTS			; Настройка часов
+   277: 0000D2   9468  SET
+   278: 0000D3   D0E6  RCALL ReadTime
+   279: 0000D4   2D7C  MOV IncBCD, R12
+   280: 0000D5   2EC7  MOV R12, IncBCD
+   281: 0000D6   D1BC  rcall BCDTo7SEG
+   282: 0000D7   9110  LDS R17, TimeToOut+1
+        0000D8   0061
+   283: 0000D9   7F1B  ANDI R17, ~(1<<dot)
+   284: 0000DA   9310  STS TimeToOut+1, R17
+        0000DB   0061
+   285: 0000DC   2711  CLR R17
+   286: 0000DD   9310  STS TimeToOut+2, R17
+        0000DE   0062
+   287: 0000DF   9310  STS TimeToOut+3, R17
+        0000E0   0063
+   288: 0000E1   CFC9  RJMP Indication
+   289: 
+   290: 
+   291: 0000E2   F01E  BRTS TmCTS			; Настройка минут
+   292: 0000E3   9468  SET
+   293: 0000E4   2F67  MOV R22, IncBCD
+   294: 0000E5   2D7B  MOV IncBCD, R11
+   295: 0000E6   2EB7  MOV R11, IncBCD
+   296: 0000E7   D1AB  rcall BCDTo7SEG
+   297: 0000E8   2711  CLR R17
+   298: 0000E9   9310  STS TimeToOut, R17
+        0000EA   0060
+   299: 0000EB   9310  STS TimeToOut+1, R17
+        0000EC   0061
+   300: 0000ED   CFBD  RJMP Indication
+   301: 
+   302: TCurrentWR:				; Сохранение времени в DS1307
+   303: 	USI_TWI_START
+   304: 	USI_SLA_W
+   305: 	USI_SEND_BI 0x00
+   306: 	USI_SEND_BI 0x00	;БАЙТ ДАННЫХ (СЕКУНДЫ)
+   307: 00011B   2F07  MOV R16, IncBCD
+   308: 	USI_SEND_B	;БАЙТ ДАННЫХ (МИНУТЫ)
+   309: 000126   2F06  MOV R16, R22
+   310: 	USI_SEND_B	;БАЙТ ДАННЫХ (ЧАСЫ)
+   311: 	USI_TWI_STOP
+   312: 00013C   94A3  INC MenuCNT
+   313: 
+   314: 
+   315: 00013D   EB00  LDI R16, 0xB0		; Отобразить tOFF
+   316: 00013E   2EC0  MOV R12, R16
+   317: 00013F   EF0F  LDI R16, 0xFF
+   318: 000140   2EB0  MOV R11, R16
+   319: 000141   D151  rcall BCDTo7SEG
+   320: 000142   9100  LDS R16, TimeToOut+1
+        000143   0061
+   321: 000144   7F0B  ANDI R16, ~(1<<dot)
+   322: 000145   9300  STS TimeToOut+1, R16
+        000146   0061
+   323: 000147   CF63  RJMP Indication
+   324: 
+   325: 000148   F01E  BRTS Th0TS			; Настройка часа выключения
+   326: 000149   9468  SET
+   327: 00014A   2D76  MOV IncBCD, Th0
+   328: 00014B   24BB  CLR R11
+   329: 00014C   2EC7  MOV R12, IncBCD
+   330: 00014D   D145  rcall BCDTo7SEG
+   331: 00014E   9110  LDS R17, TimeToOut+1
+        00014F   0061
+   332: 000150   7F1B  ANDI R17, ~(1<<dot)
+   333: 000151   9310  STS TimeToOut+1, R17
+        000152   0061
+   334: 000153   2711  CLR R17
+   335: 000154   9310  STS TimeToOut+2, R17
+        000155   0062
+   336: 000156   9310  STS TimeToOut+3, R17
+        000157   0063
+   337: 000158   CF52  RJMP Indication
+   338: 
+   339: 000159   F01E  BRTS Tm0TS			; Настройка минуты выключения
+   340: 00015A   9468  SET
+   341: 00015B   2F67  MOV R22, IncBCD
+   342: 00015C   2D77  MOV IncBCD, Tm0
+   343: 00015D   2EB7  MOV R11, IncBCD
+   344: 00015E   D134  rcall BCDTo7SEG
+   345: 00015F   2711  CLR R17
+   346: 000160   9310  STS TimeToOut, R17
+        000161   0060
+   347: 000162   9310  STS TimeToOut+1, R17
+        000163   0061
+   348: 000164   CF46  RJMP Indication
+   349: 
+   350: 000165   2E77  MOV Tm0, IncBCD
+   351: 000166   2E66  MOV Th0, R22
+   352: 000167   2700  CLR R16
+   353: 000168   D0BD  RCALL CpTime	; Проверка на совпадение времени
+   354: 000169   F419  BRNE WRt0		; Если Т0 и Т1 совпадает, увеличиваем Th0 на 1
+   355: 00016A   2D76  MOV IncBCD, Th0
+   356: 00016B   D0FA  Rcall BCDInc
+   357: 00016C   2E67  MOV Th0, IncBCD
+   358: 00016D   2722  CLR R18
+   359: 00016E   E614  LDI R17, EEPTh0
+   360: 00016F   2D06  MOV R16, Th0
+   361: 000170   D0E2  RCALL EEPROM_write
+   362: 000171   E615  LDI R17, EEPTm0
+   363: 000172   2D07  MOV R16, Tm0
+   364: 000173   D0DF  RCALL EEPROM_write
+   365: 000174   DEC2  RCALL CheckFlag
+   366: 000175   94A3  INC MenuCNT
+   367: 
+   368: 
+   369: 
+   370: 000176   EB00  LDI R16, 0xB0		; Отобразить t On
+   371: 000177   2EC0  MOV R12, R16
+   372: 000178   E00D  LDI  R16, 0x0D
+   373: 000179   2EB0  MOV R11, R16
+   374: 00017A   D118  rcall BCDTo7SEG
+   375: 00017B   2700  CLR R16
+   376: 00017C   9300  STS TimeToOut+1, R16
+        00017D   0061
+   377: 00017E   CF2C  RJMP Indication
+   378: 
+   379: 00017F   F01E  BRTS Th1TS			; Настройка часа включения
+   380: 000180   9468  SET
+   381: 000181   2D78  MOV IncBCD, Th1
+   382: 000182   24BB  CLR R11
+   383: 000183   2EC7  MOV R12, IncBCD
+   384: 000184   D10E  rcall BCDTo7SEG
+   385: 000185   9110  LDS R17, TimeToOut+1
+        000186   0061
+   386: 000187   7F1B  ANDI R17, ~(1<<dot)
+   387: 000188   9310  STS TimeToOut+1, R17
+        000189   0061
+   388: 00018A   2711  CLR R17
+   389: 00018B   9310  STS TimeToOut+2, R17
+        00018C   0062
+   390: 00018D   9310  STS TimeToOut+3, R17
+        00018E   0063
+   391: 00018F   CF1B  RJMP Indication
+   392: 
+   393: 000190   F01E  BRTS Tm1TS			; Настройка минуты включения
+   394: 000191   9468  SET
+   395: 000192   2F67  MOV R22, IncBCD
+   396: 000193   2D79  MOV IncBCD, Tm1
+   397: 000194   2EB7  MOV R11, IncBCD
+   398: 000195   D0FD  rcall BCDTo7SEG
+   399: 000196   2711  CLR R17
+   400: 000197   9310  STS TimeToOut, R17
+        000198   0060
+   401: 000199   9310  STS TimeToOut+1, R17
+        00019A   0061
+   402: 00019B   CF0F  RJMP Indication
+   403: 
+   404: 00019C   2E97  MOV Tm1, IncBCD
+   405: 00019D   2E86  MOV Th1, R22
+   406: 00019E   2700  CLR R16
+   407: 00019F   D086  RCALL CpTime	; Проверка на совпадение времени
+   408: 0001A0   F419  BRNE WRt1		; Если Т0 и Т1 совпадает, увеличиваем Th1 на 1
+   409: 0001A1   2D78  MOV IncBCD, Th1
+   410: 0001A2   D0C3  Rcall BCDInc
+   411: 0001A3   2E87  MOV Th1, IncBCD
+   412: 0001A4   2722  CLR R18
+   413: 0001A5   E616  LDI R17, EEPTh1
+   414: 0001A6   2D08  MOV R16, Th1
+   415: 0001A7   D0AB  RCALL EEPROM_write
+   416: 0001A8   E617  LDI R17, EEPTm1
+   417: 0001A9   2D09  MOV R16, Tm1
+   418: 0001AA   D0A8  RCALL EEPROM_write
+   419: 0001AB   DE8B  RCALL CheckFlag
+   420: 	
+   421: 0001AC   D00D  RCALL ReadTime
+   422: 0001AD   D0E5  RCALL BCDTo7SEG
+   423: 0001AE   D001  RCALL Delay05
+   424: 	
+   425: 0001AF   CEB0  RJMP Begin
+   426: 
+   427: 0001B0   E000  LDI R16,0x00      ;задержка (0:6 - 0,2 секунды)
+   428: 0001B1   2E30  MOV R3, R16
+   429: 0001B2   E007  LDI R16,0x07
+   430: 0001B3   2E40  MOV R4, R16
+   431: 0001B4   D101  rcall TimeToSeg
+   432: 0001B5   943A  dec R3
+   433: 0001B6   F7E9  brne Loop4
+   434: 0001B7   944A  dec R4
+   435: 0001B8   F7D9  brne Loop4
+   436: 0001B9   9508  RET
+   437: ;|----------------------------------------------------------------------
+   438: ;| Конец настройки
+   439: ;|----------------------------------------------------------------------
+   440: 
+   441: 
+   442: ;|----------------------------------------------------------------------
+   443: ;| Чтение времени
+   444: ;|----------------------------------------------------------------------
+   445: ReadTime:
+   446: 	USI_TWI_INIT
+   447: 	USI_TWI_START
+   448: 	USI_SLA_W
+   449: 	USI_SEND_BI 0x01
+   450: 	USI_TWI_START
+   451: 	USI_SLA_R
+   452: 	USI_READ_B_ACK
+   453: 00020B   2EB0  MOV R11,R16	;Записали минуты в R11
+   454: 	USI_READ_B_NACK
+   455: 000219   2EC0  MOV R12,R16	;Записали Часы в R12
+   456: 	USI_TWI_STOP
+   457: 000225   9508  RET
+   458: ;|----------------------------------------------------------------------
+   459: ;|                               END
+   460: ;|----------------------------------------------------------------------
+   461: 
+   462: 
+   463: 
+   464: 
+   465: 
+   466: ;|----------------------------------------------------------------------
+   467: ;| Сравнение текущего времени с заданным.
+   468: ;| Если флаг R16 = 1 сравнивается с Т0, Если R16 = 2 с Т1
+   469: ;| Иначе сравнивается Т0 с Т1
+   470: ;| На выходе:	C=1 если Tc<Tdest
+   471: ;|		C=0 если Tc>=Tdest
+   472: ;|		Z=1 если Tc=Tdest
+   473: ;|----------------------------------------------------------------------
+   474: CpTime:	
+   475: 000226   92CF  PUSH ThC
+   476: 000227   92BF  PUSH TmC
+   477: 000228   FD00  SBRC R16,0
+   478: 000229   C005  RJMP CPWithT0
+   479: 00022A   FD01  SBRC R16,1
+   480: 00022B   C006  RJMP CPWithT1
+   481: 
+   482: 00022C   2CC6  MOV ThC, Th0	;Сравниваем Т0 с Т1
+   483: 00022D   2CB7  MOV TmC, Tm0
+   484: 00022E   C003  RJMP CPWithT1
+   485: 
+   486: CPWithT0:	; Сравниваем с T0
+   487: 00022F   2D06  MOV R16, Th0
+   488: 000230   2D17  MOV R17, Tm0
+   489: 000231   C002  rjmp CpStart
+   490: 
+   491: CPWithT1:	; Сравниваем с T1
+   492: 000232   2D08  MOV R16, Th1
+   493: 000233   2D19  MOV R17, Tm1
+   494: 
+   495: CpStart:
+   496: 000234   16C0  CP ThC, R16
+   497: 000235   F048  BRLO CpTimeLO ;TimeCur<T
+   498: 000236   150C  CP R16, ThC
+   499: 000237   F050  BRLO CpTimeSH ;TimeCur>T
+   500: 000238   16B1  CP TmC, R17
+   501: 000239   F028  BRLO CpTimeLO ;TimeCur<T
+   502: 00023A   151B  CP R17, TmC
+   503: 00023B   F030  BRLO CpTimeSH ;TimeCur>T
+   504: 
+   505: 00023C   9488  CLC	;Если равны
+   506: 00023D   9418  SEZ
+   507: 00023E   C005  RJMP CpTimeEnd
+   508: 
+   509: 00023F   9408  SEC	;Если TimeCur < T
+   510: 000240   9498  CLZ
+   511: 000241   C002  RJMP CpTimeEnd
+   512: 
+   513: 000242   9488  CLC	;Если TimeCur > T
+   514: 000243   9498  CLZ
+   515: 
+   516: CpTimeEnd:
+   517: 000244   90BF  POP TmC
+   518: 000245   90CF  POP ThC
+   519: 000246   9508  RET
+   520: ;|----------------------------------------------------------------------
+   521: ;|                               END
+   522: ;|----------------------------------------------------------------------
+   523: 
+   524: 
+   525: 
+   526: 
+   527: 000247   E000  LDI R16,0;задержка (0,30 - 1 секунда)
+   528: 000248   2E30  MOV R3, R16
+   529: 000249   E10E  LDI R16,30
+   530: 00024A   2E40  MOV R4, R16
+   531: 
+   532: 00024B   D06A  rcall TimeToSeg
+   533: 00024C   943A  dec R3
+   534: 00024D   F7E9  brne Loop1
+   535: 00024E   99C8  SBIC KeyPin, MenuKey
+   536: 00024F   CE3A  RJMP Setting
+   537: 000250   944A  dec R4
+   538: 000251   F7C9  brne Loop1
+   539: 000252   9508  RET
+   540: 
+   541: ;|----------------------------------------------------------------------
+   542: ;| Запись и чтение EEPROM
+   543: ;|----------------------------------------------------------------------
+   544: EEPROM_write:
+   545: 000253   99E1  sbic EECR, EEPE
+   546: 000254   CFFE  rjmp EEPROM_write
+   547: 000255   930F  PUSH R16
+   548: 000256   E000  ldi r16, (0<<EEPM1)|(0<<EEPM0)
+   549: 000257   BB0C  out EECR, r16
+   550: 000258   BB2F  out EEARH, r18	; Set up address (r18:r17) in address registers
+   551: 000259   BB1E  out EEARL, r17
+   552: 00025A   910F  POP R16
+   553: 00025B   BB0D  out EEDR, r16	; Write data (r16) to data register
+   554: 00025C   9AE2  sbi EECR, EEMPE	; Write logical one to EEMPE
+   555: 00025D   9AE1  sbi EECR, EEPE	; Start eeprom write by setting EEPE
+   556: 00025E   9508  ret
+   557: 
+   558: EEPROM_read:
+   559: 00025F   99E1  sbic EECR, EEPE
+   560: 000260   CFFE  rjmp EEPROM_read
+   561: 000261   BB2F  out EEARH, r18	; Set up address (r18:r17) in address registers
+   562: 000262   BB1E  out EEARL, r17
+   563: 000263   9AE0  sbi EECR, EERE	; Start eeprom read by writing EERE
+   564: 000264   B30D  in r16, EEDR	; Read data from data register
+   565: 000265   9508  ret
+   566: ;|----------------------------------------------------------------------
+   567: ;|                               END
+   568: ;|----------------------------------------------------------------------
+   569: 
+   570: ;|----------------------------------------------------------------------
+   571: ;| Инкремент Числа BCD
+   572: ;| На входе: число в IncBCD
+   573: ;| Счетчик меню MenuCNT
+   574: ;|----------------------------------------------------------------------
+   575: 000266   9573  INC IncBCD
+   576: 000267   2F17  MOV R17, IncBCD
+   577: 000268   701F  ANDI R17, 0x0F	;отбросить старшую тетраду
+   578: 000269   301A  CPI R17, 0x0A
+   579: 00026A   F010  BRLO BCDnoHalfC	;нет полупереносв
+   580: 00026B   7F70  ANDI IncBCD, 0xF0	;очистить младшую тетраду
+   581: 00026C   5F70  SUBI IncBCD, 0xF0	;инкремент старшей тетрады
+   582: 00026D   3670  CPI IncBCD, 0x60
+   583: 00026E   F008  BRLO BCDOK
+   584: 00026F   2777  CLR IncBCD
+   585: 000270   FEA0  SBRS MenuCNT, 0
+   586: 000271   C003  RJMP BCDend
+   587: 000272   3274  CPI IncBCD, 0x24
+   588: 000273   F008  BRLO BCDend
+   589: 000274   2777  CLR IncBCD
+   590: BCDend:
+   591: 000275   9508  RET
+   592: ;|----------------------------------------------------------------------
+   593: ;|                               END
+   594: ;|----------------------------------------------------------------------
+   595: 
+   596: 
+   597: ;|----------------------------------------------------------------------
+   598: ;| Процедура вывода на 7 сегментный индикатор
+   599: ;| На входе: разряд в OutByte
+   600: ;|           символ в OutByte2
+   601: ;|----------------------------------------------------------------------
+   602: 000276   E020  ldi CNT,0
+   603: 000277   9488  clc
+   604: 000278   0F44  lsl OutByte
+   605: 000279   F018  BRLO One		;переход если С=1
+   606: 
+   607: 00027A   E200  ldi Temp, 0<<STcp|1<<SHcp|0<<DS
+   608: 00027B   D009  rcall EndWR
+   609: 00027C   C002  rjmp Check
+   610: 
+   611: 00027D   E208  ldi Temp, 0<<STcp|1<<SHcp|1<<DS
+   612: 00027E   D006  rcall EndWR
+   613: 
+   614: 00027F   E000  ldi Temp, 0<<STcp|0<<SHcp|0<<DS
+   615: 000280   D004  rcall EndWR
+   616: 
+   617: 000281   9523  inc CNT
+   618: 000282   3028  cpi CNT,0b00001000
+   619: 000283   F031  breq STout
+   620: 000284   CFF3  rjmp Next
+   621: 
+   622: 000285   B31B  in Temp2, SEG7_PORT
+   623: 000286   7517  ANDI Temp2, ~(1<<STcp|1<<SHcp|1<<DS)
+   624: 000287   2B01  OR Temp, Temp2
+   625: 000288   BB0B  out SEG7_PORT,Temp
+   626: 000289   9508  ret
+   627: 
+   628: 00028A   F01E  BRTS STend
+   629: 00028B   9468  SET
+   630: 00028C   2F45  MOV OutByte, OutByte2
+   631: 00028D   CFE8  rjmp Output
+   632: 
+   633: 00028E   E800  ldi Temp, 1<<STcp|0<<SHcp|0<<DS	;Затолкали, теперь выводим.
+   634: 00028F   DFF5  rcall EndWR
+   635: 000290   E000  ldi Temp, 0<<STcp|0<<SHcp|0<<DS
+   636: 000291   DFF3  rcall EndWR
+   637: 000292   9508  ret
+   638: ;|---------------------------------------------------------------------------
+   639: ;|                               END
+   640: ;|---------------------------------------------------------------------------
+   641: 
+   642: 
+   643: 
+   644: ;|---------------------------------------------------------------------------
+   645: ;| Процедура преобразования BCD времени в символы для 7 сегментного индикатора
+   646: ;| На входе: минуты в R11
+   647: ;|           часы в R12
+   648: ;| На выходе: В TimeToOut - старший разряд часов,
+   649: ;| в TimeToOut+1 - младний разряд часов,
+   650: ;| в TimeToOut+2 - старший разряд минут,
+   651: ;| в TimeToOut+3 - младний разряд минут
+   652: ;|---------------------------------------------------------------------------
+   653: 000293   94F8  CLI
+   654: 000294   930F  PUSH Temp
+   655: 000295   2D0C  MOV Temp, R12
+   656: 000296   9502  SWAP Temp	;Поменять местами тетрады
+   657: 000297   700F  ANDI Temp, 0b00001111
+   658: 000298   D014  rcall FSym
+   659: 000299   9300  STS TimeToOut, Temp
+        00029A   0060
+   660: 
+   661: 00029B   2D0C  MOV Temp, R12
+   662: 00029C   700F  ANDI Temp, 0b00001111
+   663: 00029D   D00F  rcall FSym
+   664: 00029E   6004  ORI Temp, 1<<dot
+   665: 00029F   9300  STS TimeToOut+1, Temp
+        0002A0   0061
+   666: 
+   667: 0002A1   2D0B  MOV Temp, R11
+   668: 0002A2   9502  SWAP Temp	;Поменять местами тетрады
+   669: 0002A3   700F  ANDI Temp, 0b00001111
+   670: 0002A4   D008  rcall FSym
+   671: 0002A5   9300  STS TimeToOut+2, Temp
+        0002A6   0062
+   672: 
+   673: 0002A7   2D0B  MOV Temp, R11
+   674: 0002A8   700F  ANDI Temp, 0b00001111
+   675: 0002A9   D003  rcall FSym
+   676: 0002AA   9300  STS TimeToOut+3, Temp
+        0002AB   0063
+   677: 
+   678: 0002AC   C006  rjmp BCDTo7SEGend
+   679: 
+   680: FSym:	; Загрузить адрес таблицы символов
+   681: 0002AD   EBE0  LDI ZL, LOW (2*sym_table)
+   682: 0002AE   E0F0  LDI ZH, HIGH(2*sym_table)
+   683: 	; Найти нужный символ
+   684: 0002AF   0FE0  ADD ZL, Temp
+   685: 	; Загрузить данные символа в R0
+   686: 0002B0   95C8  LPM
+   687: 0002B1   2D00  MOV Temp, R0
+   688: 0002B2   9508  ret
+   689: 
+   690: BCDTo7SEGend:
+   691: 0002B3   910F  POP Temp
+   692: 0002B4   9478  SEI
+   693: 0002B5   9508  RET
+   694: ;|---------------------------------------------------------------------------
+   695: ;|                               END
+   696: ;|---------------------------------------------------------------------------
+   697: 
+   698: ;|---------------------------------------------------------------------------
+   699: ;| Процедура вывода времени
+   700: ;|---------------------------------------------------------------------------
+   701: TimeToSeg:
+   702: 0002B6   B70F  IN Temp, SREG
+   703: 0002B7   930F  Push Temp
+   704: 0002B8   E6E0  ldi ZL,Low(TimeToOut)
+   705: 0002B9   E0F0  ldi ZH,High(TimeToOut)  ;загрузка начального адреса массива
+   706: 0002BA   9151  LD	OutByte2, Z+
+   707: 0002BB   EF4D  ldi OutByte, ~(1<<1) ;Первый символ
+   708: 0002BC   94E8  CLT
+   709: 0002BD   DFB8  rcall Output
+   710: 
+   711: 0002BE   9151  LD	OutByte2, Z+
+   712: 0002BF   EF4B  ldi OutByte, ~(1<<2) ;Второй символ
+   713: 0002C0   94E8  CLT
+   714: 0002C1   DFB4  rcall Output
+   715: 
+   716: 0002C2   9151  LD	OutByte2, Z+
+   717: 0002C3   EF47  ldi OutByte, ~(1<<3) ;Третий символ
+   718: 0002C4   94E8  CLT
+   719: 0002C5   DFB0  rcall Output
+   720: 
+   721: 0002C6   9151  LD	OutByte2, Z+
+   722: 0002C7   EE4F  ldi OutByte, ~(1<<4) ;Четвертый символ
+   723: 0002C8   94E8  CLT
+   724: 0002C9   DFAC  rcall Output
+   725: 0002CA   910F  POP Temp
+   726: 0002CB   BF0F  OUT SREG, Temp
+   727: 0002CC   9508  RET
+   728: ;|---------------------------------------------------------------------------
+   729: ;|                               END
+   730: ;|---------------------------------------------------------------------------
+   731: 
+   732: .DSEG
+   733: TimeToOut:	.byte	4
+ -> Warning 011: C-style instructions in file, lines ignored!
+ -> Warning 001: 3 symbol(s) defined, but not used!
+
+Program             :      696 words.
+Constants           :       21 words.
+Total program memory:      717 words.
+Eeprom space        :        0 bytes.
+Data segment        :        4 bytes.
+Compilation completed, no errors.
+Compilation endet 19.11.2015, 21:21:03

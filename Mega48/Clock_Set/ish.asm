@@ -1,0 +1,87 @@
+.include "/home/marik/Project/m48def.inc"
+
+.cseg
+.org 0
+	ldi R16,low(RAMEND) ;инициализация стека
+	out SPL,R16
+	ldi R16,high(RAMEND)
+	out SPH, R16
+
+RJMP WrTime
+	.include "TWI_macro.inc"
+
+	
+
+WrTime:	LDI R16,128	;НАстройка TWI
+	STS TWBR, R16
+
+
+	TWI_START
+	SBRC R14,0
+	RJMP ERROR
+
+	TWI_SLA_W
+	SBRC R14,0
+	RJMP ERROR
+
+	TWI_SEND_B 0x00
+	SBRC R14,0
+	RJMP ERROR
+
+	TWI_SEND_B 0x00	;БАЙТ ДАННЫХ (СЕКУНДЫ)
+	SBRC R14,0
+	RJMP ERROR
+
+	TWI_SEND_B 0x49	;БАЙТ ДАННЫХ (МИНУТЫ)
+	SBRC R14,0
+	RJMP ERROR
+
+
+	TWI_SEND_B 0x22	;БАЙТ ДАННЫХ (ЧАСЫ)
+	SBRC R14,0
+	RJMP ERROR
+
+
+	TWI_SEND_B 0x04	;БАЙТ ДАННЫХ (ДЕНЬ НЕДЕЛИ)
+	SBRC R14,0
+	RJMP ERROR
+
+
+	TWI_SEND_B 0x01	;БАЙТ ДАННЫХ (ДАТА)
+	SBRC R14,0
+	RJMP ERROR
+
+	TWI_SEND_B 0x01	;БАЙТ ДАННЫХ (МЕСЯЦ)
+	SBRC R14,0
+	RJMP ERROR
+
+	TWI_SEND_B 0x15	;БАЙТ ДАННЫХ (ГОД)
+	SBRC R14,0
+	RJMP ERROR
+
+	TWI_SEND_B 0x10	;БАЙТ ДАННЫХ (CONTROL) 1HZ
+	SBRC R14,0
+	RJMP ERROR
+
+	TWI_STOP
+	
+
+	RJMP Begin
+
+ERROR: nop
+RJMP ERROR
+
+
+
+
+Begin:
+nop
+
+
+RJMP Begin
+
+
+
+
+
+

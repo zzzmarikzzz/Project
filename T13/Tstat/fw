@@ -1,0 +1,4 @@
+#!/bin/bash
+avrdude -p t13 -c arduino-ft232r -P ft0 -u -U lfuse:w:0x32:m -B 4800
+avrdude -p t13 -c arduino-ft232r -P ft0 -u -U hfuse:w:0xf9:m -B 4800
+exit 0

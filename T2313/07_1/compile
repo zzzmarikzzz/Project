@@ -1,0 +1,3 @@
+#!/bin/bash
+tavrasm -i ish.asm -o output/hexfile.hex -e output/listfile.lst
+exit 0

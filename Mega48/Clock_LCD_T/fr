@@ -1,0 +1,4 @@
+#!/bin/bash
+avrdude -p m48 -c usbasp -U hfuse:r:hfuse.txt:b
+avrdude -p m48 -c usbasp -U lfuse:r:lfuse.txt:b
+exit 0

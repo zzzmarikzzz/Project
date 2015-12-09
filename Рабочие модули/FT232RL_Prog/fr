@@ -1,0 +1,6 @@
+#!/bin/bash
+avrdude -p t24 -c arduino-ft232r -P ft0 -U hfuse:r:hfuse.txt:b
+avrdude -p t24 -c arduino-ft232r -P ft0 -U lfuse:r:lfuse.txt:b
+#avrdude -p t24 -c arduino-ft232r -P ft0 -U hfuse:r:hfuse.txt:b -B 4800
+#avrdude -p t24 -c arduino-ft232r -P ft0 -U lfuse:r:lfuse.txt:b -B 4800
+exit 0

@@ -1,0 +1,17 @@
+gavrasm Gerd's AVR assembler version 3.4 (C)2014 by DG4FAC
+----------------------------------------------------------
+Source file: 1-wire.asm
+Hex file:    1-wire.hex
+Eeprom file: 1-wire.eep
+Compiled:    19.03.2015, 20:12:18
+Pass:        1
+ ===> Error Forced error: XTAL must be defined!
+      Line: 	.error "XTAL must be defined!"
+      File: wait.asm, Line: 28
+ ===> Error 084: Undefined parameter in EXIT-directive!
+      Line: .exit XTAL < 4000000	;XTAL too low, possible wrong delay
+      File: wait.asm, Line: 32
+ ===> Error 017: Register value (0) out of range (R24/26/28/30!)!
+      Line: 	sbiw	XH:XL, 1			; 2 такта
+      File: wait.asm, Line: 49
+Compilation aborted, 3 errors!

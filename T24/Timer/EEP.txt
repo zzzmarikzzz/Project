@@ -1,0 +1,2 @@
+avrdude -p t24 -c arduino-ft232r -P ft0 -U eeprom:r:eeprom.txt:r
+avrdude -p t24 -c arduino-ft232r -P ft0 -U eeprom:w:eeprom.txt:r

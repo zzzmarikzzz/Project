@@ -1,0 +1,106 @@
+.include "/home/marik/2313def.inc"
+.def     Temp=R16
+.def     Temp1=R17
+.def     Temp2=R18
+.def     Temp3=R19
+.def     Temp4=R20
+
+.cseg
+.org 0
+
+rjmp Reset
+rjmp INT_0
+rjmp INT_1
+rjmp Timer1_capt1
+rjmp Timer1_comp1
+rjmp Timer1_OVF1
+rjmp Timer0_OVF0
+rjmp UART_RX
+rjmp UART_UDRE
+rjmp UART_TX
+rjmp ANA_COMP
+rjmp PCINT0
+rjmp TIM1COMPB
+rjmp TIM0COMPA
+rjmp TIM0COMPB
+rjmp USISTART
+rjmp USIOVERFLOW
+rjmp EEREADY
+rjmp WDTOVERFLOW
+rjmp PCINT1
+rjmp PCINT2
+
+;Reset:
+INT_0:
+INT_1:
+Timer1_capt1:
+;Timer1_comp1:
+Timer1_OVF1:
+Timer0_OVF0:
+UART_RX:
+UART_UDRE:
+UART_TX:
+ANA_COMP:
+PCINT0:
+TIM1COMPB:
+TIM0COMPA:
+TIM0COMPB:
+USISTART:
+USIOVERFLOW:
+EEREADY:
+WDTOVERFLOW:
+PCINT1:
+PCINT2:
+          reti
+;****************************************************
+; ИНИЦИАЛИЗАЦИЯ
+;****************************************************
+Reset:	ldi Temp,RamEnd		;Инициализация стека
+	out SPL,Temp
+
+	ldi Temp,0b11111111	;Настройка порта B
+	out DDRB,Temp
+
+	ldi Temp,0b01000000	;разрешить прерывание компаратора
+	out TIMSK,Temp
+
+	
+	ldi Temp,0b00000011
+	out TCCR1B,Temp		;тактовый сигнал = CK/64
+
+	ldi Temp,0x98		;инициализация компаратора
+	out OCR1AH,Temp
+	ldi Temp,0x96
+	out OCR1AL,Temp
+
+	ldi Temp,0		;Сброс счётчика
+	out TCNT1H,Temp
+	out TCNT1L,Temp
+
+	ldi Temp1,0b00000001	;инициализация индикатора
+
+	sei			;разрешить прерывания
+;****************************************************
+; ОСНОВНОЙ ЦИКЛ
+;****************************************************
+Inf:      rjmp Inf              ;бесконечный цикл
+
+
+;****************************************************
+; ОБРАБОТЧИК ПРЕРЫВАНИЯ КОМПАРАТОРА
+;****************************************************
+
+Timer1_comp1:
+	ldi Temp,0		;Сброс счётчика
+	out TCNT1H,Temp
+	out TCNT1L,Temp
+Shift:	cpi Temp1,0b10000000	;сравнить с крайним знач.
+	breq Init		;если равно - загрузка нач. знач.
+
+	lsl Temp1		;иначе - сдвиг влево
+	rjmp Output		;перейти на вывод в порт
+
+Init:	ldi Temp1,0b0000000	;загрузить нач. значение
+Output:	out PortB,Temp1		;вывод в порт
+
+	reti			;выход из обработчика

@@ -1,0 +1,73 @@
+.include "/home/marik/Project/tn2313Adef.inc"
+.def     Temp=R16
+.def     OutByte=R17
+.def     CNT=R18
+.def     Temp2=R21
+.def     OutByte2=R20
+
+.equ	SEG7_DDR=DDRD
+.equ	SEG7_PORT=PortD
+.equ	DS=PD4
+.equ	SHcp=PD5
+
+.cseg
+.org 0
+	ldi Temp,RamEnd       ;инициализация стека
+	out SPL,Temp
+
+	ldi Temp, 1<<DS|1<<SHcp  ;настройка порта SEG7
+	in Temp2, SEG7_DDR
+	ANDI Temp2, ~(1<<SHcp|1<<DS)
+	OR Temp, Temp2
+	out SEG7_DDR,Temp
+
+
+	LDI OutByte, 0b10001111
+
+Output:	ldi CNT,0
+	clc
+Next:	lsl OutByte
+	BRLO One		;переход если С=1
+
+	ldi Temp, 0<<SHcp|0<<DS
+	rcall EndWR
+	ldi Temp, 1<<SHcp|0<<DS
+	rcall EndWR
+	rjmp Check
+
+One: 	ldi Temp, 0<<SHcp|1<<DS
+	rcall EndWR
+	ldi Temp, 1<<SHcp|1<<DS
+	rcall EndWR
+
+Check:	ldi Temp, 0<<SHcp|0<<DS
+	rcall EndWR
+
+	inc CNT
+	cpi CNT,0b00001000
+	breq STout
+	rjmp Next
+
+EndWR: 	in Temp2, SEG7_PORT
+	ANDI Temp2, ~(1<<SHcp|1<<DS)
+	OR Temp, Temp2
+	out SEG7_PORT,Temp
+ 	ret
+
+STout:	ldi Temp, 1<<SHcp|0<<DS
+	rcall EndWR
+	ldi Temp, 0<<SHcp|0<<DS
+	rcall EndWR
+
+nop
+
+
+
+
+
+
+
+
+finish: nop
+
+rjmp finish

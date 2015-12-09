@@ -1,0 +1,4 @@
+#!/bin/bash
+avrdude -p  m48 -c arduino-ft232r -P ft0 -u -U hfuse:w:0xd4:m -B 4800
+avrdude -p  m48 -c arduino-ft232r -P ft0 -u -U lfuse:w:0xde:m -B 4800
+exit 0

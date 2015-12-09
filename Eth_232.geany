@@ -1,0 +1,48 @@
+[file_prefs]
+final_new_line=true
+ensure_convert_new_lines=false
+strip_trailing_spaces=false
+replace_tabs=false
+
+[indentation]
+indent_width=4
+indent_type=1
+indent_hard_tab_width=8
+detect_indent=false
+detect_indent_width=false
+indent_mode=2
+
+[project]
+name=Eth_232
+base_path=/home/marik/Project/Eth_232/
+description=
+file_patterns=
+
+[long line marker]
+long_line_behaviour=1
+long_line_column=72
+
+[files]
+current_page=0
+FILE_NAME_0=280;C;0;EUTF-8;1;1;0;%2Fhome%2Fmarik%2FProject%2FEth_232%2Fmain.c;0;4
+
+[VTE]
+last_dir=/home/marik
+
+[build-menu]
+NF_00_LB=_Собрать
+NF_00_CM=make
+NF_00_WD=
+EX_00_LB=_Выполнить
+EX_00_CM=PART=`grep -m 1 "^//at.*" %f | grep -o "\\(attiny\\|atmega\\)[0-9]\\+" | sed "s/attiny/t/g;s/atmega/m/g"` && echo "target device: $PART" && avrdude -p $PART  -c arduino-ft232r -P ft0 -U flash:w:"rs232.hex:i" && exit
+EX_00_WD=
+CFT_00_LB=_Скомпилировать
+CFT_00_CM=make
+CFT_00_WD=
+CFT_01_LB=_Сборка
+CFT_01_CM=make clean
+CFT_01_WD=
+filetypes=C;
+CFT_02_LB=Очистить
+CFT_02_CM=make clean
+CFT_02_WD=

@@ -1,0 +1,2544 @@
+gavrasm Gerd's AVR assembler version 3.4 (C)2014 by DG4FAC
+----------------------------------------------------------
+Source file: ish.asm
+Hex file:    ish.hex
+Eeprom file: ish.eep
+Compiled:    06.11.2015, 12:30:48
+Pass:        2
+     1: .include "/home/marik/Project/m48def.inc"
+  Including file /home/marik/Project/m48def.inc
+     1: ;***** THIS IS A MACHINE GENERATED FILE - DO NOT EDIT ********************
+     2: ;***** Created: 2011-02-09 12:03 ******* Source: ATmega48.xml ************
+     3: ;*************************************************************************
+     4: ;* A P P L I C A T I O N   N O T E   F O R   T H E   A V R   F A M I L Y
+     5: ;* 
+     6: ;* Number            : AVR000
+     7: ;* File Name         : "m48def.inc"
+     8: ;* Title             : Register/Bit Definitions for the ATmega48
+     9: ;* Date              : 2011-02-09
+    10: ;* Version           : 2.35
+    11: ;* Support E-mail    : avr@atmel.com
+    12: ;* Target MCU        : ATmega48
+    13: ;* 
+    14: ;* DESCRIPTION
+    15: ;* When including this file in the assembly program file, all I/O register 
+    16: ;* names and I/O register bit names appearing in the data book can be used.
+    17: ;* In addition, the six registers forming the three data pointers X, Y and 
+    18: ;* Z have been assigned names XL - ZH. Highest RAM address for Internal 
+    19: ;* SRAM is also defined 
+    20: ;* 
+    21: ;* The Register names are represented by their hexadecimal address.
+    22: ;* 
+    23: ;* The Register Bit names are represented by their bit number (0-7).
+    24: ;* 
+    25: ;* Please observe the difference in using the bit names with instructions
+    26: ;* such as "sbr"/"cbr" (set/clear bit in register) and "sbrs"/"sbrc"
+    27: ;* (skip if bit in register set/cleared). The following example illustrates
+    28: ;* this:
+    29: ;* 
+    30: ;* in    r16,PORTB             ;read PORTB latch
+    31: ;* sbr   r16,(1<<PB6)+(1<<PB5) ;set PB6 and PB5 (use masks, not bit#)
+    32: ;* out   PORTB,r16             ;output to PORTB
+    33: ;* 
+    34: ;* in    r16,TIFR              ;read the Timer Interrupt Flag Register
+    35: ;* sbrc  r16,TOV0              ;test the overflow flag (use bit#)
+    36: ;* rjmp  TOV0_is_set           ;jump if set
+    37: ;* ...                         ;otherwise do something else
+    38: ;*************************************************************************
+    39: 
+    40: #ifndef _M48DEF_INC_
+    41: #define _M48DEF_INC_
+    42: 
+    43: 
+    44: #pragma partinc 0
+    45: 
+    46: ; ***** SPECIFY DEVICE ***************************************************
+    47: .device ATmega48
+    48: #pragma AVRPART ADMIN PART_NAME ATmega48
+    49: .equ	SIGNATURE_000	= 0x1e
+    50: .equ	SIGNATURE_001	= 0x92
+    51: .equ	SIGNATURE_002	= 0x05
+    52: 
+    53: #pragma AVRPART CORE CORE_VERSION V2E
+    54: 
+    55: 
+    56: ; ***** I/O REGISTER DEFINITIONS *****************************************
+    57: ; NOTE:
+    58: ; Definitions marked "MEMORY MAPPED"are extended I/O ports
+    59: ; and cannot be used with IN/OUT instructions
+    60: .equ	UDR0	= 0xc6	; MEMORY MAPPED
+    61: .equ	UBRR0L	= 0xc4	; MEMORY MAPPED
+    62: .equ	UBRR0H	= 0xc5	; MEMORY MAPPED
+    63: .equ	UCSR0C	= 0xc2	; MEMORY MAPPED
+    64: .equ	UCSR0B	= 0xc1	; MEMORY MAPPED
+    65: .equ	UCSR0A	= 0xc0	; MEMORY MAPPED
+    66: .equ	TWAMR	= 0xbd	; MEMORY MAPPED
+    67: .equ	TWCR	= 0xbc	; MEMORY MAPPED
+    68: .equ	TWDR	= 0xbb	; MEMORY MAPPED
+    69: .equ	TWAR	= 0xba	; MEMORY MAPPED
+    70: .equ	TWSR	= 0xb9	; MEMORY MAPPED
+    71: .equ	TWBR	= 0xb8	; MEMORY MAPPED
+    72: .equ	ASSR	= 0xb6	; MEMORY MAPPED
+    73: .equ	OCR2B	= 0xb4	; MEMORY MAPPED
+    74: .equ	OCR2A	= 0xb3	; MEMORY MAPPED
+    75: .equ	TCNT2	= 0xb2	; MEMORY MAPPED
+    76: .equ	TCCR2B	= 0xb1	; MEMORY MAPPED
+    77: .equ	TCCR2A	= 0xb0	; MEMORY MAPPED
+    78: .equ	OCR1BL	= 0x8a	; MEMORY MAPPED
+    79: .equ	OCR1BH	= 0x8b	; MEMORY MAPPED
+    80: .equ	OCR1AL	= 0x88	; MEMORY MAPPED
+    81: .equ	OCR1AH	= 0x89	; MEMORY MAPPED
+    82: .equ	ICR1L	= 0x86	; MEMORY MAPPED
+    83: .equ	ICR1H	= 0x87	; MEMORY MAPPED
+    84: .equ	TCNT1L	= 0x84	; MEMORY MAPPED
+    85: .equ	TCNT1H	= 0x85	; MEMORY MAPPED
+    86: .equ	TCCR1C	= 0x82	; MEMORY MAPPED
+    87: .equ	TCCR1B	= 0x81	; MEMORY MAPPED
+    88: .equ	TCCR1A	= 0x80	; MEMORY MAPPED
+    89: .equ	DIDR1	= 0x7f	; MEMORY MAPPED
+    90: .equ	DIDR0	= 0x7e	; MEMORY MAPPED
+    91: .equ	ADMUX	= 0x7c	; MEMORY MAPPED
+    92: .equ	ADCSRB	= 0x7b	; MEMORY MAPPED
+    93: .equ	ADCSRA	= 0x7a	; MEMORY MAPPED
+    94: .equ	ADCH	= 0x79	; MEMORY MAPPED
+    95: .equ	ADCL	= 0x78	; MEMORY MAPPED
+    96: .equ	TIMSK2	= 0x70	; MEMORY MAPPED
+    97: .equ	TIMSK1	= 0x6f	; MEMORY MAPPED
+    98: .equ	TIMSK0	= 0x6e	; MEMORY MAPPED
+    99: .equ	PCMSK1	= 0x6c	; MEMORY MAPPED
+   100: .equ	PCMSK2	= 0x6d	; MEMORY MAPPED
+   101: .equ	PCMSK0	= 0x6b	; MEMORY MAPPED
+   102: .equ	EICRA	= 0x69	; MEMORY MAPPED
+   103: .equ	PCICR	= 0x68	; MEMORY MAPPED
+   104: .equ	OSCCAL	= 0x66	; MEMORY MAPPED
+   105: .equ	PRR	= 0x64	; MEMORY MAPPED
+   106: .equ	CLKPR	= 0x61	; MEMORY MAPPED
+   107: .equ	WDTCSR	= 0x60	; MEMORY MAPPED
+   108: .equ	SREG	= 0x3f
+   109: .equ	SPL	= 0x3d
+   110: .equ	SPH	= 0x3e
+   111: .equ	SPMCSR	= 0x37
+   112: .equ	MCUCR	= 0x35
+   113: .equ	MCUSR	= 0x34
+   114: .equ	SMCR	= 0x33
+   115: .equ	ACSR	= 0x30
+   116: .equ	SPDR	= 0x2e
+   117: .equ	SPSR	= 0x2d
+   118: .equ	SPCR	= 0x2c
+   119: .equ	GPIOR2	= 0x2b
+   120: .equ	GPIOR1	= 0x2a
+   121: .equ	OCR0B	= 0x28
+   122: .equ	OCR0A	= 0x27
+   123: .equ	TCNT0	= 0x26
+   124: .equ	TCCR0B	= 0x25
+   125: .equ	TCCR0A	= 0x24
+   126: .equ	GTCCR	= 0x23
+   127: .equ	EEARL	= 0x21
+   128: .equ	EEDR	= 0x20
+   129: .equ	EECR	= 0x1f
+   130: .equ	GPIOR0	= 0x1e
+   131: .equ	EIMSK	= 0x1d
+   132: .equ	EIFR	= 0x1c
+   133: .equ	PCIFR	= 0x1b
+   134: .equ	TIFR2	= 0x17
+   135: .equ	TIFR1	= 0x16
+   136: .equ	TIFR0	= 0x15
+   137: .equ	PORTD	= 0x0b
+   138: .equ	DDRD	= 0x0a
+   139: .equ	PIND	= 0x09
+   140: .equ	PORTC	= 0x08
+   141: .equ	DDRC	= 0x07
+   142: .equ	PINC	= 0x06
+   143: .equ	PORTB	= 0x05
+   144: .equ	DDRB	= 0x04
+   145: .equ	PINB	= 0x03
+   146: 
+   147: 
+   148: ; ***** BIT DEFINITIONS **************************************************
+   149: 
+   150: ; ***** USART0 ***********************
+   151: ; UDR0 - USART I/O Data Register
+   152: .equ	UDR0_0	= 0	; USART I/O Data Register bit 0
+   153: .equ	UDR0_1	= 1	; USART I/O Data Register bit 1
+   154: .equ	UDR0_2	= 2	; USART I/O Data Register bit 2
+   155: .equ	UDR0_3	= 3	; USART I/O Data Register bit 3
+   156: .equ	UDR0_4	= 4	; USART I/O Data Register bit 4
+   157: .equ	UDR0_5	= 5	; USART I/O Data Register bit 5
+   158: .equ	UDR0_6	= 6	; USART I/O Data Register bit 6
+   159: .equ	UDR0_7	= 7	; USART I/O Data Register bit 7
+   160: 
+   161: ; UCSR0A - USART Control and Status Register A
+   162: .equ	MPCM0	= 0	; Multi-processor Communication Mode
+   163: .equ	U2X0	= 1	; Double the USART transmission speed
+   164: .equ	UPE0	= 2	; Parity Error
+   165: .equ	DOR0	= 3	; Data overRun
+   166: .equ	FE0	= 4	; Framing Error
+   167: .equ	UDRE0	= 5	; USART Data Register Empty
+   168: .equ	TXC0	= 6	; USART Transmitt Complete
+   169: .equ	RXC0	= 7	; USART Receive Complete
+   170: 
+   171: ; UCSR0B - USART Control and Status Register B
+   172: .equ	TXB80	= 0	; Transmit Data Bit 8
+   173: .equ	RXB80	= 1	; Receive Data Bit 8
+   174: .equ	UCSZ02	= 2	; Character Size
+   175: .equ	TXEN0	= 3	; Transmitter Enable
+   176: .equ	RXEN0	= 4	; Receiver Enable
+   177: .equ	UDRIE0	= 5	; USART Data register Empty Interrupt Enable
+   178: .equ	TXCIE0	= 6	; TX Complete Interrupt Enable
+   179: .equ	RXCIE0	= 7	; RX Complete Interrupt Enable
+   180: 
+   181: ; UCSR0C - USART Control and Status Register C
+   182: .equ	UCPOL0	= 0	; Clock Polarity
+   183: .equ	UCSZ00	= 1	; Character Size
+   184: .equ	UCPHA0	= UCSZ00	; For compatibility
+   185: .equ	UCSZ01	= 2	; Character Size
+   186: .equ	UDORD0	= UCSZ01	; For compatibility
+   187: .equ	USBS0	= 3	; Stop Bit Select
+   188: .equ	UPM00	= 4	; Parity Mode Bit 0
+   189: .equ	UPM01	= 5	; Parity Mode Bit 1
+   190: .equ	UMSEL00	= 6	; USART Mode Select
+   191: .equ	UMSEL0	= UMSEL00	; For compatibility
+   192: .equ	UMSEL01	= 7	; USART Mode Select
+   193: .equ	UMSEL1	= UMSEL01	; For compatibility
+   194: 
+   195: ; UBRR0H - USART Baud Rate Register High Byte
+   196: .equ	UBRR8	= 0	; USART Baud Rate Register bit 8
+   197: .equ	UBRR9	= 1	; USART Baud Rate Register bit 9
+   198: .equ	UBRR10	= 2	; USART Baud Rate Register bit 10
+   199: .equ	UBRR11	= 3	; USART Baud Rate Register bit 11
+   200: 
+   201: ; UBRR0L - USART Baud Rate Register Low Byte
+   202: .equ	_UBRR0	= 0	; USART Baud Rate Register bit 0
+   203: .equ	_UBRR1	= 1	; USART Baud Rate Register bit 1
+   204: .equ	UBRR2	= 2	; USART Baud Rate Register bit 2
+   205: .equ	UBRR3	= 3	; USART Baud Rate Register bit 3
+   206: .equ	UBRR4	= 4	; USART Baud Rate Register bit 4
+   207: .equ	UBRR5	= 5	; USART Baud Rate Register bit 5
+   208: .equ	UBRR6	= 6	; USART Baud Rate Register bit 6
+   209: .equ	UBRR7	= 7	; USART Baud Rate Register bit 7
+   210: 
+   211: 
+   212: ; ***** TWI **************************
+   213: ; TWAMR - TWI (Slave) Address Mask Register
+   214: .equ	TWAM0	= 1	; 
+   215: .equ	TWAMR0	= TWAM0	; For compatibility
+   216: .equ	TWAM1	= 2	; 
+   217: .equ	TWAMR1	= TWAM1	; For compatibility
+   218: .equ	TWAM2	= 3	; 
+   219: .equ	TWAMR2	= TWAM2	; For compatibility
+   220: .equ	TWAM3	= 4	; 
+   221: .equ	TWAMR3	= TWAM3	; For compatibility
+   222: .equ	TWAM4	= 5	; 
+   223: .equ	TWAMR4	= TWAM4	; For compatibility
+   224: .equ	TWAM5	= 6	; 
+   225: .equ	TWAMR5	= TWAM5	; For compatibility
+   226: .equ	TWAM6	= 7	; 
+   227: .equ	TWAMR6	= TWAM6	; For compatibility
+   228: 
+   229: ; TWBR - TWI Bit Rate register
+   230: .equ	TWBR0	= 0	; 
+   231: .equ	TWBR1	= 1	; 
+   232: .equ	TWBR2	= 2	; 
+   233: .equ	TWBR3	= 3	; 
+   234: .equ	TWBR4	= 4	; 
+   235: .equ	TWBR5	= 5	; 
+   236: .equ	TWBR6	= 6	; 
+   237: .equ	TWBR7	= 7	; 
+   238: 
+   239: ; TWCR - TWI Control Register
+   240: .equ	TWIE	= 0	; TWI Interrupt Enable
+   241: .equ	TWEN	= 2	; TWI Enable Bit
+   242: .equ	TWWC	= 3	; TWI Write Collition Flag
+   243: .equ	TWSTO	= 4	; TWI Stop Condition Bit
+   244: .equ	TWSTA	= 5	; TWI Start Condition Bit
+   245: .equ	TWEA	= 6	; TWI Enable Acknowledge Bit
+   246: .equ	TWINT	= 7	; TWI Interrupt Flag
+   247: 
+   248: ; TWSR - TWI Status Register
+   249: .equ	TWPS0	= 0	; TWI Prescaler
+   250: .equ	TWPS1	= 1	; TWI Prescaler
+   251: .equ	TWS3	= 3	; TWI Status
+   252: .equ	TWS4	= 4	; TWI Status
+   253: .equ	TWS5	= 5	; TWI Status
+   254: .equ	TWS6	= 6	; TWI Status
+   255: .equ	TWS7	= 7	; TWI Status
+   256: 
+   257: ; TWDR - TWI Data register
+   258: .equ	TWD0	= 0	; TWI Data Register Bit 0
+   259: .equ	TWD1	= 1	; TWI Data Register Bit 1
+   260: .equ	TWD2	= 2	; TWI Data Register Bit 2
+   261: .equ	TWD3	= 3	; TWI Data Register Bit 3
+   262: .equ	TWD4	= 4	; TWI Data Register Bit 4
+   263: .equ	TWD5	= 5	; TWI Data Register Bit 5
+   264: .equ	TWD6	= 6	; TWI Data Register Bit 6
+   265: .equ	TWD7	= 7	; TWI Data Register Bit 7
+   266: 
+   267: ; TWAR - TWI (Slave) Address register
+   268: .equ	TWGCE	= 0	; TWI General Call Recognition Enable Bit
+   269: .equ	TWA0	= 1	; TWI (Slave) Address register Bit 0
+   270: .equ	TWA1	= 2	; TWI (Slave) Address register Bit 1
+   271: .equ	TWA2	= 3	; TWI (Slave) Address register Bit 2
+   272: .equ	TWA3	= 4	; TWI (Slave) Address register Bit 3
+   273: .equ	TWA4	= 5	; TWI (Slave) Address register Bit 4
+   274: .equ	TWA5	= 6	; TWI (Slave) Address register Bit 5
+   275: .equ	TWA6	= 7	; TWI (Slave) Address register Bit 6
+   276: 
+   277: 
+   278: ; ***** TIMER_COUNTER_1 **************
+   279: ; TIMSK1 - Timer/Counter Interrupt Mask Register
+   280: .equ	TOIE1	= 0	; Timer/Counter1 Overflow Interrupt Enable
+   281: .equ	OCIE1A	= 1	; Timer/Counter1 Output CompareA Match Interrupt Enable
+   282: .equ	OCIE1B	= 2	; Timer/Counter1 Output CompareB Match Interrupt Enable
+   283: .equ	ICIE1	= 5	; Timer/Counter1 Input Capture Interrupt Enable
+   284: 
+   285: ; TIFR1 - Timer/Counter Interrupt Flag register
+   286: .equ	TOV1	= 0	; Timer/Counter1 Overflow Flag
+   287: .equ	OCF1A	= 1	; Output Compare Flag 1A
+   288: .equ	OCF1B	= 2	; Output Compare Flag 1B
+   289: .equ	ICF1	= 5	; Input Capture Flag 1
+   290: 
+   291: ; TCCR1A - Timer/Counter1 Control Register A
+   292: .equ	WGM10	= 0	; Waveform Generation Mode
+   293: .equ	WGM11	= 1	; Waveform Generation Mode
+   294: .equ	COM1B0	= 4	; Compare Output Mode 1B, bit 0
+   295: .equ	COM1B1	= 5	; Compare Output Mode 1B, bit 1
+   296: .equ	COM1A0	= 6	; Comparet Ouput Mode 1A, bit 0
+   297: .equ	COM1A1	= 7	; Compare Output Mode 1A, bit 1
+   298: 
+   299: ; TCCR1B - Timer/Counter1 Control Register B
+   300: .equ	CS10	= 0	; Prescaler source of Timer/Counter 1
+   301: .equ	CS11	= 1	; Prescaler source of Timer/Counter 1
+   302: .equ	CS12	= 2	; Prescaler source of Timer/Counter 1
+   303: .equ	WGM12	= 3	; Waveform Generation Mode
+   304: .equ	WGM13	= 4	; Waveform Generation Mode
+   305: .equ	ICES1	= 6	; Input Capture 1 Edge Select
+   306: .equ	ICNC1	= 7	; Input Capture 1 Noise Canceler
+   307: 
+   308: ; TCCR1C - Timer/Counter1 Control Register C
+   309: .equ	FOC1B	= 6	; 
+   310: .equ	FOC1A	= 7	; 
+   311: 
+   312: ; GTCCR - General Timer/Counter Control Register
+   313: .equ	PSRSYNC	= 0	; Prescaler Reset Timer/Counter1 and Timer/Counter0
+   314: .equ	TSM	= 7	; Timer/Counter Synchronization Mode
+   315: 
+   316: 
+   317: ; ***** TIMER_COUNTER_2 **************
+   318: ; TIMSK2 - Timer/Counter Interrupt Mask register
+   319: .equ	TOIE2	= 0	; Timer/Counter2 Overflow Interrupt Enable
+   320: .equ	TOIE2A	= TOIE2	; For compatibility
+   321: .equ	OCIE2A	= 1	; Timer/Counter2 Output Compare Match A Interrupt Enable
+   322: .equ	OCIE2B	= 2	; Timer/Counter2 Output Compare Match B Interrupt Enable
+   323: 
+   324: ; TIFR2 - Timer/Counter Interrupt Flag Register
+   325: .equ	TOV2	= 0	; Timer/Counter2 Overflow Flag
+   326: .equ	OCF2A	= 1	; Output Compare Flag 2A
+   327: .equ	OCF2B	= 2	; Output Compare Flag 2B
+   328: 
+   329: ; TCCR2A - Timer/Counter2 Control Register A
+   330: .equ	WGM20	= 0	; Waveform Genration Mode
+   331: .equ	WGM21	= 1	; Waveform Genration Mode
+   332: .equ	COM2B0	= 4	; Compare Output Mode bit 0
+   333: .equ	COM2B1	= 5	; Compare Output Mode bit 1
+   334: .equ	COM2A0	= 6	; Compare Output Mode bit 1
+   335: .equ	COM2A1	= 7	; Compare Output Mode bit 1
+   336: 
+   337: ; TCCR2B - Timer/Counter2 Control Register B
+   338: .equ	CS20	= 0	; Clock Select bit 0
+   339: .equ	CS21	= 1	; Clock Select bit 1
+   340: .equ	CS22	= 2	; Clock Select bit 2
+   341: .equ	WGM22	= 3	; Waveform Generation Mode
+   342: .equ	FOC2B	= 6	; Force Output Compare B
+   343: .equ	FOC2A	= 7	; Force Output Compare A
+   344: 
+   345: ; TCNT2 - Timer/Counter2
+   346: .equ	TCNT2_0	= 0	; Timer/Counter 2 bit 0
+   347: .equ	TCNT2_1	= 1	; Timer/Counter 2 bit 1
+   348: .equ	TCNT2_2	= 2	; Timer/Counter 2 bit 2
+   349: .equ	TCNT2_3	= 3	; Timer/Counter 2 bit 3
+   350: .equ	TCNT2_4	= 4	; Timer/Counter 2 bit 4
+   351: .equ	TCNT2_5	= 5	; Timer/Counter 2 bit 5
+   352: .equ	TCNT2_6	= 6	; Timer/Counter 2 bit 6
+   353: .equ	TCNT2_7	= 7	; Timer/Counter 2 bit 7
+   354: 
+   355: ; OCR2A - Timer/Counter2 Output Compare Register A
+   356: .equ	OCR2A_0	= 0	; Timer/Counter2 Output Compare Register Bit 0
+   357: .equ	OCR2A_1	= 1	; Timer/Counter2 Output Compare Register Bit 1
+   358: .equ	OCR2A_2	= 2	; Timer/Counter2 Output Compare Register Bit 2
+   359: .equ	OCR2A_3	= 3	; Timer/Counter2 Output Compare Register Bit 3
+   360: .equ	OCR2A_4	= 4	; Timer/Counter2 Output Compare Register Bit 4
+   361: .equ	OCR2A_5	= 5	; Timer/Counter2 Output Compare Register Bit 5
+   362: .equ	OCR2A_6	= 6	; Timer/Counter2 Output Compare Register Bit 6
+   363: .equ	OCR2A_7	= 7	; Timer/Counter2 Output Compare Register Bit 7
+   364: 
+   365: ; OCR2B - Timer/Counter2 Output Compare Register B
+   366: .equ	OCR2B_0	= 0	; Timer/Counter2 Output Compare Register Bit 0
+   367: .equ	OCR2B_1	= 1	; Timer/Counter2 Output Compare Register Bit 1
+   368: .equ	OCR2B_2	= 2	; Timer/Counter2 Output Compare Register Bit 2
+   369: .equ	OCR2B_3	= 3	; Timer/Counter2 Output Compare Register Bit 3
+   370: .equ	OCR2B_4	= 4	; Timer/Counter2 Output Compare Register Bit 4
+   371: .equ	OCR2B_5	= 5	; Timer/Counter2 Output Compare Register Bit 5
+   372: .equ	OCR2B_6	= 6	; Timer/Counter2 Output Compare Register Bit 6
+   373: .equ	OCR2B_7	= 7	; Timer/Counter2 Output Compare Register Bit 7
+   374: 
+   375: ; ASSR - Asynchronous Status Register
+   376: .equ	TCR2BUB	= 0	; Timer/Counter Control Register2 Update Busy
+   377: .equ	TCR2AUB	= 1	; Timer/Counter Control Register2 Update Busy
+   378: .equ	OCR2BUB	= 2	; Output Compare Register 2 Update Busy
+   379: .equ	OCR2AUB	= 3	; Output Compare Register2 Update Busy
+   380: .equ	TCN2UB	= 4	; Timer/Counter2 Update Busy
+   381: .equ	AS2	= 5	; Asynchronous Timer/Counter2
+   382: .equ	EXCLK	= 6	; Enable External Clock Input
+   383: 
+   384: ; GTCCR - General Timer Counter Control register
+   385: .equ	PSRASY	= 1	; Prescaler Reset Timer/Counter2
+   386: .equ	PSR2	= PSRASY	; For compatibility
+   387: ;.equ	TSM	= 7	; Timer/Counter Synchronization Mode
+   388: 
+   389: 
+   390: ; ***** AD_CONVERTER *****************
+   391: ; ADMUX - The ADC multiplexer Selection Register
+   392: .equ	MUX0	= 0	; Analog Channel and Gain Selection Bits
+   393: .equ	MUX1	= 1	; Analog Channel and Gain Selection Bits
+   394: .equ	MUX2	= 2	; Analog Channel and Gain Selection Bits
+   395: .equ	MUX3	= 3	; Analog Channel and Gain Selection Bits
+   396: .equ	ADLAR	= 5	; Left Adjust Result
+   397: .equ	REFS0	= 6	; Reference Selection Bit 0
+   398: .equ	REFS1	= 7	; Reference Selection Bit 1
+   399: 
+   400: ; ADCSRA - The ADC Control and Status register A
+   401: .equ	ADPS0	= 0	; ADC  Prescaler Select Bits
+   402: .equ	ADPS1	= 1	; ADC  Prescaler Select Bits
+   403: .equ	ADPS2	= 2	; ADC  Prescaler Select Bits
+   404: .equ	ADIE	= 3	; ADC Interrupt Enable
+   405: .equ	ADIF	= 4	; ADC Interrupt Flag
+   406: .equ	ADATE	= 5	; ADC  Auto Trigger Enable
+   407: .equ	ADSC	= 6	; ADC Start Conversion
+   408: .equ	ADEN	= 7	; ADC Enable
+   409: 
+   410: ; ADCSRB - The ADC Control and Status register B
+   411: .equ	ADTS0	= 0	; ADC Auto Trigger Source bit 0
+   412: .equ	ADTS1	= 1	; ADC Auto Trigger Source bit 1
+   413: .equ	ADTS2	= 2	; ADC Auto Trigger Source bit 2
+   414: .equ	ACME	= 6	; 
+   415: 
+   416: ; ADCH - ADC Data Register High Byte
+   417: .equ	ADCH0	= 0	; ADC Data Register High Byte Bit 0
+   418: .equ	ADCH1	= 1	; ADC Data Register High Byte Bit 1
+   419: .equ	ADCH2	= 2	; ADC Data Register High Byte Bit 2
+   420: .equ	ADCH3	= 3	; ADC Data Register High Byte Bit 3
+   421: .equ	ADCH4	= 4	; ADC Data Register High Byte Bit 4
+   422: .equ	ADCH5	= 5	; ADC Data Register High Byte Bit 5
+   423: .equ	ADCH6	= 6	; ADC Data Register High Byte Bit 6
+   424: .equ	ADCH7	= 7	; ADC Data Register High Byte Bit 7
+   425: 
+   426: ; ADCL - ADC Data Register Low Byte
+   427: .equ	ADCL0	= 0	; ADC Data Register Low Byte Bit 0
+   428: .equ	ADCL1	= 1	; ADC Data Register Low Byte Bit 1
+   429: .equ	ADCL2	= 2	; ADC Data Register Low Byte Bit 2
+   430: .equ	ADCL3	= 3	; ADC Data Register Low Byte Bit 3
+   431: .equ	ADCL4	= 4	; ADC Data Register Low Byte Bit 4
+   432: .equ	ADCL5	= 5	; ADC Data Register Low Byte Bit 5
+   433: .equ	ADCL6	= 6	; ADC Data Register Low Byte Bit 6
+   434: .equ	ADCL7	= 7	; ADC Data Register Low Byte Bit 7
+   435: 
+   436: ; DIDR0 - Digital Input Disable Register
+   437: .equ	ADC0D	= 0	; 
+   438: .equ	ADC1D	= 1	; 
+   439: .equ	ADC2D	= 2	; 
+   440: .equ	ADC3D	= 3	; 
+   441: .equ	ADC4D	= 4	; 
+   442: .equ	ADC5D	= 5	; 
+   443: 
+   444: 
+   445: ; ***** ANALOG_COMPARATOR ************
+   446: ; ACSR - Analog Comparator Control And Status Register
+   447: .equ	ACIS0	= 0	; Analog Comparator Interrupt Mode Select bit 0
+   448: .equ	ACIS1	= 1	; Analog Comparator Interrupt Mode Select bit 1
+   449: .equ	ACIC	= 2	; Analog Comparator Input Capture Enable
+   450: .equ	ACIE	= 3	; Analog Comparator Interrupt Enable
+   451: .equ	ACI	= 4	; Analog Comparator Interrupt Flag
+   452: .equ	ACO	= 5	; Analog Compare Output
+   453: .equ	ACBG	= 6	; Analog Comparator Bandgap Select
+   454: .equ	ACD	= 7	; Analog Comparator Disable
+   455: 
+   456: ; DIDR1 - Digital Input Disable Register 1
+   457: .equ	AIN0D	= 0	; AIN0 Digital Input Disable
+   458: .equ	AIN1D	= 1	; AIN1 Digital Input Disable
+   459: 
+   460: 
+   461: ; ***** PORTB ************************
+   462: ; PORTB - Port B Data Register
+   463: .equ	PORTB0	= 0	; Port B Data Register bit 0
+   464: .equ	PB0	= 0	; For compatibility
+   465: .equ	PORTB1	= 1	; Port B Data Register bit 1
+   466: .equ	PB1	= 1	; For compatibility
+   467: .equ	PORTB2	= 2	; Port B Data Register bit 2
+   468: .equ	PB2	= 2	; For compatibility
+   469: .equ	PORTB3	= 3	; Port B Data Register bit 3
+   470: .equ	PB3	= 3	; For compatibility
+   471: .equ	PORTB4	= 4	; Port B Data Register bit 4
+   472: .equ	PB4	= 4	; For compatibility
+   473: .equ	PORTB5	= 5	; Port B Data Register bit 5
+   474: .equ	PB5	= 5	; For compatibility
+   475: .equ	PORTB6	= 6	; Port B Data Register bit 6
+   476: .equ	PB6	= 6	; For compatibility
+   477: .equ	PORTB7	= 7	; Port B Data Register bit 7
+   478: .equ	PB7	= 7	; For compatibility
+   479: 
+   480: ; DDRB - Port B Data Direction Register
+   481: .equ	DDB0	= 0	; Port B Data Direction Register bit 0
+   482: .equ	DDB1	= 1	; Port B Data Direction Register bit 1
+   483: .equ	DDB2	= 2	; Port B Data Direction Register bit 2
+   484: .equ	DDB3	= 3	; Port B Data Direction Register bit 3
+   485: .equ	DDB4	= 4	; Port B Data Direction Register bit 4
+   486: .equ	DDB5	= 5	; Port B Data Direction Register bit 5
+   487: .equ	DDB6	= 6	; Port B Data Direction Register bit 6
+   488: .equ	DDB7	= 7	; Port B Data Direction Register bit 7
+   489: 
+   490: ; PINB - Port B Input Pins
+   491: .equ	PINB0	= 0	; Port B Input Pins bit 0
+   492: .equ	PINB1	= 1	; Port B Input Pins bit 1
+   493: .equ	PINB2	= 2	; Port B Input Pins bit 2
+   494: .equ	PINB3	= 3	; Port B Input Pins bit 3
+   495: .equ	PINB4	= 4	; Port B Input Pins bit 4
+   496: .equ	PINB5	= 5	; Port B Input Pins bit 5
+   497: .equ	PINB6	= 6	; Port B Input Pins bit 6
+   498: .equ	PINB7	= 7	; Port B Input Pins bit 7
+   499: 
+   500: 
+   501: ; ***** PORTC ************************
+   502: ; PORTC - Port C Data Register
+   503: .equ	PORTC0	= 0	; Port C Data Register bit 0
+   504: .equ	PC0	= 0	; For compatibility
+   505: .equ	PORTC1	= 1	; Port C Data Register bit 1
+   506: .equ	PC1	= 1	; For compatibility
+   507: .equ	PORTC2	= 2	; Port C Data Register bit 2
+   508: .equ	PC2	= 2	; For compatibility
+   509: .equ	PORTC3	= 3	; Port C Data Register bit 3
+   510: .equ	PC3	= 3	; For compatibility
+   511: .equ	PORTC4	= 4	; Port C Data Register bit 4
+   512: .equ	PC4	= 4	; For compatibility
+   513: .equ	PORTC5	= 5	; Port C Data Register bit 5
+   514: .equ	PC5	= 5	; For compatibility
+   515: .equ	PORTC6	= 6	; Port C Data Register bit 6
+   516: .equ	PC6	= 6	; For compatibility
+   517: 
+   518: ; DDRC - Port C Data Direction Register
+   519: .equ	DDC0	= 0	; Port C Data Direction Register bit 0
+   520: .equ	DDC1	= 1	; Port C Data Direction Register bit 1
+   521: .equ	DDC2	= 2	; Port C Data Direction Register bit 2
+   522: .equ	DDC3	= 3	; Port C Data Direction Register bit 3
+   523: .equ	DDC4	= 4	; Port C Data Direction Register bit 4
+   524: .equ	DDC5	= 5	; Port C Data Direction Register bit 5
+   525: .equ	DDC6	= 6	; Port C Data Direction Register bit 6
+   526: 
+   527: ; PINC - Port C Input Pins
+   528: .equ	PINC0	= 0	; Port C Input Pins bit 0
+   529: .equ	PINC1	= 1	; Port C Input Pins bit 1
+   530: .equ	PINC2	= 2	; Port C Input Pins bit 2
+   531: .equ	PINC3	= 3	; Port C Input Pins bit 3
+   532: .equ	PINC4	= 4	; Port C Input Pins bit 4
+   533: .equ	PINC5	= 5	; Port C Input Pins bit 5
+   534: .equ	PINC6	= 6	; Port C Input Pins bit 6
+   535: 
+   536: 
+   537: ; ***** PORTD ************************
+   538: ; PORTD - Port D Data Register
+   539: .equ	PORTD0	= 0	; Port D Data Register bit 0
+   540: .equ	PD0	= 0	; For compatibility
+   541: .equ	PORTD1	= 1	; Port D Data Register bit 1
+   542: .equ	PD1	= 1	; For compatibility
+   543: .equ	PORTD2	= 2	; Port D Data Register bit 2
+   544: .equ	PD2	= 2	; For compatibility
+   545: .equ	PORTD3	= 3	; Port D Data Register bit 3
+   546: .equ	PD3	= 3	; For compatibility
+   547: .equ	PORTD4	= 4	; Port D Data Register bit 4
+   548: .equ	PD4	= 4	; For compatibility
+   549: .equ	PORTD5	= 5	; Port D Data Register bit 5
+   550: .equ	PD5	= 5	; For compatibility
+   551: .equ	PORTD6	= 6	; Port D Data Register bit 6
+   552: .equ	PD6	= 6	; For compatibility
+   553: .equ	PORTD7	= 7	; Port D Data Register bit 7
+   554: .equ	PD7	= 7	; For compatibility
+   555: 
+   556: ; DDRD - Port D Data Direction Register
+   557: .equ	DDD0	= 0	; Port D Data Direction Register bit 0
+   558: .equ	DDD1	= 1	; Port D Data Direction Register bit 1
+   559: .equ	DDD2	= 2	; Port D Data Direction Register bit 2
+   560: .equ	DDD3	= 3	; Port D Data Direction Register bit 3
+   561: .equ	DDD4	= 4	; Port D Data Direction Register bit 4
+   562: .equ	DDD5	= 5	; Port D Data Direction Register bit 5
+   563: .equ	DDD6	= 6	; Port D Data Direction Register bit 6
+   564: .equ	DDD7	= 7	; Port D Data Direction Register bit 7
+   565: 
+   566: ; PIND - Port D Input Pins
+   567: .equ	PIND0	= 0	; Port D Input Pins bit 0
+   568: .equ	PIND1	= 1	; Port D Input Pins bit 1
+   569: .equ	PIND2	= 2	; Port D Input Pins bit 2
+   570: .equ	PIND3	= 3	; Port D Input Pins bit 3
+   571: .equ	PIND4	= 4	; Port D Input Pins bit 4
+   572: .equ	PIND5	= 5	; Port D Input Pins bit 5
+   573: .equ	PIND6	= 6	; Port D Input Pins bit 6
+   574: .equ	PIND7	= 7	; Port D Input Pins bit 7
+   575: 
+   576: 
+   577: ; ***** TIMER_COUNTER_0 **************
+   578: ; TIMSK0 - Timer/Counter0 Interrupt Mask Register
+   579: .equ	TOIE0	= 0	; Timer/Counter0 Overflow Interrupt Enable
+   580: .equ	OCIE0A	= 1	; Timer/Counter0 Output Compare Match A Interrupt Enable
+   581: .equ	OCIE0B	= 2	; Timer/Counter0 Output Compare Match B Interrupt Enable
+   582: 
+   583: ; TIFR0 - Timer/Counter0 Interrupt Flag register
+   584: .equ	TOV0	= 0	; Timer/Counter0 Overflow Flag
+   585: .equ	OCF0A	= 1	; Timer/Counter0 Output Compare Flag 0A
+   586: .equ	OCF0B	= 2	; Timer/Counter0 Output Compare Flag 0B
+   587: 
+   588: ; TCCR0A - Timer/Counter  Control Register A
+   589: .equ	WGM00	= 0	; Waveform Generation Mode
+   590: .equ	WGM01	= 1	; Waveform Generation Mode
+   591: .equ	COM0B0	= 4	; Compare Output Mode, Fast PWm
+   592: .equ	COM0B1	= 5	; Compare Output Mode, Fast PWm
+   593: .equ	COM0A0	= 6	; Compare Output Mode, Phase Correct PWM Mode
+   594: .equ	COM0A1	= 7	; Compare Output Mode, Phase Correct PWM Mode
+   595: 
+   596: ; TCCR0B - Timer/Counter Control Register B
+   597: .equ	CS00	= 0	; Clock Select
+   598: .equ	CS01	= 1	; Clock Select
+   599: .equ	CS02	= 2	; Clock Select
+   600: .equ	WGM02	= 3	; 
+   601: .equ	FOC0B	= 6	; Force Output Compare B
+   602: .equ	FOC0A	= 7	; Force Output Compare A
+   603: 
+   604: ; TCNT0 - Timer/Counter0
+   605: .equ	TCNT0_0	= 0	; 
+   606: .equ	TCNT0_1	= 1	; 
+   607: .equ	TCNT0_2	= 2	; 
+   608: .equ	TCNT0_3	= 3	; 
+   609: .equ	TCNT0_4	= 4	; 
+   610: .equ	TCNT0_5	= 5	; 
+   611: .equ	TCNT0_6	= 6	; 
+   612: .equ	TCNT0_7	= 7	; 
+   613: 
+   614: ; OCR0A - Timer/Counter0 Output Compare Register
+   615: .equ	OCR0A_0	= 0	; 
+   616: .equ	OCR0A_1	= 1	; 
+   617: .equ	OCR0A_2	= 2	; 
+   618: .equ	OCR0A_3	= 3	; 
+   619: .equ	OCR0A_4	= 4	; 
+   620: .equ	OCR0A_5	= 5	; 
+   621: .equ	OCR0A_6	= 6	; 
+   622: .equ	OCR0A_7	= 7	; 
+   623: 
+   624: ; OCR0B - Timer/Counter0 Output Compare Register
+   625: .equ	OCR0B_0	= 0	; 
+   626: .equ	OCR0B_1	= 1	; 
+   627: .equ	OCR0B_2	= 2	; 
+   628: .equ	OCR0B_3	= 3	; 
+   629: .equ	OCR0B_4	= 4	; 
+   630: .equ	OCR0B_5	= 5	; 
+   631: .equ	OCR0B_6	= 6	; 
+   632: .equ	OCR0B_7	= 7	; 
+   633: 
+   634: ; GTCCR - General Timer/Counter Control Register
+   635: ;.equ	PSRSYNC	= 0	; Prescaler Reset Timer/Counter1 and Timer/Counter0
+   636: .equ	PSR10	= PSRSYNC	; For compatibility
+   637: ;.equ	TSM	= 7	; Timer/Counter Synchronization Mode
+   638: 
+   639: 
+   640: ; ***** EXTERNAL_INTERRUPT ***********
+   641: ; EICRA - External Interrupt Control Register
+   642: .equ	ISC00	= 0	; External Interrupt Sense Control 0 Bit 0
+   643: .equ	ISC01	= 1	; External Interrupt Sense Control 0 Bit 1
+   644: .equ	ISC10	= 2	; External Interrupt Sense Control 1 Bit 0
+   645: .equ	ISC11	= 3	; External Interrupt Sense Control 1 Bit 1
+   646: 
+   647: ; EIMSK - External Interrupt Mask Register
+   648: .equ	INT0	= 0	; External Interrupt Request 0 Enable
+   649: .equ	INT1	= 1	; External Interrupt Request 1 Enable
+   650: 
+   651: ; EIFR - External Interrupt Flag Register
+   652: .equ	INTF0	= 0	; External Interrupt Flag 0
+   653: .equ	INTF1	= 1	; External Interrupt Flag 1
+   654: 
+   655: ; PCICR - Pin Change Interrupt Control Register
+   656: .equ	PCIE0	= 0	; Pin Change Interrupt Enable 0
+   657: .equ	PCIE1	= 1	; Pin Change Interrupt Enable 1
+   658: .equ	PCIE2	= 2	; Pin Change Interrupt Enable 2
+   659: 
+   660: ; PCMSK2 - Pin Change Mask Register 2
+   661: .equ	PCINT16	= 0	; Pin Change Enable Mask 16
+   662: .equ	PCINT17	= 1	; Pin Change Enable Mask 17
+   663: .equ	PCINT18	= 2	; Pin Change Enable Mask 18
+   664: .equ	PCINT19	= 3	; Pin Change Enable Mask 19
+   665: .equ	PCINT20	= 4	; Pin Change Enable Mask 20
+   666: .equ	PCINT21	= 5	; Pin Change Enable Mask 21
+   667: .equ	PCINT22	= 6	; Pin Change Enable Mask 22
+   668: .equ	PCINT23	= 7	; Pin Change Enable Mask 23
+   669: 
+   670: ; PCMSK1 - Pin Change Mask Register 1
+   671: .equ	PCINT8	= 0	; Pin Change Enable Mask 8
+   672: .equ	PCINT9	= 1	; Pin Change Enable Mask 9
+   673: .equ	PCINT10	= 2	; Pin Change Enable Mask 10
+   674: .equ	PCINT11	= 3	; Pin Change Enable Mask 11
+   675: .equ	PCINT12	= 4	; Pin Change Enable Mask 12
+   676: .equ	PCINT13	= 5	; Pin Change Enable Mask 13
+   677: .equ	PCINT14	= 6	; Pin Change Enable Mask 14
+   678: 
+   679: ; PCMSK0 - Pin Change Mask Register 0
+   680: .equ	PCINT0	= 0	; Pin Change Enable Mask 0
+   681: .equ	PCINT1	= 1	; Pin Change Enable Mask 1
+   682: .equ	PCINT2	= 2	; Pin Change Enable Mask 2
+   683: .equ	PCINT3	= 3	; Pin Change Enable Mask 3
+   684: .equ	PCINT4	= 4	; Pin Change Enable Mask 4
+   685: .equ	PCINT5	= 5	; Pin Change Enable Mask 5
+   686: .equ	PCINT6	= 6	; Pin Change Enable Mask 6
+   687: .equ	PCINT7	= 7	; Pin Change Enable Mask 7
+   688: 
+   689: ; PCIFR - Pin Change Interrupt Flag Register
+   690: .equ	PCIF0	= 0	; Pin Change Interrupt Flag 0
+   691: .equ	PCIF1	= 1	; Pin Change Interrupt Flag 1
+   692: .equ	PCIF2	= 2	; Pin Change Interrupt Flag 2
+   693: 
+   694: 
+   695: ; ***** SPI **************************
+   696: ; SPDR - SPI Data Register
+   697: .equ	SPDR0	= 0	; SPI Data Register bit 0
+   698: .equ	SPDR1	= 1	; SPI Data Register bit 1
+   699: .equ	SPDR2	= 2	; SPI Data Register bit 2
+   700: .equ	SPDR3	= 3	; SPI Data Register bit 3
+   701: .equ	SPDR4	= 4	; SPI Data Register bit 4
+   702: .equ	SPDR5	= 5	; SPI Data Register bit 5
+   703: .equ	SPDR6	= 6	; SPI Data Register bit 6
+   704: .equ	SPDR7	= 7	; SPI Data Register bit 7
+   705: 
+   706: ; SPSR - SPI Status Register
+   707: .equ	SPI2X	= 0	; Double SPI Speed Bit
+   708: .equ	WCOL	= 6	; Write Collision Flag
+   709: .equ	SPIF	= 7	; SPI Interrupt Flag
+   710: 
+   711: ; SPCR - SPI Control Register
+   712: .equ	SPR0	= 0	; SPI Clock Rate Select 0
+   713: .equ	SPR1	= 1	; SPI Clock Rate Select 1
+   714: .equ	CPHA	= 2	; Clock Phase
+   715: .equ	CPOL	= 3	; Clock polarity
+   716: .equ	MSTR	= 4	; Master/Slave Select
+   717: .equ	DORD	= 5	; Data Order
+   718: .equ	SPE	= 6	; SPI Enable
+   719: .equ	SPIE	= 7	; SPI Interrupt Enable
+   720: 
+   721: 
+   722: ; ***** CPU **************************
+   723: ; SREG - Status Register
+   724: .equ	SREG_C	= 0	; Carry Flag
+   725: .equ	SREG_Z	= 1	; Zero Flag
+   726: .equ	SREG_N	= 2	; Negative Flag
+   727: .equ	SREG_V	= 3	; Two's Complement Overflow Flag
+   728: .equ	SREG_S	= 4	; Sign Bit
+   729: .equ	SREG_H	= 5	; Half Carry Flag
+   730: .equ	SREG_T	= 6	; Bit Copy Storage
+   731: .equ	SREG_I	= 7	; Global Interrupt Enable
+   732: 
+   733: ; OSCCAL - Oscillator Calibration Value
+   734: .equ	CAL0	= 0	; Oscillator Calibration Value Bit0
+   735: .equ	CAL1	= 1	; Oscillator Calibration Value Bit1
+   736: .equ	CAL2	= 2	; Oscillator Calibration Value Bit2
+   737: .equ	CAL3	= 3	; Oscillator Calibration Value Bit3
+   738: .equ	CAL4	= 4	; Oscillator Calibration Value Bit4
+   739: .equ	CAL5	= 5	; Oscillator Calibration Value Bit5
+   740: .equ	CAL6	= 6	; Oscillator Calibration Value Bit6
+   741: .equ	CAL7	= 7	; Oscillator Calibration Value Bit7
+   742: 
+   743: ; CLKPR - Clock Prescale Register
+   744: .equ	CLKPS0	= 0	; Clock Prescaler Select Bit 0
+   745: .equ	CLKPS1	= 1	; Clock Prescaler Select Bit 1
+   746: .equ	CLKPS2	= 2	; Clock Prescaler Select Bit 2
+   747: .equ	CLKPS3	= 3	; Clock Prescaler Select Bit 3
+   748: .equ	CLKPCE	= 7	; Clock Prescaler Change Enable
+   749: 
+   750: ; SPMCSR - Store Program Memory Control Register
+   751: .equ	SELFPRGEN	= 0	; Self Programming Enable
+   752: .equ	PGERS	= 1	; Page Erase
+   753: .equ	PGWRT	= 2	; Page Write
+   754: .equ	BLBSET	= 3	; Boot Lock Bit Set
+   755: .equ	RWWSRE	= 4	; Read-While-Write section read enable
+   756: .equ	RWWSB	= 6	; Read-While-Write Section Busy
+   757: .equ	SPMIE	= 7	; SPM Interrupt Enable
+   758: 
+   759: ; MCUCR - MCU Control Register
+   760: .equ	PUD	= 4	; 
+   761: 
+   762: ; MCUSR - MCU Status Register
+   763: .equ	PORF	= 0	; Power-on reset flag
+   764: .equ	EXTRF	= 1	; External Reset Flag
+   765: .equ	EXTREF	= EXTRF	; For compatibility
+   766: .equ	BORF	= 2	; Brown-out Reset Flag
+   767: .equ	WDRF	= 3	; Watchdog Reset Flag
+   768: 
+   769: ; SMCR - 
+   770: .equ	SE	= 0	; 
+   771: .equ	SM0	= 1	; 
+   772: .equ	SM1	= 2	; 
+   773: .equ	SM2	= 3	; 
+   774: 
+   775: ; GPIOR2 - General Purpose I/O Register 2
+   776: .equ	GPIOR20	= 0	; 
+   777: .equ	GPIOR21	= 1	; 
+   778: .equ	GPIOR22	= 2	; 
+   779: .equ	GPIOR23	= 3	; 
+   780: .equ	GPIOR24	= 4	; 
+   781: .equ	GPIOR25	= 5	; 
+   782: .equ	GPIOR26	= 6	; 
+   783: .equ	GPIOR27	= 7	; 
+   784: 
+   785: ; GPIOR1 - General Purpose I/O Register 1
+   786: .equ	GPIOR10	= 0	; 
+   787: .equ	GPIOR11	= 1	; 
+   788: .equ	GPIOR12	= 2	; 
+   789: .equ	GPIOR13	= 3	; 
+   790: .equ	GPIOR14	= 4	; 
+   791: .equ	GPIOR15	= 5	; 
+   792: .equ	GPIOR16	= 6	; 
+   793: .equ	GPIOR17	= 7	; 
+   794: 
+   795: ; GPIOR0 - General Purpose I/O Register 0
+   796: .equ	GPIOR00	= 0	; 
+   797: .equ	GPIOR01	= 1	; 
+   798: .equ	GPIOR02	= 2	; 
+   799: .equ	GPIOR03	= 3	; 
+   800: .equ	GPIOR04	= 4	; 
+   801: .equ	GPIOR05	= 5	; 
+   802: .equ	GPIOR06	= 6	; 
+   803: .equ	GPIOR07	= 7	; 
+   804: 
+   805: ; PRR - Power Reduction Register
+   806: .equ	PRADC	= 0	; Power Reduction ADC
+   807: .equ	PRUSART0	= 1	; Power Reduction USART
+   808: .equ	PRSPI	= 2	; Power Reduction Serial Peripheral Interface
+   809: .equ	PRTIM1	= 3	; Power Reduction Timer/Counter1
+   810: .equ	PRTIM0	= 5	; Power Reduction Timer/Counter0
+   811: .equ	PRTIM2	= 6	; Power Reduction Timer/Counter2
+   812: .equ	PRTWI	= 7	; Power Reduction TWI
+   813: 
+   814: 
+   815: ; ***** WATCHDOG *********************
+   816: ; WDTCSR - Watchdog Timer Control Register
+   817: .equ	WDP0	= 0	; Watch Dog Timer Prescaler bit 0
+   818: .equ	WDP1	= 1	; Watch Dog Timer Prescaler bit 1
+   819: .equ	WDP2	= 2	; Watch Dog Timer Prescaler bit 2
+   820: .equ	WDE	= 3	; Watch Dog Enable
+   821: .equ	WDCE	= 4	; Watchdog Change Enable
+   822: .equ	WDP3	= 5	; Watchdog Timer Prescaler Bit 3
+   823: .equ	WDIE	= 6	; Watchdog Timeout Interrupt Enable
+   824: .equ	WDIF	= 7	; Watchdog Timeout Interrupt Flag
+   825: 
+   826: 
+   827: ; ***** EEPROM ***********************
+   828: ; EEARL - EEPROM Address Register Low Byte
+   829: .equ	EEAR0	= 0	; EEPROM Read/Write Access Bit 0
+   830: .equ	EEAR1	= 1	; EEPROM Read/Write Access Bit 1
+   831: .equ	EEAR2	= 2	; EEPROM Read/Write Access Bit 2
+   832: .equ	EEAR3	= 3	; EEPROM Read/Write Access Bit 3
+   833: .equ	EEAR4	= 4	; EEPROM Read/Write Access Bit 4
+   834: .equ	EEAR5	= 5	; EEPROM Read/Write Access Bit 5
+   835: .equ	EEAR6	= 6	; EEPROM Read/Write Access Bit 6
+   836: .equ	EEAR7	= 7	; EEPROM Read/Write Access Bit 7
+   837: 
+   838: ; EEDR - EEPROM Data Register
+   839: .equ	EEDR0	= 0	; EEPROM Data Register bit 0
+   840: .equ	EEDR1	= 1	; EEPROM Data Register bit 1
+   841: .equ	EEDR2	= 2	; EEPROM Data Register bit 2
+   842: .equ	EEDR3	= 3	; EEPROM Data Register bit 3
+   843: .equ	EEDR4	= 4	; EEPROM Data Register bit 4
+   844: .equ	EEDR5	= 5	; EEPROM Data Register bit 5
+   845: .equ	EEDR6	= 6	; EEPROM Data Register bit 6
+   846: .equ	EEDR7	= 7	; EEPROM Data Register bit 7
+   847: 
+   848: ; EECR - EEPROM Control Register
+   849: .equ	EERE	= 0	; EEPROM Read Enable
+   850: .equ	EEPE	= 1	; EEPROM Write Enable
+   851: .equ	EEWE	= EEPE	; For compatibility
+   852: .equ	EEMPE	= 2	; EEPROM Master Write Enable
+   853: .equ	EEMWE	= EEMPE	; For compatibility
+   854: .equ	EERIE	= 3	; EEPROM Ready Interrupt Enable
+   855: .equ	EEPM0	= 4	; EEPROM Programming Mode Bit 0
+   856: .equ	EEPM1	= 5	; EEPROM Programming Mode Bit 1
+   857: 
+   858: 
+   859: 
+   860: ; ***** LOCKSBITS ********************************************************
+   861: .equ	LB1	= 0	; Lockbit
+   862: .equ	LB2	= 1	; Lockbit
+   863: 
+   864: 
+   865: ; ***** FUSES ************************************************************
+   866: ; LOW fuse bits
+   867: .equ	CKSEL0	= 0	; Select Clock Source
+   868: .equ	CKSEL1	= 1	; Select Clock Source
+   869: .equ	CKSEL2	= 2	; Select Clock Source
+   870: .equ	CKSEL3	= 3	; Select Clock Source
+   871: .equ	SUT0	= 4	; Select start-up time
+   872: .equ	SUT1	= 5	; Select start-up time
+   873: .equ	CKOUT	= 6	; Clock output
+   874: .equ	CKDIV8	= 7	; Divide clock by 8
+   875: 
+   876: ; HIGH fuse bits
+   877: .equ	BODLEVEL0	= 0	; Brown-out Detector trigger level
+   878: .equ	BODLEVEL1	= 1	; Brown-out Detector trigger level
+   879: .equ	BODLEVEL2	= 2	; Brown-out Detector trigger level
+   880: .equ	EESAVE	= 3	; EEPROM memory is preserved through chip erase
+   881: .equ	WDTON	= 4	; Watchdog Timer Always On
+   882: .equ	SPIEN	= 5	; Enable Serial programming and Data Downloading
+   883: .equ	DWEN	= 6	; debugWIRE Enable
+   884: .equ	RSTDISBL	= 7	; External reset disable
+   885: 
+   886: ; EXTENDED fuse bits
+   887: ;.equ	SELFPRGEN	= 0	; Self Programming Enable
+   888: 
+   889: 
+   890: 
+   891: ; ***** CPU REGISTER DEFINITIONS *****************************************
+   892: .def	XH	= r27
+   893: .def	XL	= r26
+   894: .def	YH	= r29
+   895: .def	YL	= r28
+   896: .def	ZH	= r31
+   897: .def	ZL	= r30
+   898: 
+   899: 
+   900: 
+   901: ; ***** DATA MEMORY DECLARATIONS *****************************************
+   902: .equ	FLASHEND	= 0x07ff	; Note: Word address
+   903: .equ	IOEND	= 0x00ff
+   904: .equ	SRAM_START	= 0x0100
+   905: .equ	SRAM_SIZE	= 512
+   906: .equ	RAMEND	= 0x02ff
+   907: .equ	XRAMEND	= 0x0000
+   908: .equ	E2END	= 0x00ff
+   909: .equ	EEPROMEND	= 0x00ff
+   910: .equ	EEADRBITS	= 8
+   911: #pragma AVRPART MEMORY PROG_FLASH 4096
+   912: #pragma AVRPART MEMORY EEPROM 256
+   913: #pragma AVRPART MEMORY INT_SRAM SIZE 512
+   914: #pragma AVRPART MEMORY INT_SRAM START_ADDR 0x100
+   915: 
+   916: 
+   917: 
+   918: ; ***** BOOTLOADER DECLARATIONS ******************************************
+   919: .equ	NRWW_START_ADDR	= 0x0
+   920: .equ	NRWW_STOP_ADDR	= 0x7ff
+   921: .equ	RWW_START_ADDR	= 0x0
+   922: .equ	RWW_STOP_ADDR	= 0x0
+   923: .equ	PAGESIZE	= 32
+   924: 
+   925: 
+   926: 
+   927: ; ***** INTERRUPT VECTORS ************************************************
+   928: .equ	INT0addr	= 0x0001	; External Interrupt Request 0
+   929: .equ	INT1addr	= 0x0002	; External Interrupt Request 1
+   930: .equ	PCI0addr	= 0x0003	; Pin Change Interrupt Request 0
+   931: .equ	PCI1addr	= 0x0004	; Pin Change Interrupt Request 0
+   932: .equ	PCI2addr	= 0x0005	; Pin Change Interrupt Request 1
+   933: .equ	WDTaddr	= 0x0006	; Watchdog Time-out Interrupt
+   934: .equ	OC2Aaddr	= 0x0007	; Timer/Counter2 Compare Match A
+   935: .equ	OC2Baddr	= 0x0008	; Timer/Counter2 Compare Match A
+   936: .equ	OVF2addr	= 0x0009	; Timer/Counter2 Overflow
+   937: .equ	ICP1addr	= 0x000a	; Timer/Counter1 Capture Event
+   938: .equ	OC1Aaddr	= 0x000b	; Timer/Counter1 Compare Match A
+   939: .equ	OC1Baddr	= 0x000c	; Timer/Counter1 Compare Match B
+   940: .equ	OVF1addr	= 0x000d	; Timer/Counter1 Overflow
+   941: .equ	OC0Aaddr	= 0x000e	; TimerCounter0 Compare Match A
+   942: .equ	OC0Baddr	= 0x000f	; TimerCounter0 Compare Match B
+   943: .equ	OVF0addr	= 0x0010	; Timer/Couner0 Overflow
+   944: .equ	SPIaddr	= 0x0011	; SPI Serial Transfer Complete
+   945: .equ	URXCaddr	= 0x0012	; USART Rx Complete
+   946: .equ	UDREaddr	= 0x0013	; USART, Data Register Empty
+   947: .equ	UTXCaddr	= 0x0014	; USART Tx Complete
+   948: .equ	ADCCaddr	= 0x0015	; ADC Conversion Complete
+   949: .equ	ERDYaddr	= 0x0016	; EEPROM Ready
+   950: .equ	ACIaddr	= 0x0017	; Analog Comparator
+   951: .equ	TWIaddr	= 0x0018	; Two-wire Serial Interface
+   952: .equ	SPMRaddr	= 0x0019	; Store Program Memory Read
+   953: 
+   954: .equ	INT_VECTORS_SIZE	= 26	; size in words
+   955: 
+   956: #endif  /* _M48DEF_INC_ */
+   957: 
+   958: ; ***** END OF FILE ******************************************************
+  Continuing file ish.asm
+     2: .include "LCD4_macro.inc"
+  Including file LCD4_macro.inc
+     1: ;===============================================================================================
+     2: ; LCD Init
+     3: 			.equ 	LCD_CLR          	= 0      ; DB0: clear display
+     4: 			.equ 	LCD_HOME         	= 1      ; DB1: return to home position
+     5: 
+     6: 			.equ  	LCD_ENTRY_MODE   	= 2      ; DB2: set entry mode
+     7: 			.equ 	LCD_ENTRY_INC    	= 1      ;   DB1: increment
+     8: 			.equ 	LCD_ENTRY_SHIFT  	= 0      ;   DB2: shift
+     9: 
+    10: 			.equ 	LCD_ON		      	= 3      ; DB3: turn lcd/cursor on
+    11: 			.equ  	LCD_ON_DISPLAY   	= 2      ;   DB2: turn display on
+    12: 			.equ  	LCD_ON_CURSOR     	= 1      ;   DB1: turn cursor on
+    13: 			.equ  	LCD_ON_BLINK      	= 0      ;   DB0: blinking cursor
+    14: 
+    15: 			.equ  	LCD_MOVE          	= 4      ; DB4: move cursor/display
+    16: 			.equ 	LCD_MOVE_DISP       = 3      ;   DB3: move display (0-> move cursor)
+    17: 			.equ  	LCD_MOVE_RIGHT      = 2      ;   DB2: move right (0-> left)
+    18: 
+    19: 			.equ  	LCD_F		        = 5      ; DB5: function set
+    20: 			.equ 	LCD_F_8B		   	= 4      ;   DB4: set 8BIT mode (0->4BIT mode)
+    21: 			.equ  	LCD_F_2L			= 3      ;   DB3: two lines (0->one line)
+    22: 			.equ  	LCD_F_10D			= 2      ;   DB2: 5x10 font (0->5x7 font)
+    23: 			.equ  	LCD_CGRAM           = 6      ; DB6: set CG RAM address
+    24: 			.equ  	LCD_DDRAM           = 7      ; DB7: set DD RAM address
+    25:  
+    26: 			.equ	SCR_L				= 0b00011000	; Сдвиг экрана влево
+    27: 			.equ	SCR_R				= 0b00011100	; Сдвиг экрана вправо
+    28: 			
+    29: 			.equ	CUR_L				= 0b00010000 	; Сдвиг курсора влево
+    30: 			.equ	CUR_R				= 0b00010100	; Сдвиг курсора вправо
+    31: 			
+    32: ;===============================================================================================
+    33: ;Write Data
+    34: 			.MACRO	WR_DATA
+    35: 			MOV		R17,@0
+    36: 			RCALL	DATA_WR
+    37: 			.ENDM
+    38: 
+    39: ;===============================================================================================
+    40: ;Write Data I
+    41: 			.MACRO	WR_DATAI
+    42: 			LDI		R17,@0
+    43: 			RCALL	DATA_WR
+    44: 			.ENDM
+    45: 
+    46: 
+    47: ;===============================================================================================
+    48: ;Write CMD
+    49: 			.MACRO	WR_CMD
+    50: 			LDI		R17,@0
+    51: 			RCALL	CMD_WR
+    52: 			.ENDM
+    53: ;===============================================================================================
+    54: ; Read Data
+    55: 			.MACRO	RD_DATA
+    56: 			RCALL	DATA_RD
+    57: 			.ENDM
+    58: ;===============================================================================================
+    59: ; Read CMD
+    60: 			.MACRO	RD_CMD
+    61: 			RCALL	CMD_RD
+    62: 			.ENDM
+    63: 
+    64: ;===============================================================================================
+    65: ; Init Config
+    66: 			.MACRO	INIT_LCD							; Инициализация LCD
+    67: 			RCALL	InitHW								; Настроить контрольный порт
+    68: 
+    69: 			RCALL	LCD_DELAY							; Подождать
+    70: 
+    71: 			WR_CMD	(1<<LCD_F)|(0<<LCD_F_8B)				; Выдать функции в порт. Команда инициализации адресации ДВА РАЗА!!!
+    72: 			WR_CMD	(1<<LCD_F)|(0<<LCD_F_8B)|(1<<LCD_F_2L) 	; Так как на 4 байтах нельзя передать сразу второй байт
+    73: 			WR_CMD	(1<<LCD_CLR)															;0x01
+    74: 			WR_CMD	(1<<LCD_ENTRY_MODE)|(1<<LCD_ENTRY_INC)									;0x06
+    75: 			WR_CMD	(1<<LCD_ON)|(1<<LCD_ON_DISPLAY)|(0<<LCD_ON_CURSOR)|(0<<LCD_ON_BLINK)	;0x0C
+    76: 			WR_CMD	(1<<LCD_HOME)		
+    77: 			.ENDM
+    78: 
+    79: 
+    80: ;===============================================================================================
+    81: ;Set COORD
+    82: ;Syntax LCD_COORD X,Y
+    83: 			.MACRO LCD_COORD
+    84: 			LDI		R17,(1<<LCD_DDRAM)|(@0+0x40*@1)
+    85: 			RCALL	CMD_WR
+    86: 			.ENDM
+    87: ;===============================================================================================
+    88: ;Shift SCREEN/CURSOR
+    89: 			.MACRO	SHIFT
+    90: 			LDI		R17,@0
+    91: 			RCALL	CMD_WR
+    92: 			.ENDM
+    93: 
+    94: ;===============================================================================================
+    95: ;LCD Clear
+    96: 
+    97: 			.MACRO	LCDCLR
+    98: 			LDI 	R17,(1<<LCD_CLR)
+    99: 			RCALL	CMD_WR
+   100: 			.ENDM
+   101: 
+   102: ;===============================================================================================
+   103: ;Write CGRAM
+   104: 			.MACRO WR_CGADR
+   105: 			LDI		R17,(1<<LCD_CGRAM)|(@0)
+   106: 			RCALL	CMD_WR
+   107: 			.ENDM
+   108: 
+   109: ;Write DDRAM
+   110: 			.MACRO WR_DDADR
+   111: 			LDI		R17,(1<<LCD_DDRAM)|(@0)
+   112: 			RCALL	CMD_WR
+   113: 			.ENDM
+   114: 
+   115: 			
+  Continuing file ish.asm
+     3: 
+     4: .cseg
+     5: .org 0
+     6: 000000   EF0F  ldi R16,low(RAMEND) ;РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ СЃС‚РµРєР°
+     7: 000001   BF0D  out SPL,R16
+     8: 000002   E002  ldi R16,high(RAMEND)
+     9: 000003   BF0E  out SPH, R16
+    10: 
+    11: 000004   E800  LDI R16,128	;РќРђСЃС‚СЂРѕР№РєР° TWI
+    12: 000005   9300  STS TWBR, R16
+        000006   00B8
+    13: 000007   24EE  CLR R14
+    14: 	INIT_LCD		; РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј
+    15: 	LCD_COORD 0,1
+    16: 000018   E504  LDI R16,'T'
+    17: 	WR_DATA R16
+    18: 	LCD_COORD 0,0
+    19: 
+    20: 00001D   C712  RJMP lol
+    21: 	.include "TWI_macro.inc"
+  Including file TWI_macro.inc
+     1: ;===============================================================================================
+     2: ; TWI Init
+     3: 
+     4: 	.equ	DS1307		= 0b11010000	;РђРґСЂРµСЃ С‡Р°СЃРѕРІ
+     5: 
+     6: 	.equ	Start		= 0x08		;РџСЂРѕС€РµР» СЃС‚Р°СЂС‚
+     7: 	.equ	Restart		= 0x10		;РџСЂРѕС€РµР» Р РµСЃС‚Р°СЂС‚
+     8: 	.equ	SLA_W_ACK	= 0x18		;РђРґСЂРµСЃ + Р·Р°РїРёСЃСЊ РїСЂРёРЅСЏС‚, РїРѕР»СѓС‡РµРЅ ACK
+     9: 	.equ	Byte_ACK	= 0x28		;Р‘Р°Р№С‚ РѕС‚РїСЂР°РІР»РµРЅ, РїРѕР»СѓС‡РµРЅ ACK
+    10: 	.equ	SLA_R_ACK	= 0x40		;РђРґСЂРµСЃ + С‡С‚РµРЅРёРµ РїСЂРёРЅСЏС‚, РїРѕР»СѓС‡РµРЅ ACK
+    11: 	.equ	RecB		= 0x50		;Р‘Р°Р№С‚ РїРѕР»СѓС‡РµРЅ, РїРµСЂРµРґР°РЅ ACK
+    12: 	.equ	RecB_NACK	= 0x58		;Р‘Р°Р№С‚ РїРѕР»СѓС‡РµРЅ, РїРµСЂРµРґР°РЅ NACK
+    13: 
+    14: ;===============================================================================================
+    15: ;Start
+    16: 	.MACRO	TWI_START
+    17: 	LDI R16, 1<<TWEN|1<<TWSTA|1<<TWINT	;START
+    18: 	STS TWCR, R16
+    19: 
+    20: 	rcall wait1	;Р–РґРµРј РїСЂРµСЂС‹РІР°РЅРёСЏ
+    21: 	LDS R16, TWSR
+    22: 	ANDI R16, 0XF8
+    23: 	CPI R16, Start	;РџР РћР’Р•Р РљРђ РЎРўРђР РўРђ
+    24: 	BREQ NoError
+    25: 	LDI R16,1
+    26: 	Mov R14,R16
+    27: NoError:
+    28: 	.ENDM
+    29: 
+    30: ;===============================================================================================
+    31: ;ReStart
+    32: 	.MACRO	TWI_RESTART
+    33: 	LDI R16, 1<<TWEN|1<<TWSTA|1<<TWINT	;RESTART
+    34: 	STS TWCR, R16
+    35: 
+    36: 	rcall wait1	;Р–РґРµРј РїСЂРµСЂС‹РІР°РЅРёСЏ
+    37: 	LDS R16, TWSR
+    38: 	ANDI R16, 0XF8
+    39: 	CPI R16, Restart	;РџР РћР’Р•Р РљРђ РЎРўРђР РўРђ
+    40: 	BREQ NoError
+    41: 	LDI R16,5
+    42: 	Mov R14,R16
+    43: NoError:
+    44: 	.ENDM
+    45: 
+    46: ;===============================================================================================
+    47: ;Stop
+    48: 	.MACRO	TWI_STOP
+    49: 	LDI R16, 1<<TWEN|1<<TWSTO|1<<TWINT	;STOP
+    50: 	STS TWCR, R16
+    51: 	.ENDM
+    52: 
+    53: ;===============================================================================================
+    54: ;SLA_W
+    55: 	.MACRO	TWI_SLA_W
+    56: 	LDI R16,DS1307	;РђР”Р Р•РЎ РЈРЎРўР РћР™РЎРўР’Рђ
+    57: 	STS TWDR, R16
+    58: 	LDI R16, 1<<TWINT|1<<TWEN
+    59: 	STS TWCR, R16
+    60: 
+    61: 	rcall wait1	;Р–РґРµРј РїСЂРµСЂС‹РІР°РЅРёСЏ
+    62: 	LDS R16, TWSR
+    63: 	ANDI R16, 0XF8
+    64: 	CPI R16, SLA_W_ACK	;РџР РћР’Р•Р РљРђ РћРўР’Р•РўРђ РќРђ РђР”Р Р•РЎ
+    65: 	BREQ NoError2
+    66: 	LDI R16,3
+    67: 	Mov R14,R16
+    68: NoError2:
+    69: 	.ENDM
+    70: 
+    71: 
+    72: ;===============================================================================================
+    73: ;SLA_R
+    74: 	.MACRO	TWI_SLA_R
+    75: 	LDI R16,DS1307|1<<0	;РђР”Р Р•РЎ РЈРЎРўР РћР™РЎРўР’Рђ
+    76: 	STS TWDR, R16
+    77: 	LDI R16, 1<<TWINT|1<<TWEN
+    78: 	STS TWCR, R16
+    79: 
+    80: 	rcall wait1	;Р–РґРµРј РїСЂРµСЂС‹РІР°РЅРёСЏ
+    81: 	LDS R16, TWSR
+    82: 	ANDI R16, 0XF8
+    83: 	CPI R16, SLA_R_ACK	;РџР РћР’Р•Р РљРђ РћРўР’Р•РўРђ РќРђ РђР”Р Р•РЎ
+    84: 	BREQ NoError3
+    85: 	LDI R16,7
+    86: 	Mov R14,R16
+    87: NoError3:
+    88: 	.ENDM
+    89: 
+    90: ;===============================================================================================
+    91: ;Send Byte
+    92: 	.MACRO	TWI_SEND_B
+    93: 	LDI R16,@0	;РђР”Р Р•РЎ РЎР›РћР’Рђ
+    94: 	STS TWDR, R16
+    95: 	LDI R16, 1<<TWINT|1<<TWEN
+    96: 	STS TWCR, R16
+    97: 
+    98: 	rcall wait1	;Р–РґРµРј РїСЂРµСЂС‹РІР°РЅРёСЏ
+    99: 	LDS R16, TWSR
+   100: 	ANDI R16, 0XF8
+   101: 	CPI R16, Byte_ACK	;РџР РћР’Р•Р РљРђ РџР РРќРЇРўРРЇ Р‘РђР™РўРђ
+   102: 	BREQ NoError4
+   103: 	LDI R16,15
+   104: 	Mov R14,R16
+   105: NoError4:
+   106: 	.ENDM
+   107: 
+   108: ;===============================================================================================
+   109: ;Receive Byte + ACK
+   110: 	.MACRO	TWI_READ_B_ACK
+   111: 	LDI R16, 1<<TWINT|1<<TWEN|1<<TWEA	;Р‘СѓРј С‡РёС‚Р°С‚СЊ
+   112: 	STS TWCR, R16
+   113: 	rcall wait1	;Р–РґРµРј РїСЂРµСЂС‹РІР°РЅРёСЏ
+   114: 	LDS R16, TWSR
+   115: 	ANDI R16, 0XF8
+   116: 	CPI R16, RecB	;РџР РћР’Р•Р РљРђ Р§РўР•РќРРЇ
+   117: 	BREQ NoError5
+   118: 	LDI R16,31
+   119: 	Mov R14,R16
+   120: NoError5:	
+   121: 	LDS R16, TWDR
+   122: .ENDM
+   123: 
+   124: ;===============================================================================================
+   125: ;Receive Byte + NACK
+   126: 	.MACRO	TWI_READ_B_NACK
+   127: 	LDI R16, 1<<TWINT|1<<TWEN|0<<TWEA	;Р‘СѓРј С‡РёС‚Р°С‚СЊ
+   128: 	STS TWCR, R16
+   129: 	rcall wait1	;Р–РґРµРј РїСЂРµСЂС‹РІР°РЅРёСЏ
+   130: 	LDS R16, TWSR
+   131: 	ANDI R16, 0XF8
+   132: 	CPI R16, RecB_NACK	;РџР РћР’Р•Р РљРђ Р§РўР•РќРРЇ
+   133: 	BREQ NoError6
+   134: 	LDI R16,63
+   135: 	Mov R14,R16
+   136: NoError6:	
+   137: 	LDS R16, TWDR
+   138: .ENDM
+   139: ;===============================================================================================
+   140: 
+   141: 
+   142: 
+   143: 00001E   9100  LDS R16, TWCR		;Р–РґРµРј РїСЂРµСЂС‹РІР°РЅРёСЏ
+        00001F   00BC
+   144: 000020   FF07  SBRS R16, TWINT
+   145: 000021   CFFC  RJMP wait1
+   146: 000022   9508  RET
+  Continuing file ish.asm
+    22: 	.include "LCD4.asm"
+  Including file LCD4.asm
+     1: ;=========== LCD Define ==================================================================
+     2: 			.equ	DATA_PORT	= PORTD	; LCD Data Port
+     3: 			.equ	DATA_PIN	= PIND
+     4: 			.equ	DATA_DDR	= DDRD
+     5: 
+     6: 			.equ	CMD_PORT	= PORTD	; LCD Control Port
+     7: 			.equ	CMD_PIN		= PIND
+     8: 			.equ	CMD_DDR		= DDRD
+     9: 
+    10: 			.equ	E		= 0
+    11: 			.equ	RW		= 1
+    12: 			.equ	RS		= 2
+    13: 
+    14: 			.equ	SPEED	= 14	; 14 для XTAL=16MHz, 10 для XTAL=8MHz,  
+    15: 									; 6 для XTAL=4MHz, 5 для XTAL<4MHz
+    16: ;=========================================================================================
+    17: ;=========== LCD Proc ====================================================================
+    18: 000023   985A  CBI		CMD_PORT,RS		; Выставляем нужные уровни на управляющих выводах
+    19: 000024   9859  CBI		CMD_PORT,RW		; Порты на выход
+    20: 000025   9858  CBI		CMD_PORT,E		; И сразу же выставляются на 1
+    21: 
+    22: 000026   9A52  SBI		CMD_DDR,RS
+    23: 000027   9A51  SBI		CMD_DDR,RW
+    24: 000028   9A50  SBI		CMD_DDR,E
+    25: 			
+    26: 000029   D04F  RCALL	PortIn			; Порт данных на вход
+    27: 00002A   9508  RET
+    28: 
+    29: ;=========================================================================================
+    30: 00002B   94F8  CLI						; Ожидание флага занятости контроллера дисплея
+    31: 00002C   D04C  RCALL	PortIn			; Порты на вход
+    32: 			
+    33: 00002D   985A  CBI		CMD_PORT,RS		; Идет Команда!
+    34: 00002E   9A59  SBI		CMD_PORT,RW		; Чтение!
+    35: 
+    36: 
+    37: 00002F   9A58  SBI		CMD_PORT,E		; Поднять строб	
+    38: 000030   D053  RCALL	LCD_Delay		; Подождать	
+    39: 000031   9858  CBI		CMD_PORT,E		; Бросить строб - первый цикл (старший полубайт)
+    40: 000032   0000  nop
+    41: 000033   0000  nop
+    42: 000034   0000  nop
+    43: 000035   B109  IN		R16,DATA_PIN	; Считать байт
+    44: 			
+    45: 000036   930F  PUSH	R16				; Сохранить его в стек. Дело в том, что у нас R16 убивается в LCD_Delay
+    46: 
+    47: 	
+    48: 000037   D04C  RCALL	LCD_Delay		; Подождем маленько	
+    49: 
+    50: 000038   9A58  SBI		CMD_PORT,E		; Поднимем строб	
+    51: 000039   D04A  RCALL	LCD_Delay		; Подождем 
+    52: 00003A   9858  CBI		CMD_PORT,E		; Опустим строб	- нужно для пропуска второго полубайта
+    53: 
+    54: 00003B   D048  RCALL	LCD_Delay		; Задержка снова	
+    55: 
+    56: 00003C   910F  POP		R16				; А теперь достаем сныканый байт - в нем наш флаг. Может быть.
+    57: 
+    58: 00003D   7800  ANDI	R16,0x80		; Продавливаем по маске. Есть флаг?
+    59: 00003E   F781  BRNE	BusyLoop		; Если нет, то переход
+    60: 
+    61: 00003F   9478  SEI						; Разрешаем прерывания.
+    62: 000040   9508  RET
+    63: ;=========================================================================================
+    64: ; Запись команды в дисплей. Код команды в R17
+    65: 000041   94F8  CLI						; Запрет прерываний
+    66: 000042   DFE8  RCALL	BusyWait		; Ждем готовности
+    67: 
+    68: 000043   985A  CBI		CMD_PORT,RS		; Идет команда!
+    69: 000044   C003  RJMP	WR_END			; Переход на запись
+    70: 
+    71: ;-----------------------------------------------------------------------------------------
+    72: ; Запись данных в дисплей. Код данных в R17
+    73: 000045   94F8  CLI						; Запрет прерываний
+    74: 000046   DFE4  RCALL	BusyWait		; Ждем готовности
+    75: 			
+    76: 000047   9A5A  SBI		CMD_PORT,RS		; Идут данные!
+    77: 000048   9859  CBI		CMD_PORT,RW		; Запись!	
+    78: 000049   9A58  SBI		CMD_PORT,E		; Поднять строб	
+    79: 			
+    80: 00004A   D035  RCALL	PortOut			; Порт настроить на выход!
+    81: 00004B   931F  PUSH	R17				; Сохраним данные которые будем выводить в стеке
+    82: 00004C   7F10  ANDI	R17,0xF0		; Отдавим по маске данным младшую тетраду.	
+    83: 
+    84: 00004D   B10B  IN		R16,DATA_PORT	; Возьмем из порта данных старое значение
+    85: 00004E   700F  ANDI	R16,0x0F		; Отдавим ему старшую тетраду
+    86: 
+    87: 00004F   930F  PUSH	R16				; Сохраним результа в стеке. Пригодится
+    88: 
+    89: 000050   2B01  OR		R16,R17			; Склеим младшую тетраду из порта со старшей тетрадой данных 
+    90: 
+    91: 000051   B90B  OUT		DATA_PORT,R16	; Выдадим этого мутанта в порт.
+    92: 
+    93: 000052   D031  RCALL	LCD_Delay		; Подождем	
+    94: 000053   9858  CBI		CMD_PORT,E		; Бросим строб вниз - данные ушли в индикатор	
+    95: 
+    96: 000054   D02F  RCALL	LCD_Delay		; Подождем	 
+    97: 000055   9A58  SBI		CMD_PORT,E		; Поднимем строб	
+    98: 000056   910F  POP		R16				; Достанем из стека младшую тетраду из порта
+    99: 000057   911F  POP		R17				; И данные которые мы выводим
+   100: 	
+   101: 000058   9512  SWAP	R17				; Поменяем тетрады местами у байта данных 
+   102: 000059   7F10  ANDI	R17,0xF0		; Отдавим младшую тетраду
+   103: 
+   104: 00005A   2B01  OR		R16,R17			; Склеим младшую тетраду из порта с старшей тетрадой данных (бывшая младшая)
+   105: 00005B   B90B  OUT		DATA_PORT,R16	; Выдадим в порт
+   106: 
+   107: 00005C   D027  RCALL	LCD_Delay		; Подождем	
+   108: 00005D   9858  CBI		CMD_Port,E		; Бросим строб	
+   109: 
+   110: 00005E   D01A  RCALL	PortIn			; Порт вернем в прежнее состояние - на вход
+   111: 00005F   9478  SEI						; Разрешим прерывания
+   112: 000060   9508  RET						; Возврат
+   113: 
+   114: ;=========================================================================================
+   115: ; Чтение команды из дисплея. Результат в R17
+   116: 000061   94F8  CLI						; Запрет прерываний
+   117: 000062   DFC8  RCALL	BusyWait		; Ждем контроллер
+   118: 000063   985A  CBI		CMD_PORT,RS		; Команда!
+   119: 			
+   120: 000064   C003  RJMP	RD_END			; Идем на чтение
+   121: 
+   122: ;-----------------------------------------------------------------------------------------
+   123: ; Чтение команды из дисплея. Результат в R17
+   124: 000065   94F8  CLI						; Запрет прерываний
+   125: 000066   DFC4  RCALL	BusyWait		; Ждем контроллер
+   126: 000067   9A5A  SBI		CMD_PORT,RS		; Данные!
+   127: 000068   9A59  SBI		CMD_PORT,RW		; Чтение!
+   128: 
+   129: 000069   9A58  SBI		CMD_PORT,E		; Поднимаем строб
+   130: 00006A   D019  RCALL	LCD_Delay		; Ждем
+   131: 00006B   B119  IN		R17,DATA_PIN	; Читаем из порта байт 
+   132: 00006C   9858  CBI		CMD_PORT,E		; Бросем строб вниз
+   133: 
+   134: 00006D   7F10  ANDI	R17,0xF0		; Отдавливаем ему младшую тетраду
+   135: 00006E   9512  SWAP	R17				; Обмениваем тетрады местами
+   136: 
+   137: 00006F   D014  RCALL	LCD_Delay		; Ждем
+   138: 000070   9A58  SBI		CMD_PORT,E		; Поднимаем строб
+   139: 000071   2F01  MOV		R16,R17			; Прячем старшую тетраду в R16
+   140: 
+   141: 000072   B119  IN		R17,DATA_PIN	; Берем еще один байт
+   142: 000073   9858  CBI		CMD_PORT,E		; Бросаем строб
+   143: 
+   144: 000074   7F10  ANDI	R17,0xF0		; Отдавливаем младшую тетраду
+   145: 000075   2B10  OR		R17,R16			; Склеиваем результат с старшим байтом
+   146: 000076   9512  SWAP	R17				; Разорваичаем байт. Т.к. первой выходила старшая тетрада
+   147: 
+   148: 000077   9478  SEI						; разрешаем прерывания
+   149: 000078   9508  RET						; Возврат.
+   150: 
+   151: ;=========================================================================================
+   152: 000079   B10A  IN		R16,DATA_DDR	; Данные из DDR в регистр
+   153: 00007A   700F  ANDI	R16,0x0F		; Отдавливаем старшую тетраду - нам нужно сохранить младшую и обнулить старшую
+   154: 00007B   B90A  OUT		DATA_DDR,R16	; Выдаем результат в порт.
+   155: 
+   156: 00007C   B10B  IN		R16,DATA_PORT	; Берем данные из порта 
+   157: 00007D   6F00  ORI		R16,0xF0		; Выставляем все биты старшей тетрады, не трогая младшую
+   158: 00007E   B90B  OUT		DATA_PORT,R16	; Выдаем в порт
+   159: 00007F   9508  RET		
+   160: ;=========================================================================================	
+   161: 000080   B10A  IN		R16,DATA_DDR	; Данные из ДДР в регистр
+   162: 000081   6F00  ORI		R16,0xF0		; Выставляем все биты старшей тетрады, не трогая младшую
+   163: 000082   B90A  OUT		DATA_DDR,R16	; Выдаем данные в порт
+   164: 000083   9508  RET		
+   165: ;=========================================================================================	
+   166: 000084   E00E  LDI		R16,SPEED		; Задержка на несколько тактов. Для того чтобы дисплей 
+   167: 000085   950A  DEC		R16				; Успевал обрабатывать данные
+   168: 000086   F7F1  BRNE	L_loop
+   169: 000087   9508  RET
+  Continuing file ish.asm
+    23: 	.include "1-wire.asm"
+  Including file 1-wire.asm
+     1: ;------------------------------------------------------------------------------
+     2: ; http://avr-mcu.dxp.pl
+     3: ; (c) Radoslaw Kwiecien, 2008
+     4: ; 
+     5: ; Перевод StarXXX, http://hardisoft.ru, 2009
+     6: ;------------------------------------------------------------------------------
+     7: 
+     8: 
+     9: 
+    10: ;------------------------------------------------------------------------------
+    11: ; Начальные установки для реализации протокола 1-Wire
+    12: ;------------------------------------------------------------------------------
+    13: .equ	OW_PORT	= PORTD				; Порт МК, где висит 1-Wire
+    14: .equ	OW_PIN	= PIND				; Порт МК, где висит 1-Wire
+    15: .equ	OW_DDR	= DDRD				; Порт МК, где висит 1-Wire
+    16: .equ	OW_DQ	= PD3				; Ножка порта, где висит 1-Wire
+    17: 
+    18: .def	OWCount = r17				; Счетчик
+    19: ;------------------------------------------------------------------------------
+    20: 
+    21: 
+    22: .cseg
+    23: 
+    24: .include 	"wait.asm"			; Подключаем модуль временных задержек
+  Including file wait.asm
+     1: ;------------------------------------------------------------------------------
+     2: ; Busy-wait loops utilities module
+     3: ; For F_CPU >= 4MHz
+     4: ; http://avr-mcu.dxp.pl
+     5: ; (c) Radoslaw Kwiecien, 2008
+     6: ; 
+     7: ; Перевод StarXXX, http://hardisoft.ru, 2009
+     8: ;------------------------------------------------------------------------------
+     9: 
+    10: ;------------------------------------------------------------------------------
+    11: ; Модуль временных задержек
+    12: ;
+    13: ; !!! Для работы модуля необходимо объявить константу F_CPU равную тактовой частоте в герцах !!!
+    14: ;
+    15: ; !!! задержки действительны для тактовой частоты >= 4 МГц !!!
+    16: 
+    17: 
+    18: ; задержки приблизительны! Чем больше задержка, тем точнее,
+    19: ; т.е. при частоте 4МГц задержка в 1 микросекунду, учитывая время вызова подпрограммы и возврата из нее составит 2,5 микросекунды
+    20: ; задержка в 10 микросекунд составит 11,5 микросекунд
+    21: ; задержка в 100 мкс на самом деле будет 101,5 мкс
+    22: ; тоесть, к каждой задержке добавится 1,5 мкс - это время на вызов подпрограммы и на выход из нее
+    23: ;------------------------------------------------------------------------------
+    24: 
+    25: 
+    26: 
+    27: 		; вычисляет величину для указанного времени в микросекундах, которую нужно передать Wait4xCycles чтобы получить желаемую задержку
+    28: 
+    29: ;--------------------------------------------------------------------------------------------------------------
+    30: ; Подпрограмма задержки. В цикле отъедается 4 такта на каждую итерацию, кроме последней. В последней - 3 такта.
+    31: ; Итого, для получения нужной задержки в микросекундах надо вызывать эту функцию предварительно
+    32: ; обработав параметр макросом DVUS:
+    33: ;	ldi    XH, HIGH(DVUS(500))
+    34: ; 	ldi    XL, LOW(DVUS(500))
+    35: ; 	rcall  Wait4xCycles ; пауза 500 микросекунд
+    36: ;--------------------------------------------------------------------------------------------------------------
+    37: ; Input : XH:XL - number of CPU cycles to wait (divided by four)
+    38: ;--------------------------------------------------------------------------------------------------------------
+    39: Wait4xCycles:
+    40: 000088   9711  sbiw	XH:XL, 1			; 2 такта
+    41: 000089   F7F1  brne	Wait4xCycles		; 1/2
+    42: 00008A   9508  ret							; 4
+    43: 
+    44: 
+    45: ;------------------------------------------------------------------------------
+    46: ; Подпрограмма генерирует необходимую задержку в милисекундах
+    47: ; На входе: r16 = количество милисекунд
+    48: ;------------------------------------------------------------------------------
+    49: ; Input : r16 - number of miliseconds to wait
+    50: ;------------------------------------------------------------------------------
+    51: WaitMiliseconds:
+    52: 00008B   930F  push 	r16
+    53: WaitMsLoop: 
+    54: 00008C   E0B7  ldi    XH,HIGH(4*(500))
+    55: 00008D   EDA0  ldi    XL,LOW(4*(500))
+    56: 00008E   DFF9  rcall  Wait4xCycles
+    57: 00008F   E0B7  ldi    XH,HIGH(4*(500))
+    58: 000090   EDA0  ldi    XL,LOW(4*(500))
+    59: 000091   DFF6  rcall  Wait4xCycles
+    60: 000092   950A  dec    r16
+    61: 000093   F7C1  brne   WaitMsLoop
+    62: 000094   910F  pop    r16
+    63: 000095   9508  ret
+    64: ;------------------------------------------------------------------------------
+    65: ; End of file
+    66: ;------------------------------------------------------------------------------
+  Continuing file 1-wire.asm
+    25: 
+    26: 
+    27: 
+    28: ;------------------------------------------------------------------------------
+    29: ; СБРОС
+    30: ; Каждая передача по протоколу 1-Wire начинается с сигнала Reset.
+    31: ; После вызова этой процедуры в флаге Т регистра SGER содержится бит 
+    32: ; присутствия: 1 - если на шине нет устройств, 0 - если есть
+    33: ;------------------------------------------------------------------------------
+    34: ; Output : T - presence bit
+    35: ;------------------------------------------------------------------------------
+    36: OWReset:
+    37: 000096   985B  cbi		OW_PORT,OW_DQ		; Выводим в порт 0
+    38: 000097   9A53  sbi		OW_DDR,OW_DQ		; Переключаем порт на вывод
+    39: 
+    40: 000098   E0B7  ldi		XH, HIGH(4*(500))	; Ждем 470 микросекунд при придавленной в 0 линии. Это и есть импульс сброса.
+    41: 000099   EDA0  ldi		XL, LOW(4*(500))
+    42: 00009A   DFED  rcall		Wait4xCycles
+    43: 	
+    44: 00009B   9853  cbi		OW_DDR,OW_DQ		; Переключаем порт на ввод
+    45: 
+    46: 00009C   E0B1  ldi		XH, HIGH(4*(70))	; выжидаем 70 мкс (необходимое минимальное время реакции устройств на сброс)
+    47: 00009D   E1A8  ldi		XL, LOW(4*(70))
+    48: 00009E   DFE9  rcall		Wait4xCycles
+    49: 
+    50: 00009F   9468  set							; Устанавливаем флаг Т в 1
+    51: 0000A0   9B4B  sbis	OW_PIN,OW_DQ		; Если на линии после паузы осталась 1, значит устройств 1-Wire на ней нет. Пропускаем след. команду
+    52: 0000A1   94E8  clt							; Линия была в 0 - значит на ней кто-то есть, и ответил нам импульсом PRESENCE
+    53: 
+    54: 0000A2   E0B3  ldi		XH, HIGH(4*(240))	; Пауза 240 мкс после сброса
+    55: 0000A3   ECA0  ldi		XL, LOW(4*(240))
+    56: 0000A4   DFE3  rcall		Wait4xCycles
+    57: 
+    58: 0000A5   9508  ret
+    59: 
+    60: 
+    61: ;------------------------------------------------------------------------------
+    62: ; ОТПРАВКА 1 БИТА
+    63: ; Эта процедура отправляет 1 бит в линию 1-Wire.
+    64: ; Отправляемый бит должен быть помещен в флаг С статусного регистра
+    65: ;------------------------------------------------------------------------------
+    66: ; Input : C - bit to write
+    67: ;------------------------------------------------------------------------------
+    68: OWWriteBit:
+    69: 0000A6   F418  brcc	OWWriteZero			; Если флаг С = 0, то переход на OWWriteZero
+    70: 0000A7   E0B0  ldi		XH, HIGH(4*(1))	; Для посылки 1 линию нужно придавить в 0 всего на 1 мкс
+    71: 0000A8   E0A4  ldi		XL, LOW(4*(1))
+    72: 0000A9   C002  rjmp	OWWriteOne			; переходим к отправке
+    73: OWWriteZero:	
+    74: 0000AA   E0B1  ldi		XH, HIGH(4*(120))	; Для посылки 0 линию нужно придавить в 0 на 120 мкс
+    75: 0000AB   EEA0  ldi		XL, LOW(4*(120))
+    76: OWWriteOne:
+    77: 0000AC   9A53  sbi		OW_DDR, OW_DQ		; Переводим порт на выход, а там уже был 0, соответственно и линия придавливается в 0
+    78: 0000AD   DFDA  rcall	Wait4xCycles		; ждем
+    79: 0000AE   9853  cbi		OW_DDR, OW_DQ		; Переводим порт на вход
+    80: 	
+    81: 0000AF   E0B0  ldi		XH, HIGH(4*(60))	; Должна быть пауза между таймслотами, вообще-то от 1 мкс, но здесь сделали 60 мкс
+    82: 0000B0   EFA0  ldi		XL, LOW(4*(60))
+    83: 0000B1   DFD6  rcall	Wait4xCycles
+    84: 0000B2   9508  ret
+    85: 
+    86: 
+    87: ;------------------------------------------------------------------------------
+    88: ; ОТПРАВКА 1 БАЙТА
+    89: ; Эта процедура отправляет 1 байт в линию 1-Wire.
+    90: ; Отправляемый байт должен быть помещен в регистр r16
+    91: ;------------------------------------------------------------------------------
+    92: ; Input : r16 - byte to write
+    93: ;------------------------------------------------------------------------------
+    94: OWWriteByte:
+    95: 0000B3   931F  push	OWCount			; Сохраняем регистр счетчика
+    96: 0000B4   E010  ldi		OWCount,0		; Взводим в нём нолик
+    97: 
+    98: OWWriteLoop:				
+    99: 0000B5   9507  ror		r16				; Сдвигаем байт вправо через флаг C
+   100: 0000B6   DFEF  rcall	OWWriteBit		; отправляем в линию
+   101: 0000B7   9513  inc		OWCount			; увеличиваем счетчик
+   102: 0000B8   3018  cpi		OWCount,8		; проверяем на 8
+   103: 0000B9   F7D9  brne	OWWriteLoop		; если меньше - следующий бит
+   104: 0000BA   911F  pop		OWCount			; восстанавливаем регистр-счетчик
+   105: 0000BB   9508  ret
+   106: 
+   107: 
+   108: 
+   109: ;------------------------------------------------------------------------------
+   110: ; ЧТЕНИЕ 1 БИТА
+   111: ; Эта процедура читает 1 бит из линии 1-Wire.
+   112: ; Принятый бит помещается в флаг С статусного регистра
+   113: ;------------------------------------------------------------------------------
+   114: ; Output : C - bit from slave
+   115: ;------------------------------------------------------------------------------
+   116: OWReadBit:
+   117: 0000BC   E0B0  ldi		XH, HIGH(4*(1))	; Придавливаем линию в 0 на 1 мкс
+   118: 0000BD   E0A4  ldi		XL, LOW(4*(1))
+   119: 0000BE   9A53  sbi		OW_DDR, OW_DQ
+   120: 0000BF   DFC8  rcall	Wait4xCycles
+   121: 
+   122: 0000C0   9853  cbi		OW_DDR, OW_DQ		; Переводим порт на чтение
+   123: 0000C1   E0B0  ldi		XH, HIGH(4*(5))	; ждем 5 мкс
+   124: 0000C2   E1A4  ldi		XL, LOW(4*(5))
+   125: 0000C3   DFC4  rcall	Wait4xCycles
+   126: 
+   127: 0000C4   94E8  clt							; Сбрасываем флаг Т
+   128: 0000C5   994B  sbic	OW_PIN,OW_DQ		; Если на линии 0 - то пропускаем следующую команду
+   129: 0000C6   9468  set
+   130: 
+   131: 								; Итак, сейчас в регистре Т полученный бит
+   132: 
+   133: 0000C7   E0B0  ldi		XH, HIGH(4*(50))	; выжидаем 50 мкс для окончания таймслота
+   134: 0000C8   ECA8  ldi		XL, LOW(4*(50))
+   135: 0000C9   DFBE  rcall	Wait4xCycles
+   136: 								; переносим флаг Т в флаг С
+   137: 0000CA   9408  sec
+   138: 0000CB   F00E  brts	OWReadBitEnd
+   139: 0000CC   9488  clc
+   140: 
+   141: OWReadBitEnd:
+   142: 0000CD   9508  ret
+   143: 
+   144: 
+   145: 
+   146: ;------------------------------------------------------------------------------
+   147: ; ЧТЕНИЕ 1 БАЙТА
+   148: ; Эта процедура читает 1 байт из линии 1-Wire.
+   149: ; Принятый байт помещается регистр r16
+   150: ;------------------------------------------------------------------------------
+   151: ; Output : r16 - byte from slave
+   152: ;------------------------------------------------------------------------------
+   153: OWReadByte:
+   154: 0000CE   931F  push	OWCount			; Сохраняем регистр-счетчик
+   155: 0000CF   E010  ldi		OWCount,0		; и обнуляем его
+   156: OWReadLoop:
+   157: 0000D0   DFEB  rcall	OWReadBit		; читаем бит
+   158: 0000D1   9507  ror		r16				; запихиваем его в r16 сдвигом вправо из флага С
+   159: 0000D2   9513  inc		OWCount			; увеличиваем счетчик
+   160: 0000D3   3018  cpi		OWCount,8		; уже 8?
+   161: 0000D4   F7D9  brne	OWReadLoop		; нет - продолжаем считывать
+   162: 0000D5   911F  pop		OWCount			; восстанавливаем регистр-счетчик
+   163: 0000D6   9508  ret
+   164: ;------------------------------------------------------------------------------
+   165: ;
+   166: ;------------------------------------------------------------------------------
+   167: 
+   168: 
+   169: 
+   170: 
+   171: 
+   172: ;.include 	"1-Wire Search.asm"		; Подключаем модуль поиска устройств на шине 1-Wire
+   173: 
+   174: 
+   175: 
+   176: 
+  Continuing file ish.asm
+    24: ds18b20adr:
+    25: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        0000D7 6766 6766 6662 6267
+        0000DB 6766 6662 6267 6766
+        0000DF 6662 6267 6766 6662
+        0000E3 6267 6766 6662 6267
+        0000E7 6766 6662 6267 6766
+        0000EB 6662 6267 6766 6662
+        0000EF 6267
+    26: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        0000F0 6766 6766 6662 6267
+        0000F4 6766 6662 6267 6766
+        0000F8 6662 6267 6766 6662
+        0000FC 6267 6766 6662 6267
+        000100 6766 6662 6267 6766
+        000104 6662 6267 6766 6662
+        000108 6267
+    27: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        000109 6766 6766 6662 6267
+        00010D 6766 6662 6267 6766
+        000111 6662 6267 6766 6662
+        000115 6267 6766 6662 6267
+        000119 6766 6662 6267 6766
+        00011D 6662 6267 6766 6662
+        000121 6267
+    28: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        000122 6766 6766 6662 6267
+        000126 6766 6662 6267 6766
+        00012A 6662 6267 6766 6662
+        00012E 6267 6766 6662 6267
+        000132 6766 6662 6267 6766
+        000136 6662 6267 6766 6662
+        00013A 6267
+    29: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        00013B 6766 6766 6662 6267
+        00013F 6766 6662 6267 6766
+        000143 6662 6267 6766 6662
+        000147 6267 6766 6662 6267
+        00014B 6766 6662 6267 6766
+        00014F 6662 6267 6766 6662
+        000153 6267
+    30: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        000154 6766 6766 6662 6267
+        000158 6766 6662 6267 6766
+        00015C 6662 6267 6766 6662
+        000160 6267 6766 6662 6267
+        000164 6766 6662 6267 6766
+        000168 6662 6267 6766 6662
+        00016C 6267
+    31: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        00016D 6766 6766 6662 6267
+        000171 6766 6662 6267 6766
+        000175 6662 6267 6766 6662
+        000179 6267 6766 6662 6267
+        00017D 6766 6662 6267 6766
+        000181 6662 6267 6766 6662
+        000185 6267
+    32: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        000186 6766 6766 6662 6267
+        00018A 6766 6662 6267 6766
+        00018E 6662 6267 6766 6662
+        000192 6267 6766 6662 6267
+        000196 6766 6662 6267 6766
+        00019A 6662 6267 6766 6662
+        00019E 6267
+    33: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        00019F 6766 6766 6662 6267
+        0001A3 6766 6662 6267 6766
+        0001A7 6662 6267 6766 6662
+        0001AB 6267 6766 6662 6267
+        0001AF 6766 6662 6267 6766
+        0001B3 6662 6267 6766 6662
+        0001B7 6267
+    34: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        0001B8 6766 6766 6662 6267
+        0001BC 6766 6662 6267 6766
+        0001C0 6662 6267 6766 6662
+        0001C4 6267 6766 6662 6267
+        0001C8 6766 6662 6267 6766
+        0001CC 6662 6267 6766 6662
+        0001D0 6267
+    35: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        0001D1 6766 6766 6662 6267
+        0001D5 6766 6662 6267 6766
+        0001D9 6662 6267 6766 6662
+        0001DD 6267 6766 6662 6267
+        0001E1 6766 6662 6267 6766
+        0001E5 6662 6267 6766 6662
+        0001E9 6267
+    36: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        0001EA 6766 6766 6662 6267
+        0001EE 6766 6662 6267 6766
+        0001F2 6662 6267 6766 6662
+        0001F6 6267 6766 6662 6267
+        0001FA 6766 6662 6267 6766
+        0001FE 6662 6267 6766 6662
+        000202 6267
+    37: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        000203 6766 6766 6662 6267
+        000207 6766 6662 6267 6766
+        00020B 6662 6267 6766 6662
+        00020F 6267 6766 6662 6267
+        000213 6766 6662 6267 6766
+        000217 6662 6267 6766 6662
+        00021B 6267
+    38: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        00021C 6766 6766 6662 6267
+        000220 6766 6662 6267 6766
+        000224 6662 6267 6766 6662
+        000228 6267 6766 6662 6267
+        00022C 6766 6662 6267 6766
+        000230 6662 6267 6766 6662
+        000234 6267
+    39: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        000235 6766 6766 6662 6267
+        000239 6766 6662 6267 6766
+        00023D 6662 6267 6766 6662
+        000241 6267 6766 6662 6267
+        000245 6766 6662 6267 6766
+        000249 6662 6267 6766 6662
+        00024D 6267
+    40: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        00024E 6766 6766 6662 6267
+        000252 6766 6662 6267 6766
+        000256 6662 6267 6766 6662
+        00025A 6267 6766 6662 6267
+        00025E 6766 6662 6267 6766
+        000262 6662 6267 6766 6662
+        000266 6267
+    41: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        000267 6766 6766 6662 6267
+        00026B 6766 6662 6267 6766
+        00026F 6662 6267 6766 6662
+        000273 6267 6766 6662 6267
+        000277 6766 6662 6267 6766
+        00027B 6662 6267 6766 6662
+        00027F 6267
+    42: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        000280 6766 6766 6662 6267
+        000284 6766 6662 6267 6766
+        000288 6662 6267 6766 6662
+        00028C 6267 6766 6662 6267
+        000290 6766 6662 6267 6766
+        000294 6662 6267 6766 6662
+        000298 6267
+    43: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        000299 6766 6766 6662 6267
+        00029D 6766 6662 6267 6766
+        0002A1 6662 6267 6766 6662
+        0002A5 6267 6766 6662 6267
+        0002A9 6766 6662 6267 6766
+        0002AD 6662 6267 6766 6662
+        0002B1 6267
+    44: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        0002B2 6766 6766 6662 6267
+        0002B6 6766 6662 6267 6766
+        0002BA 6662 6267 6766 6662
+        0002BE 6267 6766 6662 6267
+        0002C2 6766 6662 6267 6766
+        0002C6 6662 6267 6766 6662
+        0002CA 6267
+    45: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        0002CB 6766 6766 6662 6267
+        0002CF 6766 6662 6267 6766
+        0002D3 6662 6267 6766 6662
+        0002D7 6267 6766 6662 6267
+        0002DB 6766 6662 6267 6766
+        0002DF 6662 6267 6766 6662
+        0002E3 6267
+    46: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        0002E4 6766 6766 6662 6267
+        0002E8 6766 6662 6267 6766
+        0002EC 6662 6267 6766 6662
+        0002F0 6267 6766 6662 6267
+        0002F4 6766 6662 6267 6766
+        0002F8 6662 6267 6766 6662
+        0002FC 6267
+    47: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        0002FD 6766 6766 6662 6267
+        000301 6766 6662 6267 6766
+        000305 6662 6267 6766 6662
+        000309 6267 6766 6662 6267
+        00030D 6766 6662 6267 6766
+        000311 6662 6267 6766 6662
+        000315 6267
+    48: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        000316 6766 6766 6662 6267
+        00031A 6766 6662 6267 6766
+        00031E 6662 6267 6766 6662
+        000322 6267 6766 6662 6267
+        000326 6766 6662 6267 6766
+        00032A 6662 6267 6766 6662
+        00032E 6267
+    49: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        00032F 6766 6766 6662 6267
+        000333 6766 6662 6267 6766
+        000337 6662 6267 6766 6662
+        00033B 6267 6766 6662 6267
+        00033F 6766 6662 6267 6766
+        000343 6662 6267 6766 6662
+        000347 6267
+    50: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        000348 6766 6766 6662 6267
+        00034C 6766 6662 6267 6766
+        000350 6662 6267 6766 6662
+        000354 6267 6766 6662 6267
+        000358 6766 6662 6267 6766
+        00035C 6662 6267 6766 6662
+        000360 6267
+    51: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        000361 6766 6766 6662 6267
+        000365 6766 6662 6267 6766
+        000369 6662 6267 6766 6662
+        00036D 6267 6766 6662 6267
+        000371 6766 6662 6267 6766
+        000375 6662 6267 6766 6662
+        000379 6267
+    52: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        00037A 6766 6766 6662 6267
+        00037E 6766 6662 6267 6766
+        000382 6662 6267 6766 6662
+        000386 6267 6766 6662 6267
+        00038A 6766 6662 6267 6766
+        00038E 6662 6267 6766 6662
+        000392 6267
+    53: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        000393 6766 6766 6662 6267
+        000397 6766 6662 6267 6766
+        00039B 6662 6267 6766 6662
+        00039F 6267 6766 6662 6267
+        0003A3 6766 6662 6267 6766
+        0003A7 6662 6267 6766 6662
+        0003AB 6267
+    54: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        0003AC 6766 6766 6662 6267
+        0003B0 6766 6662 6267 6766
+        0003B4 6662 6267 6766 6662
+        0003B8 6267 6766 6662 6267
+        0003BC 6766 6662 6267 6766
+        0003C0 6662 6267 6766 6662
+        0003C4 6267
+    55: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        0003C5 6766 6766 6662 6267
+        0003C9 6766 6662 6267 6766
+        0003CD 6662 6267 6766 6662
+        0003D1 6267 6766 6662 6267
+        0003D5 6766 6662 6267 6766
+        0003D9 6662 6267 6766 6662
+        0003DD 6267
+    56: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        0003DE 6766 6766 6662 6267
+        0003E2 6766 6662 6267 6766
+        0003E6 6662 6267 6766 6662
+        0003EA 6267 6766 6662 6267
+        0003EE 6766 6662 6267 6766
+        0003F2 6662 6267 6766 6662
+        0003F6 6267
+    57: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        0003F7 6766 6766 6662 6267
+        0003FB 6766 6662 6267 6766
+        0003FF 6662 6267 6766 6662
+        000403 6267 6766 6662 6267
+        000407 6766 6662 6267 6766
+        00040B 6662 6267 6766 6662
+        00040F 6267
+    58: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        000410 6766 6766 6662 6267
+        000414 6766 6662 6267 6766
+        000418 6662 6267 6766 6662
+        00041C 6267 6766 6662 6267
+        000420 6766 6662 6267 6766
+        000424 6662 6267 6766 6662
+        000428 6267
+    59: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        000429 6766 6766 6662 6267
+        00042D 6766 6662 6267 6766
+        000431 6662 6267 6766 6662
+        000435 6267 6766 6662 6267
+        000439 6766 6662 6267 6766
+        00043D 6662 6267 6766 6662
+        000441 6267
+    60: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        000442 6766 6766 6662 6267
+        000446 6766 6662 6267 6766
+        00044A 6662 6267 6766 6662
+        00044E 6267 6766 6662 6267
+        000452 6766 6662 6267 6766
+        000456 6662 6267 6766 6662
+        00045A 6267
+    61: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        00045B 6766 6766 6662 6267
+        00045F 6766 6662 6267 6766
+        000463 6662 6267 6766 6662
+        000467 6267 6766 6662 6267
+        00046B 6766 6662 6267 6766
+        00046F 6662 6267 6766 6662
+        000473 6267
+    62: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        000474 6766 6766 6662 6267
+        000478 6766 6662 6267 6766
+        00047C 6662 6267 6766 6662
+        000480 6267 6766 6662 6267
+        000484 6766 6662 6267 6766
+        000488 6662 6267 6766 6662
+        00048C 6267
+    63: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        00048D 6766 6766 6662 6267
+        000491 6766 6662 6267 6766
+        000495 6662 6267 6766 6662
+        000499 6267 6766 6662 6267
+        00049D 6766 6662 6267 6766
+        0004A1 6662 6267 6766 6662
+        0004A5 6267
+    64: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        0004A6 6766 6766 6662 6267
+        0004AA 6766 6662 6267 6766
+        0004AE 6662 6267 6766 6662
+        0004B2 6267 6766 6662 6267
+        0004B6 6766 6662 6267 6766
+        0004BA 6662 6267 6766 6662
+        0004BE 6267
+    65: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        0004BF 6766 6766 6662 6267
+        0004C3 6766 6662 6267 6766
+        0004C7 6662 6267 6766 6662
+        0004CB 6267 6766 6662 6267
+        0004CF 6766 6662 6267 6766
+        0004D3 6662 6267 6766 6662
+        0004D7 6267
+    66: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        0004D8 6766 6766 6662 6267
+        0004DC 6766 6662 6267 6766
+        0004E0 6662 6267 6766 6662
+        0004E4 6267 6766 6662 6267
+        0004E8 6766 6662 6267 6766
+        0004EC 6662 6267 6766 6662
+        0004F0 6267
+    67: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        0004F1 6766 6766 6662 6267
+        0004F5 6766 6662 6267 6766
+        0004F9 6662 6267 6766 6662
+        0004FD 6267 6766 6662 6267
+        000501 6766 6662 6267 6766
+        000505 6662 6267 6766 6662
+        000509 6267
+    68: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        00050A 6766 6766 6662 6267
+        00050E 6766 6662 6267 6766
+        000512 6662 6267 6766 6662
+        000516 6267 6766 6662 6267
+        00051A 6766 6662 6267 6766
+        00051E 6662 6267 6766 6662
+        000522 6267
+    69: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        000523 6766 6766 6662 6267
+        000527 6766 6662 6267 6766
+        00052B 6662 6267 6766 6662
+        00052F 6267 6766 6662 6267
+        000533 6766 6662 6267 6766
+        000537 6662 6267 6766 6662
+        00053B 6267
+    70: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        00053C 6766 6766 6662 6267
+        000540 6766 6662 6267 6766
+        000544 6662 6267 6766 6662
+        000548 6267 6766 6662 6267
+        00054C 6766 6662 6267 6766
+        000550 6662 6267 6766 6662
+        000554 6267
+    71: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        000555 6766 6766 6662 6267
+        000559 6766 6662 6267 6766
+        00055D 6662 6267 6766 6662
+        000561 6267 6766 6662 6267
+        000565 6766 6662 6267 6766
+        000569 6662 6267 6766 6662
+        00056D 6267
+    72: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        00056E 6766 6766 6662 6267
+        000572 6766 6662 6267 6766
+        000576 6662 6267 6766 6662
+        00057A 6267 6766 6662 6267
+        00057E 6766 6662 6267 6766
+        000582 6662 6267 6766 6662
+        000586 6267
+    73: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        000587 6766 6766 6662 6267
+        00058B 6766 6662 6267 6766
+        00058F 6662 6267 6766 6662
+        000593 6267 6766 6662 6267
+        000597 6766 6662 6267 6766
+        00059B 6662 6267 6766 6662
+        00059F 6267
+    74: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        0005A0 6766 6766 6662 6267
+        0005A4 6766 6662 6267 6766
+        0005A8 6662 6267 6766 6662
+        0005AC 6267 6766 6662 6267
+        0005B0 6766 6662 6267 6766
+        0005B4 6662 6267 6766 6662
+        0005B8 6267
+    75: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        0005B9 6766 6766 6662 6267
+        0005BD 6766 6662 6267 6766
+        0005C1 6662 6267 6766 6662
+        0005C5 6267 6766 6662 6267
+        0005C9 6766 6662 6267 6766
+        0005CD 6662 6267 6766 6662
+        0005D1 6267
+    76: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        0005D2 6766 6766 6662 6267
+        0005D6 6766 6662 6267 6766
+        0005DA 6662 6267 6766 6662
+        0005DE 6267 6766 6662 6267
+        0005E2 6766 6662 6267 6766
+        0005E6 6662 6267 6766 6662
+        0005EA 6267
+    77: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        0005EB 6766 6766 6662 6267
+        0005EF 6766 6662 6267 6766
+        0005F3 6662 6267 6766 6662
+        0005F7 6267 6766 6662 6267
+        0005FB 6766 6662 6267 6766
+        0005FF 6662 6267 6766 6662
+        000603 6267
+    78: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        000604 6766 6766 6662 6267
+        000608 6766 6662 6267 6766
+        00060C 6662 6267 6766 6662
+        000610 6267 6766 6662 6267
+        000614 6766 6662 6267 6766
+        000618 6662 6267 6766 6662
+        00061C 6267
+    79: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        00061D 6766 6766 6662 6267
+        000621 6766 6662 6267 6766
+        000625 6662 6267 6766 6662
+        000629 6267 6766 6662 6267
+        00062D 6766 6662 6267 6766
+        000631 6662 6267 6766 6662
+        000635 6267
+    80: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        000636 6766 6766 6662 6267
+        00063A 6766 6662 6267 6766
+        00063E 6662 6267 6766 6662
+        000642 6267 6766 6662 6267
+        000646 6766 6662 6267 6766
+        00064A 6662 6267 6766 6662
+        00064E 6267
+    81: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        00064F 6766 6766 6662 6267
+        000653 6766 6662 6267 6766
+        000657 6662 6267 6766 6662
+        00065B 6267 6766 6662 6267
+        00065F 6766 6662 6267 6766
+        000663 6662 6267 6766 6662
+        000667 6267
+    82: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        000668 6766 6766 6662 6267
+        00066C 6766 6662 6267 6766
+        000670 6662 6267 6766 6662
+        000674 6267 6766 6662 6267
+        000678 6766 6662 6267 6766
+        00067C 6662 6267 6766 6662
+        000680 6267
+    83: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        000681 6766 6766 6662 6267
+        000685 6766 6662 6267 6766
+        000689 6662 6267 6766 6662
+        00068D 6267 6766 6662 6267
+        000691 6766 6662 6267 6766
+        000695 6662 6267 6766 6662
+        000699 6267
+    84: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        00069A 6766 6766 6662 6267
+        00069E 6766 6662 6267 6766
+        0006A2 6662 6267 6766 6662
+        0006A6 6267 6766 6662 6267
+        0006AA 6766 6662 6267 6766
+        0006AE 6662 6267 6766 6662
+        0006B2 6267
+    85: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        0006B3 6766 6766 6662 6267
+        0006B7 6766 6662 6267 6766
+        0006BB 6662 6267 6766 6662
+        0006BF 6267 6766 6662 6267
+        0006C3 6766 6662 6267 6766
+        0006C7 6662 6267 6766 6662
+        0006CB 6267
+    86: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        0006CC 6766 6766 6662 6267
+        0006D0 6766 6662 6267 6766
+        0006D4 6662 6267 6766 6662
+        0006D8 6267 6766 6662 6267
+        0006DC 6766 6662 6267 6766
+        0006E0 6662 6267 6766 6662
+        0006E4 6267
+    87: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        0006E5 6766 6766 6662 6267
+        0006E9 6766 6662 6267 6766
+        0006ED 6662 6267 6766 6662
+        0006F1 6267 6766 6662 6267
+        0006F5 6766 6662 6267 6766
+        0006F9 6662 6267 6766 6662
+        0006FD 6267
+    88: 	.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        0006FE 6766 6766 6662 6267
+        000702 6766 6662 6267 6766
+        000706 6662 6267 6766 6662
+        00070A 6267 6766 6662 6267
+        00070E 6766 6662 6267 6766
+        000712 6662 6267 6766 6662
+        000716 6267
+    89: 		.DB "fgfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgbfgb"
+        000717 6766 6766 6662 6267
+        00071B 6766 6662 6267 6766
+        00071F 6662 6267 6766 6662
+        000723 6267 6766 6662 6267
+        000727 6766 6662 6267 6766
+        00072B 6662 6267 6766 6662
+        00072F 6267
+    90: 
+    91: 	
+    92: ;ReadTime: TWI_START
+    93: ;	SBRC R14,0
+    94: ;	RJMP ERROR
+    95: ;
+    96: ;	TWI_SLA_W
+    97: ;	SBRC R14,0
+    98: ;	RJMP ERROR
+    99: ;
+   100: ;	TWI_SEND_B 0x00
+   101: ;	SBRC R14,0
+   102: ;	RJMP ERROR
+   103: ;
+   104: ;	TWI_RESTART
+   105: ;	SBRC R14,0
+   106: ;	RJMP ERROR
+   107: ;
+   108: ;	TWI_SLA_R
+   109: ;	SBRC R14,0
+   110: ;	RJMP ERROR
+   111: ;
+   112: ;	TWI_READ_B_ACK
+   113: ;	SBRC R14,0
+   114: ;	RJMP ERROR
+   115: ;	MOV R10,R16	;Р—Р°РїРёСЃР°Р»Рё СЃРµРєСѓРЅРґС‹ РІ R10
+   116: ;
+   117: ;	TWI_READ_B_ACK
+   118: ;	SBRC R14,0
+   119: ;	RJMP ERROR
+   120: ;	MOV R11,R16	;Р—Р°РїРёСЃР°Р»Рё РјРёРЅСѓС‚С‹ РІ R11
+   121: ;
+   122: ;	TWI_READ_B_NACK
+   123: ;	SBRC R14,0
+   124: ;	RJMP ERROR
+   125: ;	MOV R12,R16	;Р—Р°РїРёСЃР°Р»Рё Р§Р°СЃС‹ РІ R12
+   126: ;
+   127: ;	TWI_STOP
+   128: ;
+   129: ;
+   130: ;rjmp Begin
+   131: ;
+   132: ;ERROR: Mov R16,R14
+   133: ;	WR_DATA R16
+   134: ;CLR R14
+   135: ;RJMP ReadTime
+   136: ;
+   137: ;Begin: rcall TimeToASCII
+   138: ;	ldi ZL,Low(TimeInASCII)
+   139: ;	ldi ZH,High(TimeInASCII)  ;Р·Р°РіСЂСѓР·РєР° РЅР°С‡Р°Р»СЊРЅРѕРіРѕ Р°РґСЂРµСЃР° РјР°СЃСЃРёРІР°
+   140: ;	LDI R18,8
+   141: ;
+   142: ;Risuy:	LD	R16, Z+
+   143: ;	WR_DATA R16
+   144: ;	DEC R18
+   145: ;	TST R18
+   146: ;	brne Risuy
+   147: ;
+   148: lol:	LCD_COORD 2,1
+   149: 
+   150: 
+   151: 000732   D963  rcall OWReset
+   152: 000733   EC0C  ldi R16,0xCC
+   153: 000734   D97E  rcall OWWriteByte
+   154: 000735   E404  ldi R16,0x44
+   155: 000736   D97C  rcall OWWriteByte
+   156: 000737   EF0A  ldi R16,250
+   157: 000738   D952  rcall WaitMiliseconds	; Р–РґР°С‚СЊ 750 РјСЃ
+   158: 000739   D951  rcall WaitMiliseconds
+   159: 00073A   D950  rcall WaitMiliseconds
+   160: 
+   161: 00073B   D95A  rcall OWReset
+   162: 00073C   EC0C  ldi R16,0xCC
+   163: 00073D   D975  rcall OWWriteByte
+   164: 00073E   EB0E  ldi R16,0xBE
+   165: 00073F   D973  rcall OWWriteByte
+   166: 000740   2700  clr R16
+   167: 000741   D98C  rcall OWReadByte
+   168: 000742   2F60  MOV R22,R16
+   169: 000743   D98A  rcall OWReadByte
+   170: 000744   2F70  MOV R23,R16
+   171: 000745   D950  rcall OWReset
+   172: 
+   173: 000746   D00F  rcall t_convert
+   174: 000747   2F07  MOV R16,R23
+   175: 000748   2F16  MOV R17,R22
+   176: 000749   D034  rcall NumToASCII
+   177: 
+   178: 00074A   E0E8  ldi ZL,Low(NumberInASCII)
+   179: 00074B   E0F1  ldi ZH,High(NumberInASCII)  ;Р·Р°РіСЂСѓР·РєР° РЅР°С‡Р°Р»СЊРЅРѕРіРѕ Р°РґСЂРµСЃР° РјР°СЃСЃРёРІР°
+   180: 00074C   E025  LDI R18,5
+   181: 
+   182: 00074D   9101  LD	R16, Z+
+   183: 	WR_DATA R16
+   184: 000750   952A  DEC R18
+   185: 000751   2322  TST R18
+   186: 000752   F7D1  brne T_Out
+   187: 
+   188: LCD_COORD 0,0
+   189: 
+   190: 000755   CFDA  RJMP lol
+   191: 
+   192: 
+   193: 
+   194: 
+   195: ;|---------------------------------------------------------------------------
+   196: ;| РџСЂРѕС†РµРґСѓСЂР° РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ С‚РµРјРїРµСЂР°С‚СѓСЂС‹
+   197: ;| РќР° РІС…РѕРґРµ: РњР»Р°РґС€РёР№ Р±Р°Р№С‚ РІ R22, РЎС‚Р°СЂС€РёР№ Р±Р°Р№С‚ РІ R23
+   198: ;| РќР° РІС‹С…РѕРґРµ: РґСЂРѕР±РЅР°СЏ С‡Р°СЃС‚СЊ РІ R22, Р¦РµР»Р°СЏ С‡Р°СЃС‚СЊ СЃРѕ Р·РЅР°РєРѕРј РІ R23
+   199: ;|---------------------------------------------------------------------------
+   200: 000756   930F  PUSH R16
+   201: 000757   931F  PUSH R17
+   202: 000758   FF77  SBRS R23,7	;Р•СЃР»Рё С‡РёСЃР»Рѕ РїРѕР»РѕР¶РёС‚РµР»СЊРЅРѕРµ, С‚Рѕ РїРµСЂРµС…РѕРґРёРј Рє РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЋ РґСЂРѕР±РЅРѕР№ С‡Р°СЃС‚Рё
+   203: 000759   C007  rjmp IfPositiv
+   204: 00075A   2700  CLR R16
+   205: 00075B   2711  CLR R17
+   206: 00075C   1B06  SUB R16, R22	;РџРµСЂРµРІРѕРґРёРј РёР· РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅРѕРіРѕ РєРѕРґР°
+   207: 00075D   0B17  SBC R17, R23
+   208: 00075E   2F60  MOV R22, R16
+   209: 00075F   2F71  MOV R23, R17
+   210: 000760   6078  ORI R23,1<<3	;СЃС‚Р°РІРёРј Р·РЅР°Рє "-"
+   211: 
+   212: IfPositiv:
+   213: 000761   2F06  mov R16, R22
+   214: 000762   9506  lsr R16
+   215: 000763   9506  lsr R16
+   216: 000764   9506  lsr R16
+   217: 000765   9506  lsr R16
+   218: 000766   0F77  lsl R23
+   219: 000767   0F77  lsl R23
+   220: 000768   0F77  lsl R23
+   221: 000769   0F77  lsl R23
+   222: 00076A   2B70  OR R23,R16	;РЎРєР»РµРёРІР°РµРј С†РµР»С‹Рµ С‡Р°СЃС‚Рё РјР»Р°РґС€РµРіРѕ Рё СЃС‚Р°СЂС€РµРіРѕ Р±Р°Р№С‚РѕРІ РІ РѕРґРёРЅ Р±Р°Р№С‚
+   223: 
+   224: 00076B   706F  ANDI R22,0b00001111	;РџСЂРµРѕР±СЂР°Р·СѓРµРј РґСЂРѕР±РЅСѓСЋ С‡Р°СЃС‚СЊ
+   225: 00076C   2F06  mov R16, R22	;РќСѓР¶РЅРѕ СѓРјРЅРѕР¶РёС‚СЊ РЅР° 10, РґР»СЏ СЌС‚РѕРіРѕ:
+   226: 00076D   0F00  lsl R16		;РЈРјРЅРѕР¶Р°РµРј РЅР° 2
+   227: 00076E   0F66  lsl R22
+   228: 00076F   0F66  lsl R22
+   229: 000770   0F66  lsl R22		;РЈРјРЅРѕР¶Р°РµРј РЅР° 8
+   230: 000771   0F60  ADD R22,R16	;РЎРєР»Р°РґС‹РІР°РµРј Рё СѓРјРЅРѕР¶РµРЅРёРµ РЅР° 10 РіРѕС‚РѕРІРѕ
+   231: 000772   9566  lsr R22
+   232: 000773   9566  lsr R22
+   233: 000774   9566  lsr R22
+   234: 000775   9566  lsr R22		;Р”РµР»РёРј РЅР° 16
+   235: 000776   3870  CPI R23, 1<<7	;РџСЂРѕРІРµСЂРєР° РЅР° -0, РµСЃР»Рё -0.0 РЅР°РґРѕ СѓР±СЂР°С‚СЊ РјРёРЅСѓСЃ
+   236: 000777   F419  BRNE end_t_convert
+   237: 000778   2366  TST R22		;РџСЂРѕРІРµСЂРєР° РЅР° -0.0
+   238: 000779   F409  BRNE end_t_convert
+   239: 00077A   2777  CLR R23
+   240: 
+   241: end_t_convert:
+   242: 00077B   911F  POP R17
+   243: 00077C   910F  POP R16
+   244: 00077D   9508  RET
+   245: ;|---------------------------------------------------------------------------
+   246: ;|                               END
+   247: :|---------------------------------------------------------------------------
+   248: 
+   249: ;|---------------------------------------------------------------------------
+   250: ;| РџСЂРѕС†РµРґСѓСЂР° СЂР°Р·Р±РёРІРєРё Р±Р°Р№С‚Р° РЅР° РґРµСЃСЏС‚РёС‡РЅС‹Рµ СЂР°Р·СЂСЏРґС‹ СЃ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµРј РІ ASCII
+   251: ;| РўР°РєР¶Рµ РµСЃР»Рё 7Р№ Р±РёС‚ R16 = 1, С‚Рѕ РІС‹РІРѕРґРёС‚СЃСЏ Р·РЅР°Рє "-"
+   252: ;| РќР° РІС…РѕРґРµ: С†РµР»Р°СЏ С‡Р°СЃС‚СЊ РІ R16
+   253: ;|         РґСЂРѕР±РЅР°СЏ С‡Р°СЃС‚СЊ РІ R17
+   254: ;| РќР° РІС‹С…РѕРґРµ: Р’ NumberInASCII - СЃС‚Р°СЂС€РёР№ СЂР°Р·СЂСЏРґ РёР»Рё "-",
+   255: ;| РІ NumberInASCII+1 - СЃСЂРµРґРЅРёР№ СЂР°Р·СЂСЏРґ РёР»Рё "-",
+   256: ;| РІ NumberInASCII+2 - РјР»Р°РґС€РёР№ СЂР°Р·СЂСЏРґ
+   257: ;| РІ NumberInASCII+3 - СЃРёРјРІРѕР» С‚РѕС‡РєРё
+   258: ;| РІ NumberInASCII+4 - РґСЂРѕР±РЅР°СЏ С‡Р°СЃС‚СЊ
+   259: ;| РўР°РєР¶Рµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ С„Р»Р°Рі Рў
+   260: ;|---------------------------------------------------------------------------
+   261: 00077E   94E8  CLT		;СЃР±СЂР°СЃС‹РІР°РµРј С„Р»Р°Рі T
+   262: 00077F   930F  PUSH R16
+   263: 000780   932F  PUSH R18
+   264: 000781   931F  PUSH R17
+   265: 000782   2711  CLR R17
+   266: 000783   2722  CLR R18
+   267: 000784   FF07  SBRS R16,7	;Р•СЃР»Рё С‡РёСЃР»Рѕ РїРѕР»РѕР¶РёС‚РµР»СЊРЅРѕРµ, С‚Рѕ РїРµСЂРµС…РѕРґРёРј Рє РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЋ
+   268: 000785   C002  rjmp not_neg
+   269: 000786   9468  SET		; Р§РёСЃР»Рѕ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅРѕРµ, СЃС‚Р°РІРёРј С„Р»Р°Рі Рў
+   270: 000787   770F  ANDI R16, 0b01111111	; РЈР±РёСЂР°РµРј РёР· С‡РёСЃР»Р° Р·РЅР°Рє -
+   271: 000788   3604  CPI R16, 100
+   272: 000789   F018  BRLO LoTh100 ;РµСЃР»Рё РјРµРЅСЊС€Рµ 100
+   273: 00078A   5604  SUBI R16, 100
+   274: 00078B   9523  INC R18
+   275: 00078C   CFFB  RJMP not_neg
+   276: 
+   277: 
+   278: 00078D   2322  TST R18
+   279: 00078E   F431  BRNE R1NZ ; Р Р°Р·СЂСЏРґ 1 РЅРµ РЅРѕР»СЊ
+   280: 00078F   6012  ORI R17, 1<<1; Р—Р°РїРѕРјРёРЅР°РµРј С‡С‚Рѕ СЃС‚Р°СЂС€РёР№ СЂР°Р·СЂСЏРґ "РџСЂРѕР±РµР»", РІРґСЂСѓРі РїСЂРёРіРѕРґРёС‚СЃСЏ :-)
+   281: 000790   E220  LDI R18, 0x20	;Р—Р°РіСЂСѓР¶Р°РµРј СЃРёРјРІРѕР» РїСЂРѕР±РµР»Р°
+   282: 000791   9320  STS NumberInASCII, R18
+        000792   0108
+   283: 000793   2722  CLR R18
+   284: 000794   C004  RJMP CalcDec
+   285: 
+   286: 000795   5D20  SUBI R18, (-48)	; РџСЂРёР±Р°РІР»СЏРµРј 48 РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ СЃРёРјРІРѕР»Р°
+   287: 000796   9320  STS NumberInASCII, R18
+        000797   0108
+   288: 000798   2722  CLR R18
+   289: 
+   290: 000799   300A  CPI R16, 10	;РЎС‡РёС‚Р°РµРј РґРµСЃСЏС‚РєРё
+   291: 00079A   F018  BRLO LoTh10 ;РµСЃР»Рё РјРµРЅСЊС€Рµ 10
+   292: 00079B   500A  SUBI R16, 10
+   293: 00079C   9523  INC R18
+   294: 00079D   CFFB  RJMP CalcDec
+   295: 
+   296: 00079E   2322  TST R18
+   297: 00079F   F441  BRNE R2NZ ; Р Р°Р·СЂСЏРґ 2 РЅРµ РЅРѕР»СЊ
+   298: 0007A0   FF11  SBRS R17,1	;Р•СЃР»Рё РїРµСЂРІС‹Р№ СЂРµРіРёСЃС‚СЂ РЅРµ 0, С‚РѕРіРґР° Р·Р°РїРёСЃС‹РІР°РµРј 0 Р° РЅРµ РїСЂРѕР±РµР»
+   299: 0007A1   C006  rjmp R2NZ
+   300: 
+   301: 0007A2   6011  ORI R17, 1<<0; Р—Р°РїРѕРјРёРЅР°РµРј С‡С‚Рѕ СЃСЂРµРґРЅРёР№ СЂР°Р·СЂСЏРґ =0, РІРґСЂСѓРі РїСЂРёРіРѕРґРёС‚СЃСЏ :-)
+   302: 0007A3   E220  LDI R18, 0x20	;Р—Р°РіСЂСѓР¶Р°РµРј СЃРёРјРІРѕР» РїСЂРѕР±РµР»Р°
+   303: 0007A4   9320  STS NumberInASCII+1, R18
+        0007A5   0109
+   304: 0007A6   2722  CLR R18
+   305: 0007A7   C004  RJMP CalcOne
+   306: 
+   307: 0007A8   5D20  SUBI R18, (-48)	; РџСЂРёР±Р°РІР»СЏРµРј 48 РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ СЃРёРјРІРѕР»Р°
+   308: 0007A9   9320  STS NumberInASCII+1, R18
+        0007AA   0109
+   309: 0007AB   2722  CLR R18
+   310: 
+   311: 0007AC   5D00  SUBI R16, (-48)	; РџСЂРёР±Р°РІР»СЏРµРј 48 РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ СЃРёРјРІРѕР»Р°
+   312: 0007AD   9300  STS NumberInASCII+2, R16
+        0007AE   010A
+   313: 
+   314: 0007AF   F45E  BRTC EndNTA	;РџСЂРѕРІРµСЂРєР° РЅР° -, РµСЃР»Рё РјРёРЅСѓСЃР° РЅРµС‚ - Р·Р°РєР°РЅС‡РёРІР°РµРј
+   315: 0007B0   FF10  SBRS R17,0	;Р•СЃР»Рё РІС‚РѕСЂРѕР№ СЂР°Р·СЂСЏРґ РЅРµ 0, С‚РѕРіРґР° Р·Р°РїРёСЃС‹РІР°РµРј 0 Р° РЅРµ РїСЂРѕР±РµР»
+   316: 0007B1   C005  rjmp R1IsZ
+   317: 
+   318: 0007B2   94E8  CLT
+   319: 0007B3   E22D  LDI R18, 0x2D	;Р—Р°РіСЂСѓР¶Р°РµРј СЃРёРјРІРѕР» РјРёРЅСѓСЃР°
+   320: 0007B4   9320  STS NumberInASCII+1, R18	; РїРёС€РµРј РјРёРЅСѓСЃ РІРѕ РІС‚РѕСЂРѕР№ СЂР°Р·СЂСЏРґ
+        0007B5   0109
+   321: 0007B6   C004  RJMP EndNTA
+   322: 
+   323: 
+   324: 0007B7   94E8  CLT
+   325: 0007B8   E22D  LDI R18, 0x2D	;Р—Р°РіСЂСѓР¶Р°РµРј СЃРёРјРІРѕР» РјРёРЅСѓСЃР°
+   326: 0007B9   9320  STS NumberInASCII, R18	;Р’ РїРµСЂРІС‹Р№ СЂР°Р·СЂСЏРґ
+        0007BA   0108
+   327: 
+   328: EndNTA:
+   329: 
+   330: 0007BB   911F  POP R17	;Р’С‹РІРѕРґ РґСЂРѕР±РЅРѕР№ С‡Р°СЃС‚Рё
+   331: 0007BC   E22E  LDI R18, 0x2E	;Р—Р°РіСЂСѓР¶Р°РµРј СЃРёРјРІРѕР» С‚РѕС‡РєРё
+   332: 0007BD   9320  STS NumberInASCII+3, R18	; РїРёС€РµРј РјРёРЅСѓСЃ РІРѕ РІС‚РѕСЂРѕР№ СЂР°Р·СЂСЏРґ
+        0007BE   010B
+   333: 0007BF   5D10  SUBI R17, (-48)	; РџСЂРёР±Р°РІР»СЏРµРј 48 РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ СЃРёРјРІРѕР»Р°
+   334: 0007C0   9310  STS NumberInASCII+4, R17
+        0007C1   010C
+   335: 
+   336: 
+   337: 
+   338: 
+   339: 0007C2   912F  POP R18
+   340: 0007C3   910F  POP R16
+   341: 0007C4   9508  RET
+   342: ;|---------------------------------------------------------------------------
+   343: ;|                               END
+   344: :|---------------------------------------------------------------------------
+   345: 
+   346: ;|---------------------------------------------------------------------------
+   347: ;| РџСЂРѕС†РµРґСѓСЂР° РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ РІСЂРµРјРµРЅРё РІ ASCII
+   348: ;| РќР° РІС…РѕРґРµ: СЃРµРєСѓРЅРґС‹ РІ R10
+   349: ;|            РјРёРЅСѓС‚С‹ РІ R11
+   350: ;|              С‡Р°СЃС‹ РІ R12
+   351: ;| РќР° РІС‹С…РѕРґРµ: Р’ TimeInASCII Рё TimeInASCII+1 - Р§Р°СЃС‹,
+   352: ;| Р’ TimeInASCII+3 Рё TimeInASCII+4 - РњРёРЅСѓС‚С‹,
+   353: ;| Р’ TimeInASCII+6 Рё TimeInASCII+7 - РЎРµРєСѓРЅРґС‹,
+   354: ;| Р’ TimeInASCII+2 Рё TimeInASCII+5 - Р”РІРѕРµС‚РѕС‡РёРµ
+   355: ;|---------------------------------------------------------------------------
+   356: 0007C5   930F  PUSH R16
+   357: 	
+   358: 0007C6   2D0C  MOV R16,R12
+   359: 0007C7   9506  LSR R16
+   360: 0007C8   9506  LSR R16
+   361: 0007C9   9506  LSR R16
+   362: 0007CA   9506  LSR R16
+   363: 0007CB   5D00  SUBI R16, (-48)	; РџСЂРёР±Р°РІР»СЏРµРј 48 РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ СЃРёРјРІРѕР»Р°
+   364: 0007CC   9300  STS TimeInASCII, R16
+        0007CD   0100
+   365: 
+   366: 0007CE   2D0C  MOV R16,R12
+   367: 0007CF   700F  ANDI R16,0x0F
+   368: 0007D0   5D00  SUBI R16, (-48)	; РџСЂРёР±Р°РІР»СЏРµРј 48 РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ СЃРёРјРІРѕР»Р°
+   369: 0007D1   9300  STS TimeInASCII+1, R16
+        0007D2   0101
+   370: 
+   371: 0007D3   2D0B  MOV R16,R11
+   372: 0007D4   9506  LSR R16
+   373: 0007D5   9506  LSR R16
+   374: 0007D6   9506  LSR R16
+   375: 0007D7   9506  LSR R16
+   376: 0007D8   5D00  SUBI R16, (-48)	; РџСЂРёР±Р°РІР»СЏРµРј 48 РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ СЃРёРјРІРѕР»Р°
+   377: 0007D9   9300  STS TimeInASCII+3, R16
+        0007DA   0103
+   378: 
+   379: 0007DB   2D0B  MOV R16,R11
+   380: 0007DC   700F  ANDI R16,0x0F
+   381: 0007DD   5D00  SUBI R16, (-48)	; РџСЂРёР±Р°РІР»СЏРµРј 48 РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ СЃРёРјРІРѕР»Р°
+   382: 0007DE   9300  STS TimeInASCII+4, R16
+        0007DF   0104
+   383: 
+   384: 0007E0   2D0A  MOV R16,R10
+   385: 0007E1   9506  LSR R16
+   386: 0007E2   9506  LSR R16
+   387: 0007E3   9506  LSR R16
+   388: 0007E4   9506  LSR R16
+   389: 0007E5   5D00  SUBI R16, (-48)	; РџСЂРёР±Р°РІР»СЏРµРј 48 РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ СЃРёРјРІРѕР»Р°
+   390: 0007E6   9300  STS TimeInASCII+6, R16
+        0007E7   0106
+   391: 
+   392: 0007E8   2D0A  MOV R16,R10
+   393: 0007E9   700F  ANDI R16,0x0F
+   394: 0007EA   5D00  SUBI R16, (-48)	; РџСЂРёР±Р°РІР»СЏРµРј 48 РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ СЃРёРјРІРѕР»Р°
+   395: 0007EB   9300  STS TimeInASCII+7, R16
+        0007EC   0107
+   396: 
+   397: 0007ED   E30A  LDI R16, 0x3A
+   398: 0007EE   9300  STS TimeInASCII+2, R16
+        0007EF   0102
+   399: 0007F0   9300  STS TimeInASCII+5, R16
+        0007F1   0105
+   400: 
+   401: 0007F2   910F  POP R16
+   402: 0007F3   9508  RET
+   403: ;|---------------------------------------------------------------------------
+   404: ;|                               END
+   405: :|---------------------------------------------------------------------------
+   406: 
+   407: 
+   408: .DSEG
+   409: TimeInASCII:	.byte	8
+   410: NumberInASCII:	.byte	5
+   411: 
+ -> Warning 011: C-style instructions in file, lines ignored!
+ -> Warning 001: 24 symbol(s) defined, but not used!
+
+Program             :      411 words.
+Constants           :     1625 words.
+Total program memory:     2036 words.
+Eeprom space        :        0 bytes.
+Data segment        :       13 bytes.
+Compilation completed, no errors.
+Compilation endet 06.11.2015, 12:30:48

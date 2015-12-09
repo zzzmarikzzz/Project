@@ -1,0 +1,10 @@
+.include "/home/marik/2313def.inc"
+.def     Temp=R16
+.def     Temp1=R17
+.def     Temp2=R18
+.def     Temp3=R19
+.def     Temp4=R20
+
+.cseg
+.org 0
+	ldi Temp,RamEnd       ;
