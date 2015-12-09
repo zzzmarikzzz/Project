@@ -1,4 +1,0 @@
-#!/bin/bash
-avrdude -p t13 -c usbasp -U hfuse:r:hfuse.txt:b
-avrdude -p t13 -c usbasp -U lfuse:r:lfuse.txt:b
-exit 0
