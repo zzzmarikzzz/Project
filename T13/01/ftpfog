@@ -1,3 +1,0 @@
-#!/bin/bash
-avrdude -p t13 -c arduino-ft232r -P ft0 -b1200 -U flash:w:ish.hex:i -vvv
-exit 0

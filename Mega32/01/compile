@@ -1,4 +1,0 @@
-#!/bin/bash
-gavrasm -xeb ish.asm
-#tavrasm -i ish.asm -o output/hexfile.hex -e output/listfile.lst
-exit 0

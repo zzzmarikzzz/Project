@@ -1,3 +1,0 @@
-#!/bin/bash
-avrdude -p m48 -c usbasp -U flash:w:ish.hex:i
-exit 0
