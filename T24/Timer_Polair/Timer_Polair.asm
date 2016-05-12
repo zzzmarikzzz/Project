@@ -1,9 +1,3 @@
-;|----------------------------------------------------------------------
-;| TO DO:
-;| - Добавить мигающие точки
-;|----------------------------------------------------------------------
-
-
 .include "/home/marik/Project/tn24Adef.inc"
 ; Internal Hardware Init  ======================================
 		.equ 	XTAL = 16000000 
@@ -16,6 +10,7 @@
 .def     ThC=R12	;Час Текущий (считанный)
 .def     TmC=R11	;Минута Текущая (считанная)
 .def     MenuCNT=R10;Счетчик меню
+.def     Dot_Flag=R13	;флаг точек
 
 .def     Temp=R16
 .def     Temp2=R17
@@ -70,7 +65,7 @@ EXTPCINT0:
 EXTPCINT1:
 WDT:
 TIM1_CAPT:
-TIM1_COMPA:
+;TIM1_COMPA:
 TIM1_COMPB:
 TIM1_OVF:
 TIM0_COMPA:
@@ -136,6 +131,28 @@ RESET:
 	OUT ADCSRB, R16
 	RCALL KeyCheck
 
+	LDI Temp, 1<<OCIE1A	;разрешить прерывание компаратора 1A
+	OUT TIMSK1,Temp
+
+	
+	LDI Temp, 1<<CS12|0<<CS11|1<<CS10
+	OUT TCCR1B,Temp		;тактовый сигнал = CK/1024
+	
+	LDI Temp, high(7812)		;инициализация компаратора 7812
+	OUT OCR1AH,Temp
+	LDI Temp, low(7812)
+	OUT OCR1AL,Temp
+
+	LDI Temp,0		;Сброс счётчика
+	OUT TCNT1H,Temp
+	OUT TCNT1L,Temp
+
+	SEI			;разрешить прерывания
+
+
+
+
+
 	CLR R18
 	LDI R17, EEPTh0
 	RCALL EEPROM_read
@@ -164,6 +181,58 @@ FlagZero:	LDI R16, 0
 FlagWrite:	MOV Flag, R16
 	RET
 ;|----------------------------------------------------------------------
+
+
+;****************************************************
+; ОБРАБОТЧИК ПРЕРЫВАНИЯ КОМПАРАТОРА
+;****************************************************
+
+TIM1_COMPA:
+	PUSH Temp
+	IN Temp, SREG
+	PUSH Temp
+	CLI
+	LDI Temp,0		;Сброс счётчика
+	OUT TCNT1H,Temp
+	OUT TCNT1L,Temp
+	WDR
+	
+	LDI Temp, 1<<0
+	SBRC Dot_Flag, 0
+	CLR Temp
+	MOV Dot_Flag, Temp
+	Rcall CHECK_DOT
+
+
+
+	POP Temp
+	OUT SREG, Temp
+	POP Temp
+	RETI			;выход из обработчика
+
+
+CHECK_DOT:	SBRC Dot_Flag,0
+	RJMP Dot_ON
+	
+	LDS Temp, TimeToOut+2
+	ANDI Temp, ~(1<<dot)
+	STS TimeToOut+2, Temp
+
+	LDS Temp, TimeToOut+3
+	ANDI Temp, ~(1<<dot)
+	STS TimeToOut+3, Temp
+	RET
+
+Dot_ON:	LDS Temp, TimeToOut+2
+	ORI Temp, 1<<dot
+	STS TimeToOut+2, Temp
+
+	LDS Temp, TimeToOut+3
+	ORI Temp, 1<<dot
+	STS TimeToOut+3, Temp
+	RET
+;|----------------------------------------------------------------------
+
 
 	.include 	"USI_macro.inc"
 
@@ -213,6 +282,7 @@ Light_Off: in R16,PORTA ; Выключаем свет
 
 Bezdel:
 rcall BCDTo7SEG
+Rcall CHECK_DOT
 WDR
 rcall Delay
 nop
@@ -310,9 +380,6 @@ TCurrent: LDI R16, 0xBC		; Отобразить tCur
 	LDI R16, 0xAE
 	MOV R11, R16
 	rcall BCDTo7SEG
-	LDS R16, TimeToOut+1
-	ANDI R16, ~(1<<dot)
-	STS TimeToOut+1, R16
 	RCALL Delay05
 	WDR
 	RJMP Indication
@@ -323,9 +390,6 @@ SetThC: BRTS ThCTS			; Настройка часов
 	MOV IncBCD, R12
 ThCTS: MOV R12, IncBCD
 	rcall BCDTo7SEG
-	LDS R17, TimeToOut+1
-	ANDI R17, ~(1<<dot)
-	STS TimeToOut+1, R17
 	CLR R17
 	STS TimeToOut+2, R17
 	STS TimeToOut+3, R17
@@ -361,9 +425,6 @@ TOff: LDI R16, 0xB0		; Отобразить tOFF
 	LDI R16, 0xFF
 	MOV R11, R16
 	rcall BCDTo7SEG
-	LDS R16, TimeToOut+1
-	ANDI R16, ~(1<<dot)
-	STS TimeToOut+1, R16
 	RJMP Indication
 
 SetTh0: BRTS Th0TS			; Настройка часа выключения
@@ -372,9 +433,6 @@ SetTh0: BRTS Th0TS			; Настройка часа выключения
 	CLR R11
 Th0TS: MOV R12, IncBCD
 	rcall BCDTo7SEG
-	LDS R17, TimeToOut+1
-	ANDI R17, ~(1<<dot)
-	STS TimeToOut+1, R17
 	CLR R17
 	STS TimeToOut+2, R17
 	STS TimeToOut+3, R17
@@ -426,9 +484,6 @@ SetTh1: BRTS Th1TS			; Настройка часа включения
 	CLR R11
 Th1TS: MOV R12, IncBCD
 	rcall BCDTo7SEG
-	LDS R17, TimeToOut+1
-	ANDI R17, ~(1<<dot)
-	STS TimeToOut+1, R17
 	CLR R17
 	STS TimeToOut+2, R17
 	STS TimeToOut+3, R17
@@ -522,6 +577,7 @@ KeyCheckExit:
 ;| Чтение времени
 ;|----------------------------------------------------------------------
 ReadTime:
+	CLI
 	USI_TWI_INIT
 	USI_TWI_START
 	USI_SLA_W
@@ -533,6 +589,7 @@ ReadTime:
 	USI_READ_B_NACK
 	MOV R12,R16	;Записали Часы в R12
 	USI_TWI_STOP
+	SEI
 	RET
 ;|----------------------------------------------------------------------
 ;|                               END
@@ -622,6 +679,7 @@ Loop1:	rcall TimeToSeg
 ;| Запись и чтение EEPROM
 ;|----------------------------------------------------------------------
 EEPROM_write:
+	CLI
 	sbic EECR, EEPE
 	rjmp EEPROM_write
 	PUSH R16
@@ -633,15 +691,18 @@ EEPROM_write:
 	out EEDR, r16	; Write data (r16) to data register
 	sbi EECR, EEMPE	; Write logical one to EEMPE
 	sbi EECR, EEPE	; Start eeprom write by setting EEPE
+	SEI
 	ret
 
 EEPROM_read:
+	CLI
 	sbic EECR, EEPE
 	rjmp EEPROM_read
 	out EEARH, r18	; Set up address (r18:r17) in address registers
 	out EEARL, r17
 	sbi EECR, EERE	; Start eeprom read by writing EERE
 	in r16, EEDR	; Read data from data register
+	SEI
 	ret
 ;|----------------------------------------------------------------------
 ;|                               END
@@ -765,7 +826,6 @@ BCDTo7SEG: CLI
 	MOV Temp, R12
 	ANDI Temp, 0b00001111
 	rcall FSym
-	ORI Temp, 1<<dot
 	STS TimeToOut+1, Temp
 
 	MOV Temp, R11
