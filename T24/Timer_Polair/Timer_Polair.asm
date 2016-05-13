@@ -282,7 +282,6 @@ Light_Off: in R16,PORTA ; Выключаем свет
 
 Bezdel:
 rcall BCDTo7SEG
-Rcall CHECK_DOT
 WDR
 rcall Delay
 nop
@@ -820,6 +819,7 @@ BCDTo7SEG: CLI
 	MOV Temp, R12
 	SWAP Temp	;Поменять местами тетрады
 	ANDI Temp, 0b00001111
+	BREQ PC+1	
 	rcall FSym
 	STS TimeToOut, Temp
 
@@ -852,6 +852,7 @@ FSym:	; Загрузить адрес таблицы символов
 	ret
 
 BCDTo7SEGend:
+Rcall CHECK_DOT
 POP Temp
 SEI
 RET
