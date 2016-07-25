@@ -137,9 +137,9 @@ Discharged:
 	LDI Flague, 2
 	CBI Relay_Port, Relay_PIN
 	SBI LED_Port, LED_PIN
-	CPI R16, 105
-	BRLO Mark1
-	LDI Flague, 1
+;	CPI R16, 107
+;	BRLO Mark1
+;	LDI Flague, 1
 
 Mark1:
 	Rcall NumCut
