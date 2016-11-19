@@ -5,6 +5,7 @@
 .def     CNT=R18
 .def     OutByte=R20
 .def     OutByte2=R21
+.def	 Flague=R23
 
 .equ	SEG7_DDR=DDRB
 .equ	SEG7_PORT=PortB
@@ -17,6 +18,10 @@
 .equ	Relay_Port=PortB
 .equ	Relay_PIN=7
 
+
+.equ	LED_DDR=DDRD
+.equ	LED_Port=PortD
+.equ	LED_PIN=7
 .cseg
 .org 0
 	ldi R16,low(RAMEND) ;инициализация стека
@@ -57,6 +62,10 @@
 	SBI Relay_DDR, Relay_PIN
 	CBI Relay_Port, Relay_PIN
 	
+	SBI LED_DDR, LED_PIN
+	CBI LED_Port, LED_PIN
+	
+	CLR R23
 	RJMP Begin
 
 sym_table:
@@ -91,15 +100,49 @@ Loop1:	rcall TimeToSeg
 Begin:
 	RCALL Delay
 	IN R16, ADCH
-	CPI R16, 96
-	BRLO Mark1
-	SBI Relay_Port, Relay_PIN
-	RJMP Mark2
-Mark1:
-	CBI Relay_Port, Relay_PIN
-Mark2:
-	Rcall NumCut
+	CPI R16, 3
+	BRSH Detected
+;	TST Flague
+;	BRNE Detected
 	
+
+;	CPI R16, 4
+;	BRSH Detected	
+NoCell:
+	CBI Relay_Port, Relay_PIN
+	CBI LED_Port, LED_PIN
+	CLR Flague
+	RJMP Mark1
+
+Detected:
+	CPI Flague, 1
+	BREQ Discharging
+	CPI R16, 100
+	BRLO DisCharged
+	CPI Flague, 2
+	BREQ DisCharged
+	LDI Flague, 1
+
+Discharging:
+	CPI R16, 3
+	BRLO Discharged
+	SBI Relay_Port, Relay_PIN
+	IN R17, LED_Port
+	LDI R18, 1<<LED_Pin
+	EOR R17, R18
+	OUT LED_Port, R17
+	RJMP Mark1
+
+Discharged:
+	LDI Flague, 2
+	CBI Relay_Port, Relay_PIN
+	SBI LED_Port, LED_PIN
+;	CPI R16, 107
+;	BRLO Mark1
+;	LDI Flague, 1
+
+Mark1:
+	Rcall NumCut
 	RJMP Begin
 
 ;|----------------------------------------------------------------------
