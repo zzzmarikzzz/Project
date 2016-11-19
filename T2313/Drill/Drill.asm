@@ -1,9 +1,12 @@
 .include "/home/marik/Project/tn2313Adef.inc"
 .def     Temp=R16
-.def     Temp1=R17
-.def     Temp2=R18
-.def     Temp3=R19
-.def     Temp4=R20
+.def     Flag=R19
+	.equ	DRILL=0
+
+.equ	PIN_KEY=PINB
+.equ	KEY=1
+
+
 
 .cseg
 .org 0
@@ -61,6 +64,8 @@ Reset:	LDI Temp,RamEnd		;Инициализация стека
 	SBI DDRB, 0	;Настройка порта B
 	CBI PORTB, 0
 	
+
+	
 	LDI Temp, 1<<OCIE1A|1<<OCIE1B	;разрешить прерывание компаратора 1A, 1B
 	OUT TIMSK,Temp
 
@@ -88,17 +93,50 @@ Reset:	LDI Temp,RamEnd		;Инициализация стека
 	OUT TCNT1H,Temp
 	OUT TCNT1L,Temp
 
+	CLR R18
+	CLR Flag
 	SEI			;разрешить прерывания
 ;****************************************************
 ; ОСНОВНОЙ ЦИКЛ
 ;****************************************************
-Inf:
+Init:
 	RCALL Delay
-	LDI Temp,  100
-	CLR R17
-	ADD ZL, Temp
-	ADC ZH, R17
-	RJMP Inf              ;бесконечный цикл
+	INC R18
+	CPI R18, 6
+	BRLO Init
+	
+			;Настройка прерывания кнопок
+	
+	
+Run:	SBIS PIN_KEY, KEY
+	RJMP Run
+
+	SBRC Flag, DRILL
+	RJMP DRILL_STOP	;переход к остановке
+
+;запуск
+	LDI Flag, 1<<DRILL	;запуск
+	RCALL Start
+	RCALL Delay
+	RJMP Run
+
+DRILL_STOP:
+	LDI Flag, 0<<DRILL
+	RCALL Stop
+	RCALL Delay
+	RJMP Run
+
+
+
+Start:
+	LDI ZH, high(5000)
+	LDI ZL, low(5000)
+	RET
+
+Stop:
+	LDI ZH, high(2000)
+	LDI ZL, low(2000)
+	RET
 
 
 ;****************************************************
@@ -141,7 +179,7 @@ TIMER1_COMPB:
 
 
 Delay:
-	ldi Temp,0          ;Задержка
+	ldi Temp,100          ;Задержка
 	MOV R3, TEMP
 	MOV R4, TEMP
 	MOV R5, TEMP
