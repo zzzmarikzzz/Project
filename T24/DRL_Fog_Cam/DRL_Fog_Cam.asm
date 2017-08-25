@@ -1,10 +1,12 @@
 .include "/home/marik/Project/tn24Adef.inc"
 ; Internal Hardware Init  ======================================
-	.equ 	XTAL = 16000000 
+	.equ 	XTAL = 16000000
+	.equ 	USBdel = 16000000 / 1024 /256
 
 .equ	USB_DDR=DDRB
 .equ	USB_PORT=PORTB
 .equ	USB=PB2
+.equ	USBDelaySec=10		; Задержка включения USB в секундах
 
 .equ	Fog_Key=PA2
 .equ	Fog_Relay=PA1
@@ -19,11 +21,14 @@
 .equ	Cam_relay=PA5
 
 .def	Temp=R16
+.def	USBCount2=R23
+.def	USBCount=R24
 .def	Flags=R25
 	.equ	FK=0	;	Fog Key Prev (Пред. состояние кнопки туманок)
 	.equ	HL=1	;	Headlamp Prev (Пред. состояние ближнего света)
 	.equ	DRL=2	;	DRL (Разрешение (выключатель) на работу ДХО
 					;	0 - ДХО включены, 1 - выключены
+	.equ	USBint=3	;Прерывание счётчика USB
 
 .cseg
 .org 0
@@ -58,7 +63,7 @@ TIM1_COMPB:
 TIM1_OVF:
 TIM0_COMPA:
 TIM0_COMPB:
-TIM0_OVF:
+;TIM0_OVF:
 ANA_COMP:
 ADC:
 EE_RDY:
@@ -106,7 +111,7 @@ WDR
 RCALL Delay
 RCALL FogControl
 RCALL DRLControl
-
+RCALL USBControl
 NOP
 ;SBI USB_PORT,USB
 ;SBI PORTA, Fog_Relay
@@ -164,6 +169,7 @@ LoopDRL:
 	RJMP DRLTrig
 	dec R4
 	brne LoopDRL
+	WDR
 	dec R5
 	brne LoopDRL
 					; Если в течении секунды ближний не погас - меняем флаг и уходим
@@ -222,6 +228,80 @@ Fog_Key_Pressed2:			; Если кнопка ещё нажата - меняем �
 	RET
 ;|----------------------------------------------------------------------
 ;| Конец Управления туманками
+;|----------------------------------------------------------------------
+
+;|----------------------------------------------------------------------
+;| Управление USB
+;|----------------------------------------------------------------------
+USBControl:
+	SBIC PINA, MAR			;Если нет зажигания - Выключаем и уходим
+	RJMP USBMAR
+	CBI USB_PORT, USB
+	CBR Flags, 1<<USBint
+	RET
+
+USBMAR:
+	SBIS USB_PORT, USB
+	RJMP USBcnt		;Если USB уже включен - уходим
+	RET
+
+USBcnt:
+	CBI USB_PORT, USB
+	SBRC Flags, USBint	;Проверяем включено-ли прерывание
+	RJMP USB_int
+	CLI				;Настраиваем прерывание
+	
+	IN Temp, TIMSK0
+	SBR Temp, 1<<TOIE0	;разрешить прерывание по переполнению
+	OUT TIMSK0,Temp
+	
+	LDI Temp, 1<<CS02|0<<CS01|1<<CS00
+	OUT TCCR0B,Temp		;тактовый сигнал = CK/1024
+	
+	
+	LDI Temp,0		;Сброс счётчика
+	OUT TCNT0,Temp
+
+	CLR USBCount
+	CLR USBCount2
+	SBR Flags, 1<<USBint
+	SEI			;разрешить прерывания
+	RET
+
+USB_int:	;Проверяем счётчик
+	CPI USBCount, USBDelaySec
+	BRSH USB_on
+	RET
+	
+USB_on:		;Если досчитали - включаем USB, выключаем прерывания, сбрасываем счётчики
+	SBI USB_PORT, USB
+	CBR Flags, 1<<USBint
+	IN Temp, TIMSK0
+	CBR Temp, 1<<TOIE0	;запретить прерывание по переполнению
+	OUT TIMSK0,Temp
+	RET
+
+
+TIM0_OVF:
+	PUSH Temp
+	IN Temp, SREG
+	PUSH Temp
+	CLI
+	WDR
+	INC USBCount2
+	CPI USBCount2, USBdel
+	BRLO TIM0_OVF_OUT
+	
+	CLR USBCount2
+	INC USBCount
+TIM0_OVF_OUT:
+	POP Temp
+	OUT SREG, Temp
+	POP Temp
+	RETI
+
+;|----------------------------------------------------------------------
+;| Конец Управления USB
 ;|----------------------------------------------------------------------
 
 Delay005:
