@@ -4,7 +4,9 @@
 	.equ	DRILL=0
 
 .equ	PIN_KEY=PINB
-.equ	KEY=1
+.equ	KEY_START=1
+.equ	KEY_INC=2
+.equ	KEY_DEC=3
 
 
 
@@ -104,13 +106,61 @@ Init:
 	INC R18
 	CPI R18, 6
 	BRLO Init
+	LDI R21, high(5000)
+	LDI R20, low(5000)
 	
 			;Настройка прерывания кнопок
 	
 	
-Run:	SBIS PIN_KEY, KEY
-	RJMP Run
+Run:
+	SBRS Flag, DRILL
+	RJMP Not_Press
+	MOV R21, ZH
+	MOV R20, ZL
+	SBIS PIN_KEY, KEY_INC
+	RJMP Substract
+	
+	LDI R23, high(200)
+	LDI R22, low(200)
+	ADD R20, R22			;+200
+	ADC R21, R23
+	
+	LDI R23, high(5000)
+	LDI R22, low(5000)
+	CP R20, R22
+	CPC R21, R23
+	BRLO Modifed
+	LDI R21, high(5000)
+	LDI R20, low(5000)
+Modifed:
+	MOV ZH, R21
+	MOV ZL, R20
+	RCALL Delay
 
+Substract:
+	SBIS PIN_KEY, KEY_DEC
+	RJMP Not_Press
+
+	LDI R23, high(200)
+	LDI R22, low(200)
+	SUB R20, R22			;-200
+	SBC R21, R23
+	
+	LDI R23, high(2600)
+	LDI R22, low(2600)
+	CP R20, R22
+	CPC R21, R23
+	BRSH Modifed2
+	LDI R21, high(2600)
+	LDI R20, low(2600)
+Modifed2:
+	MOV ZH, R21
+	MOV ZL, R20
+	RCALL Delay
+
+Not_Press:
+	SBIS PIN_KEY, KEY_START
+	RJMP Run
 	SBRC Flag, DRILL
 	RJMP DRILL_STOP	;переход к остановке
 
@@ -129,8 +179,8 @@ DRILL_STOP:
 
 
 Start:
-	LDI ZH, high(5000)
-	LDI ZL, low(5000)
+	MOV ZH, R21
+	MOV ZL, R20
 	RET
 
 Stop:
@@ -179,7 +229,7 @@ TIMER1_COMPB:
 
 
 Delay:
-	ldi Temp,100          ;Задержка
+	ldi Temp,40          ;Задержка
 	MOV R3, TEMP
 	MOV R4, TEMP
 	MOV R5, TEMP
