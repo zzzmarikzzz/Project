@@ -9,20 +9,39 @@
 .equ	USB=PB2
 .equ	USBDelaySec=10		; Задержка включения USB в секундах
 
+.equ	DDR_Fog_Key=DDRA
+.equ	PIN_Fog_Key=PINA
 .equ	Fog_Key=PA2
+
+.equ	DDR_Fog_Relay=DDRA
+.equ	Port_Fog_Relay=PORTA
 .equ	Fog_Relay=PA1
 
+.equ	DDR_DRL_Relay=DDRA
+.equ	Port_DRL_Relay=PORTA
 .equ	DRL_Relay=PA0
+
+.equ	DDR_Bliz=DDRA
+.equ	Pin_Bliz=PINA
 .equ	Bliz=PA4
 
+.equ	DDR_MAR=DDRA
+.equ	Pin_MAR=PINA
 .equ	MAR=PA3
 
+.equ	DDR_Reverse=DDRA
+.equ	Pin_Reverse=PINA
 .equ	Reverse=PA7
+
+.equ	DDR_Cam_Key=DDRA
+.equ	Pin_Cam_Key=PINA
 .equ	Cam_Key=PA6
+
+.equ	DDR_Cam_relay=DDRA
+.equ	Port_Cam_relay=PORTA
 .equ	Cam_relay=PA5
 .equ	CamDelayMSec=2000	; Задержка при переключении камер в авторежиме, задаётся в мс.
 
-;.def	Temp=R16
 .def	USBCount=R6
 .def	USBCount2=R7
 .def	Flags=R25
@@ -104,19 +123,21 @@ RESET:
 	IN R16, PCMSK0
 	SBR R16, (1<<Bliz) | (1<<Fog_Key)
 	OUT PCMSK0, R16
-	
+
 	SEI
 
-	CLR R16				;настройка порта A
-	OUT PORTA, R16
-	IN R16, DDRA
-	ORI R16,(1<<DRL_Relay)|(1<<Fog_Relay)|(1<<Cam_Relay)
-	OUT DDRA,R16
-	
-	CBI USB_PORT, USB		;настройка порта B
+	; Настройка портов
+	CBI Port_Fog_Relay, Fog_Relay
+	CBI Port_DRL_Relay, DRL_Relay
+	CBI Port_Cam_relay, Cam_relay
+	CBI USB_PORT, USB
+
+	SBI DDR_Fog_Relay, Fog_Relay
+	SBI DDR_DRL_Relay, DRL_Relay
+	SBI DDR_Cam_relay, Cam_relay
 	SBI USB_DDR, USB
-
-
+	
+	
 Begin:
 WDR
 RCALL FogControl
@@ -130,41 +151,41 @@ RJMP Begin
 ;| Управление ДХО
 ;|----------------------------------------------------------------------
 DRLControl:
-	SBIC PINA, MAR			;Если нет зажигания - Выключаем и уходим
+	SBIC Pin_MAR, MAR			;Если нет зажигания - Выключаем и уходим
 	RJMP DRLMAR
-	CBI PORTA, DRL_Relay
+	CBI Port_DRL_Relay, DRL_Relay
 	CBR Flags, 1<<HL
 	RET
 	
 DRLMAR:
-	SBIC PINA, Bliz		;Если нет ближнего - сбрасываем флаг, управляем ДХО и уходим
+	SBIC Pin_Bliz, Bliz		;Если нет ближнего - сбрасываем флаг, управляем ДХО и уходим
 	RJMP DRLBliz
 	CBR Flags, 1<<HL
 	SBRC Flags, DRL
 	RJMP DRLOff
-	SBI PORTA, DRL_Relay
+	SBI Port_DRL_Relay, DRL_Relay
 	RET
 	
 	DRLOff:
-		CBI PORTA, DRL_Relay
+		CBI Port_DRL_Relay, DRL_Relay
 		RET
 	
 DRLBliz:
 	SBRS Flags, HL			;Если ближний раньше горел -  гасим ДХО и уходим
 	RJMP DRLBlizNew
-	CBI PORTA, DRL_Relay
+	CBI Port_DRL_Relay, DRL_Relay
 	SBR Flags, 1<<HL
 	RET
 
 DRLBlizNew:
 	RCALL Delay005
-	SBIC PINA, 	Bliz	;Если после 0,05с ближний не горит -  уходим
+	SBIC Pin_Bliz, 	Bliz	;Если после 0,05с ближний не горит -  уходим
 	RJMP DRLBliz2
 	CBR Flags, 1<<HL
 	RET
 	
 DRLBliz2:
-	CBI PORTA, DRL_Relay	; гасим ДХО
+	CBI Port_DRL_Relay, DRL_Relay	; гасим ДХО
 	LDI R16,0;задержка (0,0,80 - 1 секунда)
 	MOV R3, R16
 	MOV R4, R16
@@ -173,7 +194,7 @@ DRLBliz2:
 LoopDRL:
 	dec R3
 	brne LoopDRL
-	SBIS PINA, 	Bliz
+	SBIS Pin_Bliz, 	Bliz
 	RJMP DRLTrig
 	dec R4
 	brne LoopDRL
@@ -197,20 +218,20 @@ DRLTrig:
 ;| Управление туманками
 ;|----------------------------------------------------------------------
 FogControl:
-	SBIC PINA, MAR			;Если нет зажигания - Выключаем и уходим
+	SBIC Pin_MAR, MAR			;Если нет зажигания - Выключаем и уходим
 	RJMP FogMAR
-	CBI PORTA, Fog_Relay
+	CBI Port_Fog_Relay, Fog_Relay
 	CBR Flags, 1<<FK
 	RET
 	
 FogMAR:
-	SBIC PINA, Bliz		;Если нет ближнего - Выключаем и уходим
+	SBIC Pin_Bliz, Bliz		;Если нет ближнего - Выключаем и уходим
 	RJMP FogBliz
-	CBI PORTA, Fog_Relay
+	CBI Port_Fog_Relay, Fog_Relay
 	CBR Flags, 1<<FK
 	RET
 
-FogBliz: SBIS PINA, Fog_Key	;Если кнопка не нажата -  уходим
+FogBliz: SBIS PIN_Fog_Key, Fog_Key	;Если кнопка не нажата -  уходим
 	RJMP Fog_Key_Pressed
 	CBR Flags, 1<<FK
 	RET
@@ -222,16 +243,16 @@ Fog_Key_Pressed:
 
 Fog_Key_Pressed_NPP:
 	RCALL Delay005
-	SBIS PINA, Fog_Key		;Если кнопка после 0,05с не нажата -  уходим
+	SBIS PIN_Fog_Key, Fog_Key		;Если кнопка после 0,05с не нажата -  уходим
 	RJMP Fog_Key_Pressed2
 	CBR Flags, 1<<FK
 	RET
 
 Fog_Key_Pressed2:			; Если кнопка ещё нажата - меняем состояние туманок
-	IN R16, PORTA
+	IN R16, Port_Fog_Relay
 	LDI R17, 1<<Fog_Relay
 	EOR R16, R17
-	OUT PORTA, R16
+	OUT Port_Fog_Relay, R16
 	SBR Flags, 1<<FK
 	RET
 ;|----------------------------------------------------------------------
@@ -242,7 +263,7 @@ Fog_Key_Pressed2:			; Если кнопка ещё нажата - меняем �
 ;| Управление USB
 ;|----------------------------------------------------------------------
 USBControl:
-	SBIC PINA, MAR			;Если нет зажигания - Выключаем и уходим
+	SBIC Pin_MAR, MAR			;Если нет зажигания - Выключаем и уходим
 	RJMP USBMAR
 	CBI USB_PORT, USB
 	CBR Flags, 1<<USBint
@@ -317,7 +338,7 @@ TIM0_OVF_OUT:
 ;| Управление Камерами
 ;|----------------------------------------------------------------------
 CamControl:
-	SBIS PINA, Cam_Key	; Если кнопка не нажата - продолжаем
+	SBIS Pin_Cam_Key, Cam_Key	; Если кнопка не нажата - продолжаем
 	RJMP CamKeyMBPressed
 	CBR Flags, 1<<KRP
 	SBRS Flags, AutoCam
@@ -326,7 +347,7 @@ CamControl:
 
 CamNotAuto:
 	RCALL Delay005
-	SBIS PINA, Reverse
+	SBIS Pin_Reverse, Reverse
 	RJMP Forward
 	SBRS Flags, RP			; Задняя включена
 	RJMP RevCh
@@ -337,14 +358,14 @@ Forward:		; Задняя выключена
 	RJMP RevNotCh
 
 RevCh:		; Задняя переключалась
-	SBIS PINA, Reverse
+	SBIS Pin_Reverse, Reverse
 	RJMP ForwardNow
-	SBI PORTA, Cam_Relay	;Включили заднюю
+	SBI Port_Cam_relay, Cam_Relay	;Включили заднюю
 	SBR Flags, 1<<RP
 	RET
 	
 ForwardNow:	
-	CBI PORTA, Cam_Relay	;Включили переднюю
+	CBI Port_Cam_relay, Cam_Relay	;Включили переднюю
 	CBR Flags, 1<<RP
 
 RevNotCh:	; Задняя не переключалась
@@ -352,7 +373,7 @@ RevNotCh:	; Задняя не переключалась
 
 CamKeyMBPressed:
 	RCALL Delay005
-	SBIC PINA, Cam_Key
+	SBIC Pin_Cam_Key, Cam_Key
 	RJMP CamControl
 	; После 0,01с кнопка ещё нажата
 	SBRS Flags, KRP
@@ -368,7 +389,7 @@ CamKeyPressed:
 LoopCam:
 	dec R3
 	brne LoopCam
-	SBIC PINA, Cam_Key
+	SBIC Pin_Cam_Key, Cam_Key
 	RJMP CamChangePresed
 	dec R4
 	brne LoopCam
@@ -412,9 +433,9 @@ CamChangePresed:
 
 CamChange:
 	LDI R16, 1<<Cam_Relay
-	IN R17, PORTA
+	IN R17, Port_Cam_relay
 	EOR R17, R16
-	OUT PORTA, R17
+	OUT Port_Cam_relay, R17
 	RET
 
 TIM1_COMPA:		; Обработчик прерывания авторежима камеры
@@ -429,9 +450,9 @@ TIM1_COMPA:		; Обработчик прерывания авторежима к
 	WDR
 
 	LDI R16, 1<<Cam_Relay
-	IN R17, PORTA
+	IN R17, Port_Cam_relay
 	EOR R17, R16
-	OUT PORTA, R17
+	OUT Port_Cam_relay, R17
 
 	POP R17
 	POP R16
