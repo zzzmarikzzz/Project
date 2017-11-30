@@ -198,9 +198,36 @@ RESET:
 	LDI Temp, ClOpStep
 	STS StepCounter2, Temp
 	
-	
+	;-----------------------------------------
+	LDI R21, 220
+	LDI R20, 0
+	; Загрузить адрес таблицы символов
+Closing:	LDI ZL, LOW (2*step_table)
+	LDI ZH, HIGH(2*step_table)
+	; Найти нужный символ
+	ADD ZL, R20
+	; Загрузить данные символа в R0
+	LPM
+	MOV ZH, R0
+	IN ZL, STEP_PORT
+	ANDI ZL, ~(STEP_OUT)
+	OR ZL, ZH
+	OUT STEP_PORT, ZL
+	INC R20
+	SBRC R20,3 ;Если счетчик Меньше 0, устанавливаем его в 7
+	DEC R21
+	CPI R21, 0
+	BREQ Closed
+	SBRC R20,3
+	CLR R20
+	Rcall Delay3
+	WDR
+	Rjmp Closing
+		
+	Closed: 
 	LDI Temp, 4			;Состояние Жалюзи
 	MOV JaState, Temp
+	;-----------------------------------------	
 
 	LDI Temp, 1<<CS02|0<<CS01|1<<CS00	;Настройка таймера 0
 	OUT TCCR0B, Temp
@@ -211,7 +238,7 @@ RESET:
 	
 	LDI Temp, 1<<CS22|1<<CS21|1<<CS20	;Настройка таймера 2
 	STS TCCR2B, Temp
-		
+
 	CLR Flague
 	CLR Flague2
 	
@@ -1037,7 +1064,7 @@ JaCloseSnd:	;Если команда на закрытие послана
 	STS TIMSK2, Temp
 	ANDI Flague, ~(1<<CmdSnd)
 	LDI Temp, 4
-	MOV JaState, Temp	;Меняем состояние на SWING
+	MOV JaState, Temp	;Меняем состояние на Закрыто
 	RET
 ;++++++++++++++++	
 
@@ -1503,6 +1530,17 @@ EEPROM_read:
 ;|                               END
 ;|----------------------------------------------------------------------
 
+Delay3:
+	ldi R22,94          ;Задержка
+	MOV R3, R22
+	MOV R4, R22
+
+LoopD3:	dec R3
+	brne LoopD3
+
+	dec R4
+	brne LoopD3
+	ret
 
 .DSEG
 TermToOut:		.byte 3
