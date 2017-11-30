@@ -4,9 +4,9 @@
 	.equ 	USBdel = XTAL / 1024 / 256
 	.equ 	CAMdel = XTAL / 1024 * CamDelayMSec / 1000
 
-.equ	USB_DDR=DDRB
-.equ	USB_PORT=PORTB
-.equ	USB=PB2
+.equ	USB_DDR=DDRA
+.equ	USB_PORT=PORTA
+.equ	USB=PA7
 .equ	USBDelaySec=10		; Задержка включения USB в секундах
 
 .equ	DDR_Fog_Key=DDRA
@@ -15,11 +15,11 @@
 
 .equ	DDR_Fog_Relay=DDRA
 .equ	Port_Fog_Relay=PORTA
-.equ	Fog_Relay=PA1
+.equ	Fog_Relay=PA0
 
 .equ	DDR_DRL_Relay=DDRA
 .equ	Port_DRL_Relay=PORTA
-.equ	DRL_Relay=PA0
+.equ	DRL_Relay=PA1
 
 .equ	DDR_Bliz=DDRA
 .equ	Pin_Bliz=PINA
@@ -29,9 +29,9 @@
 .equ	Pin_MAR=PINA
 .equ	MAR=PA3
 
-.equ	DDR_Reverse=DDRA
-.equ	Pin_Reverse=PINA
-.equ	Reverse=PA7
+.equ	DDR_Reverse=DDRB
+.equ	Pin_Reverse=PINB
+.equ	Reverse=PB2
 
 .equ	DDR_Cam_Key=DDRA
 .equ	Pin_Cam_Key=PINA
