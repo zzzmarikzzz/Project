@@ -1,0 +1,4 @@
+#!/bin/bash
+avrdude -p t13 -c arduino-ft232r -P ft0 -U eeprom:r:eeprom.hex:r
+
+exit 0
