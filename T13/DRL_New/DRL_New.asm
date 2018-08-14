@@ -1,10 +1,10 @@
 ;Контроллер дневных ходовых огней
 .equ 	XTAL = 9600000		;Частота микроконтроллера в Герцах
 .equ 	TimerPrescaler=64	;Настройка делителя таймера - указывается для рассчёта. Сам параметр задаётся в TCCR0B
-.equ 	DelayAfterOFF=1000		;Время задержки включения ДХО после моргания дальним и поворотниками. Задаётся в миллисекундах.
-.equ 	TimerDelay = XTAL / 256 / TimerPrescaler * DelayAfterOFF / 1000
-
-
+.equ 	DelayAfterHB=1000		;Время задержки включения ДХО после моргания дальним. Задаётся в миллисекундах.
+.equ 	DelayAfterTurn=500		;Время задержки включения ДХО после моргания поворотниками. Задаётся в миллисекундах.
+.equ 	TimerDelayHB = XTAL / 256 / TimerPrescaler * DelayAfterHB / 1000
+.equ 	TimerDelayTurn = XTAL / 256 / TimerPrescaler * DelayAfterTurn / 1000
 
 .include "/home/marik/Project/tn13Adef.inc"
 .equ 	DRL_MAX = 255 - DRL_MAXIMUM
@@ -358,8 +358,14 @@ Begin:
 HB_NOT_ON:
 	SBRS Flags, HB_Prew_ON	;Проверяем флаг - если не поднят
 	RJMP CHECK_TURN			;переходим к проверке поворотников
+	
+	LDI R16,Low(TimerDelayHB)
+	MOV TimCNTL, R16
+	LDI R16,High(TimerDelayHB)
+	MOV TimCNTH, R16
+	CBR Flags, 1<<TOvf
+	SBR Flags, 1<<TOn		;Запускаем таймер
 
-	RCALL Set_Timer			;Запускаем таймер
 WAITING_TIMER:
 	WDR
 	RCALL HB_Check			;Проверяем дальний
@@ -397,13 +403,23 @@ TURN_LEFT_OR_RIGHT:
 	RJMP TURN_LEFT_IS_ON	;прыгаем к настройке левого поворота
 	OUT PWM_Right, DRL_Turn	;Иначе - убавляем правый,
 	OUT PWM_Left, DRL_ON	;а левый включаем
-	RCALL Set_Timer			;Запускаем таймер
+	LDI R16,Low(TimerDelayTurn)
+	MOV TimCNTL, R16
+	LDI R16,High(TimerDelayTurn)
+	MOV TimCNTH, R16
+	CBR Flags, 1<<TOvf
+	SBR Flags, 1<<TOn		;Запускаем таймер
 	RJMP Begin				;и уходим
 	
 TURN_LEFT_IS_ON:	
 	OUT PWM_Left, DRL_Turn
 	OUT PWM_Right, DRL_ON
-	RCALL Set_Timer	
+	LDI R16,Low(TimerDelayTurn)
+	MOV TimCNTL, R16
+	LDI R16,High(TimerDelayTurn)
+	MOV TimCNTH, R16
+	CBR Flags, 1<<TOvf
+	SBR Flags, 1<<TOn		;Запускаем таймер
 RJMP Begin
 ;**********************************************************************
 ;Основная программа
@@ -447,17 +463,6 @@ TIMER_NOT_OVF:
 ;======================================================================
 ; Конец обработчиков прерываний
 ;======================================================================
-
-Set_Timer:
-	LDI R16,Low(TimerDelay)
-	MOV TimCNTL, R16
-	LDI R16,High(TimerDelay)
-	MOV TimCNTH, R16
-	CBR Flags, 1<<TOvf
-	SBR Flags, 1<<TOn
-	RET
-
-;-------------------------------
 
 ;-------------------------------
 
