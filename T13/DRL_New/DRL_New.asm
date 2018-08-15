@@ -137,7 +137,7 @@ RESET:
 	LDI R16,0;задержка (0,0,28 - 1 секунда)
 	MOV R3, R16
 	MOV R4, R16
-	LDI R16,28
+	LDI R16,14
 	MOV R5, R16
 SetBegin:					;Ждём и проверяем Дальний свет
 	SBIS HB_Pin, HighBeam	;если в течении секунды погас (или не горел)
@@ -148,8 +148,10 @@ SetBegin:					;Ждём и проверяем Дальний свет
 	BRNE SetBegin
 	WDR
 	DEC R5
-	BRNE SetBegin
-
+	BRNE SetBegin			;Ждём и проверяем Дальний свет
+	SBIS HB_Pin, HighBeam	;если в течении секунды погас (или не горел)
+	RJMP Begin				;переходим в основную программу
+	
 	LDI R16,0;задержка (0,0,28 - 1 секунда)
 	MOV R3, R16
 	MOV R4, R16
