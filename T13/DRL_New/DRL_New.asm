@@ -139,9 +139,7 @@ RESET:
 	MOV R4, R16
 	LDI R16,14
 	MOV R5, R16
-SetBegin:					;Ждём и проверяем Дальний свет
-	SBIS HB_Pin, HighBeam	;если в течении секунды погас (или не горел)
-	RJMP Begin				;переходим в основную программу
+SetBegin:
 	DEC R3
 	BRNE SetBegin
 	DEC R4
