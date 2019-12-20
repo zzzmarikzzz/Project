@@ -4,3 +4,11 @@ git commit -m "small fix2"
 git push
 
 #git pull
+
+ssh -T git@github.com
+git clone git@github.com:zzzmarikzzz/Project.git
+git clone git@github.com:zzzmarikzzz/eagle.git
+
+sudo find * -type d -exec chmod 755 {} \;
+sudo find * -type f -exec chmod 644 {} \;
+sudo chown celeron:celeron * -R

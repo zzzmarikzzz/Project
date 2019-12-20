@@ -1,4 +1,4 @@
-; Контроллер света в будке
+; Контроллер света в будке V1.0
 .include "/home/marik/Project/tn13Adef.inc"
 .def	Temp=R16
 .def	Temp1=R17
@@ -295,7 +295,7 @@ CheckDoor:
 	CLR Temp			; Хитровыебаная проверка состояния дверей
 	
 	ldi Temp2,0          ;задержка (0,85 - 0,1 секунды)
-	ldi Temp3,40
+	ldi Temp3,60
 Loop3:	in Temp1, PINB
 	or Temp, Temp1
 	dec Temp2

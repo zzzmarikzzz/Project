@@ -1,0 +1,5 @@
+#!/bin/bash
+avrdude -p t13 -c arduino-ft232r -P ft0 -u -U lfuse:w:0x65:m -b 96
+avrdude -p t13 -c arduino-ft232r -P ft0 -u -U hfuse:w:0xF9:m -b 96
+avrdude -p t13 -c arduino-ft232r -P ft0 -U flash:w:Light.hex:i -b 96
+exit 0
