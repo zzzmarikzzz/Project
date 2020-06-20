@@ -1,4 +1,4 @@
-;Стопаки для лисапеда
+;Стопаки для лисапеда git
 .include "/home/marik/Project/tn13Adef.inc"
 .def     Temp=R16
 .def     Temp1=R17
