@@ -1,4 +1,4 @@
-.include "/home/marik/Project/tn13Adef.inc"
+.include "..\..\tn13Adef.inc"
 .def	Temp=R16
 .def	Temp1=R17
 .def	Temp2=R18
@@ -23,13 +23,13 @@ RESET:
 Begin: 
 	ldi Temp1,0          ;задержка (0,0,23 - 0.5 секунды при 9.6 MHz)
 	ldi Temp2,0		;задержка (0,0,140 - 3 секунды при 9.6 MHz)
-	ldi Temp3,140
+	ldi Temp3,1
 
 Loop1:	dec Temp1
 	brne Loop1
 ;Проверка порта
 
-	SBIC PINB, Key
+	SBIc PINB, Key
 	rjmp MLSICH ; Если кнопка не нажата инвертируем MLSI
 	dec Temp2
 	brne Loop1

@@ -1,4 +1,6 @@
 #!/bin/bash
 avrdude -p m32 -c arduino-ft232r -P ft0 -U flash:w:ish.hex:i -vvv
 #avrdude -p m32 -c arduino-ft232r -P ft0 -U flash:w:ish.hex:i -vvv -B 4800
+avrdude.exe -P ft0 -c arduino-ft232r -p t13 -B 480 -U flash:w:"C:\Users\zzzma\Documents\GitHub\Project\T13\SpTest\ish.hex":i
+
 exit 0
