@@ -1,5 +1,5 @@
 ; Контроллер света в будке V2.0
-.include "/home/marik/Project/tn13Adef.inc"
+.include "C:\Users\zzzma\Documents\GitHub\Project\tn13Adef.inc"
 .equ 	XTAL = 4800000	; Частота контроллера в Гц
 .equ 	PrescXTAL = 128	; Прескалер основной частоты
 .equ 	PrescCount = 64	; Прескалер счетчика
@@ -150,6 +150,8 @@ DoorOpenNowAndEarly:
 	RJMP LightInversion	; а если нажата - меняем состояние света
 	
 TCCheck:
+	SBRS MFR, TmrOn	; Проверяем включен-ли таймер
+	RJMP Begin
 	LDI R16, TimeInMinut
 	DEC R16
 	CP MinCnt, R16
