@@ -66,6 +66,16 @@ RESET:
 	;Записываем новое значение предделителя времени задержки
 	LDI R16, (0<<WDP3) |(1<<WDP2) | (1<<WDP1) | (0<<WDP0) | (1<<WDE) | (1<<WDTIE)	; Предделитель на 1 секунду
 	OUT WDTCR, R16
+	
+	; Настройка АЦП
+	IN R16, ADMUX	; ИОН Vcc, вход АЦП PB4
+	LDI R16, 0<<REFS0|1<<ADLAR|1<<MUX1|0<<MUX0
+	OUT ADMUX, R16
+
+	IN R16, ADCSRA
+	LDI R16, 1<<ADEN|1<<ADSC|0<<ADATE|0<<ADIE|0<<ADPS2|1<<ADPS1|1<<ADPS0
+	OUT ADCSRA, R16
+
 
 	LDI R16,RamEnd		;инициализация стека
 	OUT SPL,R16
@@ -82,11 +92,23 @@ RESET:
 
 Begin:
 	SEI
-	IN R16, PORTB	; Инвертируем светодиод
-	LDI R17, 1<<Led
-	EOR R16, R17
-	OUT PORTB, R16
 	ANDI MFR, ~(1<<TmrTiked) ; Таймер тикнул
+
+	SBI ADCSRA, ADSC	; Запускаем преобразование ЦАП
+WaitConversion: SBIC ADCSRA, ADSC
+	RJMP WaitConversion
+	
+	IN R16, ADCH
+	CPI R16, ADCon
+	BRSH ToOn
+	IN R16, PORTB	; Инвертируем светодиод
+	ANDI R16, ~(1<<Led)
+	OUT PORTB, R16
+	RJMP Loop
+ToOn:
+	IN R16, PORTB	; Инвертируем светодиод
+	ORI R16, (1<<Led)
+	OUT PORTB, R16
 
 Loop:
 	SBRC MFR, TmrTiked
