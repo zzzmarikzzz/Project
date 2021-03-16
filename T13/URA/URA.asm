@@ -3,7 +3,7 @@
 
 .equ 	Uoff = 130	; Напряжение выключения реле * 10
 .equ 	Uon = 135	; Напряжение включения реле * 10
-.equ 	Uref = 50	; Опорное напряжение * 10
+.equ 	Uref = 51	; Опорное напряжение * 10
 .equ 	U_Divider = 4 ; Резисторный делитель напряжения на входе в ЦАП
 
 .equ 	ADCoff = ( Uoff * 256 / U_Divider ) / Uref ; Значение ЦАП для напряжение выключения реле
@@ -93,13 +93,33 @@ RESET:
 Begin:
 	SEI
 	ANDI MFR, ~(1<<TmrTiked) ; Таймер тикнул
-
+	
+	CLR R18
+	CLR R19
+	CLR R20
+	LDI R16, 16
+	
+AdcRead:
 	SBI ADCSRA, ADSC	; Запускаем преобразование ЦАП
 WaitConversion: SBIC ADCSRA, ADSC
-	RJMP WaitConversion
+	RJMP WaitConversion	; Ждём завершения преобразования
 	
-	IN R16, ADCH
-	CPI R16, ADCon
+	IN R17, ADCH	; Складываем показания
+	ADD R19, R17
+	ADC R20, R18
+	
+	DEC R16
+	BRNE AdcRead	; Повторяем 16 раз
+	
+	SWAP R20		; Деление на 16
+	SWAP R19
+	ANDI R20, 0xF0
+	ANDI R19, 0x0F
+	ADD R19, R20
+	
+	
+	
+	CPI R19, ADCon
 	BRSH ToOn
 	IN R16, PORTB	; Инвертируем светодиод
 	ANDI R16, ~(1<<Led)
