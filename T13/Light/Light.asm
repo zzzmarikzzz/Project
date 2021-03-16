@@ -1,5 +1,5 @@
 ; Контроллер света в будке V2.0
-.include "C:\Users\zzzma\Documents\GitHub\Project\tn13Adef.inc"
+.include "..\..\tn13Adef.inc"
 .equ 	XTAL = 4800000	; Частота контроллера в Гц
 .equ 	PrescXTAL = 128	; Прескалер основной частоты
 .equ 	PrescCount = 64	; Прескалер счетчика
