@@ -9,8 +9,8 @@
 .equ 	ADCoff = ( Uoff * 256 / U_Divider ) / Uref ; Значение ЦАП для напряжение выключения реле
 .equ 	ADCon = ( Uon * 256 / U_Divider ) / Uref ; Значение ЦАП для напряжение включения реле
 
-.equ	TmrMin = 1	; Время задержки включения реле минут
-.equ	TmrSec = 25	; + секунд. !!!!! TmrSec не должно быть больше NumOfSecPerMinWDT !!!!!
+.equ	TmrMin = 5	; Время задержки включения реле минут
+.equ	TmrSec = 0	; + секунд. !!!!! TmrSec не должно быть больше NumOfSecPerMinWDT !!!!!
 .equ	NumOfSecPerMinWDT = 50	; Калибровочное значение! Количество секунд в минуте.
 								; Применяется, т.к. WDT имеет очень большую погрешность
 .def	SecCnt = R21
@@ -51,11 +51,6 @@ ADC:
 
 RESET:
 	CLI
-;	LDI R16, 1<<CLKPCE
-;	OUT CLKPR, R16		; Разрешаем изменение делителя частоты
-;	LDI R16, (0<<CLKPS3) | (1<<CLKPS2) | (1<<CLKPS1) | (1<<CLKPS0)
-;	OUT CLKPR, R16		; Устанавливаем значение делителя частоты 128
-	
 	WDR
 	IN R16, MCUSR	; Очищаем бит WDRF в регистре MCUSR
 	ANDI R16, ~(1<<WDRF)
