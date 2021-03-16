@@ -119,17 +119,45 @@ WaitConversion: SBIC ADCSRA, ADSC
 	
 	
 	
-	CPI R19, ADCon
-	BRSH ToOn
-	IN R16, PORTB	; Инвертируем светодиод
-	ANDI R16, ~(1<<Led)
-	OUT PORTB, R16
+	CPI R19, ADCoff	; Если ниже напряжения выключения - выключаем всё
+	BRLO SwitchOffRelay
+	SBRC MFR, RelayOn	; Если реле включено - выходим
 	RJMP Loop
-ToOn:
-	IN R16, PORTB	; Инвертируем светодиод
-	ORI R16, (1<<Led)
-	OUT PORTB, R16
+	SBRC MFR, TmrOk		; Если таймер досчитал - включаем реле
+	RJMP SwitchOnRelay
+	CPI R19, ADCon
+	BRLO SwitchOffRelay ; Если ниже напряжения включения, а таймер не досчитал - выключаем всё
+	ORI MFR, (1<<TmrOn)	; Если выше или равно напряжению включения - запускаем таймер
+	RJMP Loop
+	
+;	IN R16, PORTB	; Инвертируем светодиод
+;	ANDI R16, ~(1<<Led)
+;	OUT PORTB, R16
+;	RJMP Loop
+;ToOn:
+;	IN R16, PORTB	; Инвертируем светодиод
+;	ORI R16, (1<<Led)
+;	OUT PORTB, R16
 
+SwitchOnRelay:
+	IN R16, PORTB	; Включаем реле и светодиод
+	ORI R16, (1<<Led | 1<<Relay)
+	OUT PORTB, R16
+	ORI MFR, (1<<RelayOn)	; Поднимаем флаг реле
+	ANDI MFR, ~(1<<TmrOk | 1<<TmrOn)	; Сбрасываем флаги таймера
+	CLR SecCnt			; Очистка счётчиков
+	CLR MinCnt
+
+RJMP Loop
+
+SwitchOffRelay:
+	IN R16, PORTB	; Выключаем реле и светодиод
+	ANDI R16, ~(1<<Led | 1<<Relay)
+	OUT PORTB, R16
+	CLR SecCnt			; Очистка счётчиков и флагов
+	CLR MinCnt
+	ANDI MFR, ~(1<<TmrOk | 1<<TmrOn | 1<<RelayOn)
+	
 Loop:
 	SBRC MFR, TmrTiked
 	RJMP Begin
