@@ -9,14 +9,14 @@
 .equ 	ADCoff = ( Uoff * 256 / U_Divider ) / Uref ; Значение ЦАП для напряжение выключения реле
 .equ 	ADCon = ( Uon * 256 / U_Divider ) / Uref ; Значение ЦАП для напряжение включения реле
 
-.equ	TmrMin = 2	; Время задержки включения реле минут
-.equ	TmrSec = 0	; + секунд. !!!!! TmrSec не должно быть больше NumOfSecPerMinWDT !!!!!
-.equ	NumOfSecPerMinWDT = 53	; Калибровочное значение! Количество секунд в минуте.
+.equ	TmrMin = 1	; Время задержки включения реле минут
+.equ	TmrSec = 25	; + секунд. !!!!! TmrSec не должно быть больше NumOfSecPerMinWDT !!!!!
+.equ	NumOfSecPerMinWDT = 50	; Калибровочное значение! Количество секунд в минуте.
 								; Применяется, т.к. WDT имеет очень большую погрешность
-.def	SecCnt = R20
-.def	MinCnt = R21
+.def	SecCnt = R21
+.def	MinCnt = R22
 
-.def	MFR = R22			; Мой регистр флагов
+.def	MFR = R23			; Мой регистр флагов
 		.equ	TmrOn = 0		; Состояние таймера
 		.equ	TmrOk = 1		; Таймер досчитал
 		.equ	TmrTiked = 2	; Таймер тикнул
@@ -129,15 +129,6 @@ WaitConversion: SBIC ADCSRA, ADSC
 	BRLO SwitchOffRelay ; Если ниже напряжения включения, а таймер не досчитал - выключаем всё
 	ORI MFR, (1<<TmrOn)	; Если выше или равно напряжению включения - запускаем таймер
 	RJMP Loop
-	
-;	IN R16, PORTB	; Инвертируем светодиод
-;	ANDI R16, ~(1<<Led)
-;	OUT PORTB, R16
-;	RJMP Loop
-;ToOn:
-;	IN R16, PORTB	; Инвертируем светодиод
-;	ORI R16, (1<<Led)
-;	OUT PORTB, R16
 
 SwitchOnRelay:
 	IN R16, PORTB	; Включаем реле и светодиод
@@ -171,6 +162,7 @@ WATCHDOG:
 	PUSH	R16		
 	IN	R16, SREG	; Достали SREG
 	PUSH	R16		; Утопили его в стеке
+	PUSH	R17
 		
 	IN R16, WDTCR
 	ORI R16, (1<<WDTIE)	;Включаем прерывание по WDT,
@@ -198,6 +190,7 @@ TimerCheck:				; Проверяем досчитал-ли таймер
 
 WDTOUT:
 	ORI MFR, (1<<TmrTiked) ; Таймер тикнул
+	POP R17
 	POP R16
 	OUT SREG, R16
 	POP R16
