@@ -1,4 +1,9 @@
-.include "/home/marik/Project/tn24Adef.inc"
+;avrdude -p t24 -c arduino-ft232r -P ft0 -u -U lfuse:w:0xff:m -B 4800
+;avrdude -p t24 -c arduino-ft232r -P ft0 -u -U hfuse:w:0xD4:m -B 4800
+;avrdude -p t24 -c arduino-ft232r -P ft0 -U flash:w:Timer_Polair.hex:i -vvv
+
+;.include "/home/marik/Project/tn24Adef.inc"
+.include "..\..\tn24Adef.inc"
 ; Internal Hardware Init  ======================================
 		.equ 	XTAL = 16000000 
 

@@ -1,4 +1,5 @@
-.include "/home/marik/Project/tn2313Adef.inc"
+;.include "/home/marik/Project/tn2313Adef.inc"
+.include "..\..\tn2313Adef.inc"
 .def     Temp=R16
 .def     Flag=R19
 	.equ	DRILL=0
@@ -8,6 +9,10 @@
 .equ	KEY_INC=2
 .equ	KEY_DEC=3
 
+.equ	DRILL_OUT=0
+.equ	DRILL_PORT=PORTB
+.equ	DRILL_DDR=DDRB
+; выход на серву B0
 
 
 .cseg
@@ -63,8 +68,8 @@ PC_INT2:
 Reset:	LDI Temp,RamEnd		;Инициализация стека
 	OUT SPL,Temp
 
-	SBI DDRB, 0	;Настройка порта B
-	CBI PORTB, 0
+	SBI DRILL_DDR, DRILL_OUT	;Настройка выхода на серву
+	CBI DRILL_PORT, DRILL_OUT
 	
 
 	
@@ -205,7 +210,7 @@ TIM1_COMPA:
 	OUT OCR1BH,ZH
 	OUT OCR1BL,ZL
 	
-	SBI PORTB, 0
+	SBI DRILL_PORT, DRILL_OUT
 	
 	POP Temp
 	OUT SREG, Temp
@@ -219,7 +224,7 @@ TIMER1_COMPB:
 	PUSH Temp
 	PUSH R17
 	CLI	
-	CBI PORTB, 0	
+	CBI DRILL_PORT, DRILL_OUT	
 	POP R17
 	POP Temp
 	OUT SREG, Temp
