@@ -20,8 +20,7 @@
 .equ	dot=3
 .equ	minus=6
 
-.equ	Heat=PB0	; Управление Нагревом
-.equ	HeatLED=PB1
+.equ	Heat=PB4	; Управление Нагревом
 .equ	HEAT_DDR=DDRB
 .equ	HEAT_PORT=PortB
 
@@ -95,9 +94,7 @@ LDI Temp,RamEnd		;Инициализация стека
 	OUT SPL,Temp
 
 	SBI HEAT_DDR, Heat	;Настройка порта нагрева
-	SBI HEAT_DDR, HeatLED
 	CBI HEAT_PORT, Heat	;Выключение нагрева
-	CBI HEAT_PORT, HeatLED
 	
 	IN R16, SEG7_DDR	;настройка порта SEG7
 	ORI R16, (1<<STcp|1<<SHcp|1<<DS)
@@ -140,21 +137,19 @@ Init:
 	RCALL OWWriteByte
 	
 	
-	LDI R17, 23
+	LDI R17, 21
 	LDI R16, 4
 	RCALL CPTerm
 	BRLO MayBeNeedHeat
 	CBI HEAT_PORT, Heat	; Выключаем обогрев
-	CBI HEAT_PORT, HeatLED
 	RJMP NoActionRequired
 	
 MayBeNeedHeat:
-	LDI R17, 23
+	LDI R17, 21
 	LDI R16, 0
 	RCALL CPTerm
 	BRSH NoActionRequired
 	SBI HEAT_PORT, Heat	; Включаем обогрев
-	SBI HEAT_PORT, HeatLED
 NoActionRequired:
 RJMP Init
 
