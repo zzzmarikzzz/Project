@@ -1,0 +1,17 @@
+MenuWays: .dw	TCurrent, SetThC, SetTmC, TCurrentWR, TOff, SetTh0, SetTm0, TOffWR, TOn, SetTh1, SetTm1, TOnWR, THeat, SetTHeat, TheatWR, SetExit	;Для переходов по меню
+.def     TermHeat=R14		;Заданная температура
+.equ	EEPTHeat=4
+
+	RCALL OWReset
+	LDI R16,0xCC
+	RCALL OWWriteByte
+	LDI R16,0xBE
+	RCALL OWWriteByte
+	CLR R16
+	RCALL OWReadByte
+	MOV R22,R16
+	RCALL OWReadByte
+	MOV R23,R16
+	RCALL OWReset
+	
+	RCALL t_convert

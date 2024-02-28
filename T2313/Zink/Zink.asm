@@ -140,12 +140,12 @@ Init:
 ; Раз в секунду
 	ANDI Flag, ~(1<<7)
 	RCALL OWReset
-	LDI R16,0xCC
+	LDI R16,0xCC	;Scip ROM
 	RCALL OWWriteByte
-	LDI R16,0xBE
+	LDI R16,0xBE	;Read Scratchpad
 	RCALL OWWriteByte
 	CLR R16
-	RCALL OWReadByte
+	RCALL OWReadByte	;Читаем 2 байта
 	MOV R22,R16
 	RCALL OWReadByte
 	MOV R23,R16
@@ -155,9 +155,9 @@ Init:
 	RCALL NumTo7SEG
 		
 	RCALL OWReset
-	LDI R16,0xCC
+	LDI R16,0xCC		;Scip ROM
 	RCALL OWWriteByte
-	LDI R16,0x44
+	LDI R16,0x44		;Convert T
 	RCALL OWWriteByte
 	
 	
