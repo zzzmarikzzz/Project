@@ -1,3 +1,7 @@
+git clone git@github.com:zzzmarikzzz/eagle.git
+git clone git@github.com:zzzmarikzzz/Project.git
+
+
 git add .
 git status
 git commit -m "small fix2"
