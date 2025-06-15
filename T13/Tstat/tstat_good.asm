@@ -1,5 +1,5 @@
 ; Термостат
-.include "/home/marik/Project/tn13Adef.inc"
+.include "../../tn13Adef.inc"
 .equ 	XTAL = 9800000
 		
 .def     Temp=R16
