@@ -1,5 +1,5 @@
 ; Контроллер света в будке V2.0
-.include "..\..\tn13Adef.inc"
+.include "../../tn13Adef.inc"
 .equ 	XTAL = 4800000	; Частота контроллера в Гц
 .equ 	PrescXTAL = 128	; Прескалер основной частоты
 .equ 	PrescCount = 64	; Прескалер счетчика
@@ -186,6 +186,8 @@ LightOff:	; Выключение света
 	ANDI R16, ~(1<<Light)
 	OUT PORTB, R16
 	ANDI MFR, ~((1<<Blinked)|(1<<KeyP)|(1<<TmrOn))
+	CLR SecCnt			; Очистка счётчиков
+	CLR MinCnt
 RJMP Begin
 ;______________________________________________________________________
 LightInversion:	; Инверсия состояния света

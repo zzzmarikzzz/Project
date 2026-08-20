@@ -13,8 +13,8 @@ detect_indent_width=false
 indent_mode=2
 
 [project]
-name=64_86
-base_path=/home/marik/Project/64_86/
+name=order
+base_path=/home/roman/Документы/Заказы/
 description=
 file_patterns=
 
@@ -23,18 +23,23 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=0
-FILE_NAME_0=4174;C;0;EUTF-8;1;1;0;%2Fhome%2Fmarik%2FProject%2F64_86%2Fhello.c;0;4
+current_page=6
+FILE_NAME_0=288;Sh;0;EUTF-8;1;1;0;%2Fhome%2Froman%2FДокументы%2FЗаказы%2Ford;0;4
+FILE_NAME_1=4471;None;0;EUTF-8;1;1;0;%2Fhome%2Froman%2FРабочий%20стол%2F3D%2FFiat%2FProxy.txt;0;4
+FILE_NAME_2=462;Abc;0;EUTF-8;1;1;0;%2Fhome%2Froman%2FДокументы%2FЗаказы%2Forder.abc;0;4
+FILE_NAME_3=130;ASM;0;EUTF-8;1;1;0;%2Fhome%2Froman%2FProject%2FT13%2FStep_kachalo%2FStep_kachalo_TMC2208.asm;0;4
+FILE_NAME_4=1221;None;0;EUTF-8;1;1;0;%2Fhome%2Froman%2FProject%2FT13%2FStep_kachalo%2FStep_kachalo_TMC2208.lst;0;4
+FILE_NAME_5=376;Conf;0;EUTF-8;1;1;0;%2Fhome%2Froman%2F.config%2Fgeany%2Ffiledefs%2Ffiletypes.asm;0;4
 
 [VTE]
-last_dir=/home/marik
+last_dir=/home/roman
 
 [build-menu]
 NF_00_LB=_Собрать
 NF_00_CM=make
 NF_00_WD=
 EX_00_LB=_Выполнить
-EX_00_CM=./%e
+EX_00_CM=/home/roman/Документы/Заказы/ord && exit
 EX_00_WD=
 CFT_00_LB=_Скомпилировать
 CFT_00_CM=gcc %f -o %e
@@ -43,3 +48,8 @@ CFT_01_LB=_Сборка
 CFT_01_CM=make
 CFT_01_WD=
 filetypes=C;
+
+[editor]
+line_wrapping=false
+line_break_column=72
+auto_continue_multiline=true
